@@ -1,10 +1,20 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { 
-  Profile, Task, PomodoroSession, 
-  ThemeOption, AppSettings, YouTubeVideo 
-} from '../models/types';
-import * as storageService from '../services/storageService';
-import notificationService from '../services/notificationService';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import {
+  Profile,
+  Task,
+  PomodoroSession,
+  ThemeOption,
+  AppSettings,
+  YouTubeVideo,
+} from "../models/types";
+import * as storageService from "../services/storageService";
+import notificationService from "../services/notificationService";
 
 interface AppContextType {
   // Profiles
@@ -13,22 +23,22 @@ interface AppContextType {
   setActiveProfile: (profile: Profile) => void;
   saveProfile: (profile: Profile) => void;
   deleteProfile: (id: string) => void;
-  
+
   // Tasks
   tasks: Task[];
   saveTask: (task: Task) => void;
   deleteTask: (id: string) => void;
   deleteCompletedTasks: () => void;
-  
+
   // Pomodoro Sessions
   sessions: PomodoroSession[];
   saveSession: (session: PomodoroSession) => void;
-  
+
   // Settings
   settings: AppSettings;
   saveSettings: (settings: AppSettings) => void;
   setTheme: (theme: ThemeOption) => void;
-  
+
   // YouTube Videos
   videos: YouTubeVideo[];
   saveVideo: (video: YouTubeVideo) => void;
@@ -37,12 +47,16 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [sessions, setSessions] = useState<PomodoroSession[]>([]);
-  const [settings, setSettings] = useState<AppSettings>(storageService.getSettings());
+  const [settings, setSettings] = useState<AppSettings>(
+    storageService.getSettings()
+  );
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
 
   // Load data on mount
@@ -51,30 +65,34 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       // Load profiles
       const storedProfiles = storageService.getProfiles();
       setProfiles(storedProfiles);
-      
+
       // Load active profile
       const activeProfileId = storageService.getActiveProfileId();
-      const activeProf = storedProfiles.find(p => p.id === activeProfileId) || storedProfiles[0];
+      const activeProf =
+        storedProfiles.find((p) => p.id === activeProfileId) ||
+        storedProfiles[0];
       if (activeProf) {
         setActiveProfile(activeProf);
         storageService.setActiveProfileId(activeProf.id);
-        
+
         // Load tasks for active profile
         const profileTasks = storageService.getTasksByProfile(activeProf.id);
         setTasks(profileTasks);
-        
+
         // Load sessions for active profile
-        const profileSessions = storageService.getSessionsByProfile(activeProf.id);
+        const profileSessions = storageService.getSessionsByProfile(
+          activeProf.id
+        );
         setSessions(profileSessions);
       }
-      
+
       // Load settings
       setSettings(storageService.getSettings());
-      
+
       // Load videos
       setVideos(storageService.getYouTubeVideos());
     };
-    
+
     loadData();
   }, []);
 
@@ -82,27 +100,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     // Apply theme to document
     document.documentElement.classList.remove(
-      'theme-purple-space', 
-      'theme-dark-blue', 
-      'theme-dark-mode',
-      'theme-nes-retro',
-      'theme-netflix',
-      'theme-isomorphic',
-      'theme-minimalist'
+      "theme-purple-space",
+      "theme-dark-blue",
+      "theme-dark-mode",
+      "theme-nes-retro",
+      "theme-netflix",
+      "theme-isomorphic",
+      "theme-minimalist"
     );
-    
-    if (settings.theme === 'dark-blue') {
-      document.documentElement.classList.add('theme-dark-blue');
-    } else if (settings.theme === 'dark-mode') {
-      document.documentElement.classList.add('theme-dark-mode');
-    } else if (settings.theme === 'nes-retro') {
-      document.documentElement.classList.add('theme-nes-retro');
-    } else if (settings.theme === 'netflix') {
-      document.documentElement.classList.add('theme-netflix');
-    } else if (settings.theme === 'isomorphic') {
-      document.documentElement.classList.add('theme-isomorphic');
-    } else if (settings.theme === 'minimalist') {
-      document.documentElement.classList.add('theme-minimalist');
+
+    if (settings.theme === "dark-blue") {
+      document.documentElement.classList.add("theme-dark-blue");
+    } else if (settings.theme === "dark-mode") {
+      document.documentElement.classList.add("theme-dark-mode");
+    } else if (settings.theme === "nes-retro") {
+      document.documentElement.classList.add("theme-nes-retro");
+    } else if (settings.theme === "netflix") {
+      document.documentElement.classList.add("theme-netflix");
+    } else if (settings.theme === "isomorphic") {
+      document.documentElement.classList.add("theme-isomorphic");
+    } else if (settings.theme === "minimalist") {
+      document.documentElement.classList.add("theme-minimalist");
     }
     // Default 'purple-space' theme is the root theme, no need to add class
   }, [settings.theme]);
@@ -112,12 +130,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     if (settings.notificationsEnabled) {
       // Check for task notifications on load
       notificationService.checkTaskNotifications(tasks);
-      
+
       // Set up interval to check for notifications
       const intervalId = setInterval(() => {
         notificationService.checkTaskNotifications(tasks);
       }, 60000); // Check every minute
-      
+
       return () => clearInterval(intervalId);
     }
   }, [tasks, settings.notificationsEnabled]);
@@ -126,11 +144,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const handleSetActiveProfile = (profile: Profile) => {
     setActiveProfile(profile);
     storageService.setActiveProfileId(profile.id);
-    
+
     // Load tasks for the selected profile
     const profileTasks = storageService.getTasksByProfile(profile.id);
     setTasks(profileTasks);
-    
+
     // Load sessions for the selected profile
     const profileSessions = storageService.getSessionsByProfile(profile.id);
     setSessions(profileSessions);
@@ -139,7 +157,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const handleSaveProfile = (profile: Profile) => {
     storageService.saveProfile(profile);
     setProfiles(storageService.getProfiles());
-    
+
     // If we're updating the active profile, update the local state
     if (activeProfile && profile.id === activeProfile.id) {
       setActiveProfile(profile);
@@ -150,7 +168,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     storageService.deleteProfile(id);
     const updatedProfiles = storageService.getProfiles();
     setProfiles(updatedProfiles);
-    
+
     // If we're deleting the active profile, switch to another
     if (activeProfile && id === activeProfile.id) {
       if (updatedProfiles.length > 0) {
@@ -221,31 +239,33 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setActiveProfile: handleSetActiveProfile,
     saveProfile: handleSaveProfile,
     deleteProfile: handleDeleteProfile,
-    
+
     tasks,
     saveTask: handleSaveTask,
     deleteTask: handleDeleteTask,
     deleteCompletedTasks: handleDeleteCompletedTasks,
-    
+
     sessions,
     saveSession: handleSaveSession,
-    
+
     settings,
     saveSettings: handleSaveSettings,
     setTheme: handleSetTheme,
-    
+
     videos,
     saveVideo: handleSaveVideo,
-    deleteVideo: handleDeleteVideo
+    deleteVideo: handleDeleteVideo,
   };
 
-  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+  );
 };
 
 export const useApp = (): AppContextType => {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
+    throw new Error("useApp must be used within an AppProvider");
   }
   return context;
 };

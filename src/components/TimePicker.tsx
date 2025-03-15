@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,7 @@ export function TimePickerDemo({ value = "", onChange }: TimePickerDemoProps) {
   const [hour, setHour] = React.useState(() => {
     return value ? value.split(":")[0] : "";
   });
-  
+
   const [minute, setMinute] = React.useState(() => {
     return value ? value.split(":")[1] : "";
   });
@@ -56,10 +55,10 @@ export function TimePickerDemo({ value = "", onChange }: TimePickerDemoProps) {
           <div className="flex justify-between items-center">
             <Label className="text-xs">Time</Label>
             {(hour || minute) && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleClear} 
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClear}
                 className="h-6 px-2 text-xs"
               >
                 Clear
@@ -70,7 +69,7 @@ export function TimePickerDemo({ value = "", onChange }: TimePickerDemoProps) {
             <Input
               type="number"
               placeholder="HH"
-              className="w-12 h-8 text-center"
+              className="w-24 h-8 text-center"
               value={hour}
               onChange={handleHourChange}
               min={0}
@@ -80,7 +79,7 @@ export function TimePickerDemo({ value = "", onChange }: TimePickerDemoProps) {
             <Input
               type="number"
               placeholder="MM"
-              className="w-12 h-8 text-center"
+              className="w-24 h-8 text-center"
               value={minute}
               onChange={handleMinuteChange}
               min={0}
