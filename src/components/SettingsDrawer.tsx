@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { ThemeOption, PomodoroSession } from '../models/types';
+import { ThemeOption, PomodoroSession, YouTubeVideo } from '../models/types';
 import { format } from 'date-fns';
 import { 
   Sheet, 
@@ -23,6 +23,9 @@ import {
   RadioGroup, 
   RadioGroupItem 
 } from '@/components/ui/radio-group';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Youtube, Trash, Plus } from 'lucide-react';
 import notificationService from '../services/notificationService';
 
 interface SettingsDrawerProps {
@@ -39,10 +42,16 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     saveSettings, 
     setTheme, 
     sessions, 
-    activeProfile 
+    activeProfile,
+    videos,
+    saveVideo,
+    deleteVideo
   } = useApp();
   
   const [notificationsRequested, setNotificationsRequested] = useState(false);
+  const [showVideoDialog, setShowVideoDialog] = useState(false);
+  const [newVideoTitle, setNewVideoTitle] = useState('');
+  const [newVideoUrl, setNewVideoUrl] = useState('');
   
   const handleThemeChange = (value: string) => {
     setTheme(value as ThemeOption);
@@ -83,6 +92,25 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     });
   };
   
+  const handleAddVideo = () => {
+    if (newVideoTitle.trim() && newVideoUrl.trim()) {
+      const newVideo: YouTubeVideo = {
+        id: `video-${Date.now()}`,
+        title: newVideoTitle.trim(),
+        url: newVideoUrl.trim()
+      };
+      
+      saveVideo(newVideo);
+      setNewVideoTitle('');
+      setNewVideoUrl('');
+      setShowVideoDialog(false);
+    }
+  };
+  
+  const handleDeleteVideo = (id: string) => {
+    deleteVideo(id);
+  };
+  
   const sessionsToRender = activeProfile 
     ? sessions.filter(session => session.profileId === activeProfile.id && session.completed)
     : [];
@@ -116,8 +144,9 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         </SheetHeader>
         
         <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid grid-cols-2 mb-4">
-            <TabsTrigger value="app">App Settings</TabsTrigger>
+          <TabsList className="grid grid-cols-3 mb-4">
+            <TabsTrigger value="app">App</TabsTrigger>
+            <TabsTrigger value="videos">Videos</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
           
@@ -148,6 +177,14 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="netflix" id="theme-netflix" />
                   <Label htmlFor="theme-netflix">Netflix</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="isomorphic" id="theme-isomorphic" />
+                  <Label htmlFor="theme-isomorphic">Isomorphic</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="minimalist" id="theme-minimalist" />
+                  <Label htmlFor="theme-minimalist">Minimalist</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -183,6 +220,81 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   checked={settings.splitView}
                   onCheckedChange={handleViewToggle}
                 />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="videos">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium">YouTube Videos</h3>
+                <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" variant="outline">
+                      <Plus className="h-4 w-4 mr-2" /> Add
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Add YouTube Video</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="title" className="text-right">Title</Label>
+                        <Input
+                          id="title"
+                          value={newVideoTitle}
+                          onChange={(e) => setNewVideoTitle(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="url" className="text-right">URL</Label>
+                        <Input
+                          id="url"
+                          value={newVideoUrl}
+                          onChange={(e) => setNewVideoUrl(e.target.value)}
+                          className="col-span-3"
+                          placeholder="https://www.youtube.com/watch?v=..."
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DialogClose>
+                      <Button onClick={handleAddVideo}>Add Video</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
+              <div className="space-y-2">
+                {videos.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm opacity-70">No videos added</p>
+                    <p className="text-xs mt-1 opacity-50">Add YouTube videos for focus music</p>
+                  </div>
+                ) : (
+                  videos.map(video => (
+                    <div key={video.id} className="flex items-center justify-between p-3 rounded-md bg-secondary/30">
+                      <div className="flex items-center gap-2">
+                        <Youtube className="h-4 w-4 text-primary" />
+                        <div>
+                          <div className="text-sm font-medium">{video.title}</div>
+                          <div className="text-xs opacity-70 truncate max-w-[220px]">{video.url}</div>
+                        </div>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => handleDeleteVideo(video.id)}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </TabsContent>

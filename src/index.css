@@ -170,6 +170,74 @@
   --radius: 0.25rem;
 }
 
+/* Isomorphic Theme */
+.theme-isomorphic {
+  --background: 210 20% 98%;
+  --foreground: 224 71% 4%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 224 71% 4%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 71% 4%;
+  
+  --primary: 220 50% 50%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 210 20% 96%;
+  --secondary-foreground: 222 47% 11%;
+  
+  --muted: 210 20% 96%;
+  --muted-foreground: 220 9% 46%;
+  
+  --accent: 220 50% 50%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 220 50% 50%;
+  
+  --radius: 0.75rem;
+  
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Minimalist Theme */
+.theme-minimalist {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 5%;
+  
+  --card: 0 0% 98%;
+  --card-foreground: 0 0% 5%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 5%;
+  
+  --primary: 0 0% 20%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 20%;
+  
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 50%;
+  
+  --accent: 0 0% 20%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 100% 45%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 0 0% 20%;
+  
+  --radius: 0.25rem;
+}
+
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -191,7 +259,7 @@ h1, h2, h3, h4, h5, h6 {
 /* NES Retro Theme Styles */
 .theme-nes-retro .glass-panel {
   background-color: rgba(0, 0, 10, 0.8);
-  border: 2px solid hsl(var(--border));
+  border: 4px solid #a09010;
   box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.9);
 }
 
@@ -209,6 +277,17 @@ h1, h2, h3, h4, h5, h6 {
   animation: pixel-blink 1s step-end infinite;
 }
 
+.nes-btn {
+  border: 3px solid #a09010 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  transition: all 0.1s !important;
+}
+
+.nes-btn:active {
+  box-shadow: 1px 1px 0 #000 !important;
+  transform: translate(2px, 2px) !important;
+}
+
 /* Netflix Theme Styles */
 .theme-netflix .glass-panel {
   background-color: rgba(20, 20, 20, 0.9);
@@ -224,10 +303,97 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #444;
 }
 
+/* Isomorphic Theme Styles */
+.theme-isomorphic .glass-panel {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+.theme-isomorphic button {
+  transition: all 0.2s;
+}
+
+.theme-isomorphic button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Minimalist Theme Styles */
+.theme-minimalist .glass-panel {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.theme-minimalist button {
+  transition: all 0.2s;
+}
+
 /* Glass panels for all themes */
 .glass-panel {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+/* Timer styles */
+.timer-display {
+  font-size: 6rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.timer-display-nes {
+  font-size: 4rem;
+  font-weight: 400;
+  font-family: 'Press Start 2P', cursive;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+  text-shadow: 3px 3px 0 #000;
+  color: #a09010;
+}
+
+.timer-display-netflix {
+  font-size: 6rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: #E50914;
+}
+
+.timer-progress {
+  height: 8px;
+  background-color: hsl(var(--secondary));
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.timer-progress-nes {
+  height: 16px;
+  background-color: #333;
+  border: 3px solid #a09010;
+  overflow: hidden;
+}
+
+.timer-progress-bar {
+  height: 100%;
+  background-color: hsl(var(--primary));
+  transition: width 1s ease;
+}
+
+.timer-progress-bar-nes {
+  background-color: #a09010;
+  transition: width 0.1s step-end;
+}
+
+.timer-progress-bar-netflix {
+  background-color: #E50914;
 }
 
 /* Animations */
@@ -235,4 +401,17 @@ h1, h2, h3, h4, h5, h6 {
   animation: scale-up 0.3s ease-out forwards;
 }
 
-/* Additional theme modifiers can be added here */
+@keyframes pixel-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

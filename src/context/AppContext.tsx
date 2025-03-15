@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { 
   Profile, Task, PomodoroSession, 
@@ -87,7 +86,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       'theme-dark-blue', 
       'theme-dark-mode',
       'theme-nes-retro',
-      'theme-netflix'
+      'theme-netflix',
+      'theme-isomorphic',
+      'theme-minimalist'
     );
     
     if (settings.theme === 'dark-blue') {
@@ -98,6 +99,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       document.documentElement.classList.add('theme-nes-retro');
     } else if (settings.theme === 'netflix') {
       document.documentElement.classList.add('theme-netflix');
+    } else if (settings.theme === 'isomorphic') {
+      document.documentElement.classList.add('theme-isomorphic');
+    } else if (settings.theme === 'minimalist') {
+      document.documentElement.classList.add('theme-minimalist');
     }
     // Default 'purple-space' theme is the root theme, no need to add class
   }, [settings.theme]);

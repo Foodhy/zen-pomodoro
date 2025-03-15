@@ -212,66 +212,83 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onToggleFullscreen
     return 100 - ((timeLeft / totalSeconds) * 100);
   };
   
+  // Determine the timer class based on theme
+  const getTimerClass = () => {
+    if (settings.theme === 'nes-retro') {
+      return 'timer-display-nes';
+    } else if (settings.theme === 'netflix') {
+      return 'timer-display-netflix';
+    } else {
+      return 'timer-display';
+    }
+  };
+  
   return (
     <div className="flex flex-col items-center justify-center py-6 fade-in">
-      <div className="mb-2">
-        <Badge variant={currentPhase === 'work' ? 'default' : 'secondary'} className="rounded-full px-3 py-1 text-xs">
+      <div className="mb-4">
+        <Badge 
+          variant={currentPhase === 'work' ? 'default' : 'secondary'} 
+          className={`rounded-full px-4 py-1 text-sm ${settings.theme === 'nes-retro' ? 'font-pixelated' : ''}`}
+        >
           {currentPhase === 'work' ? 'Work' : currentPhase === 'shortBreak' ? 'Short Break' : 'Long Break'}
         </Badge>
       </div>
       
-      <div className="timer-display mb-6">{formatTime(timeLeft)}</div>
+      <div className={getTimerClass()}>{formatTime(timeLeft)}</div>
       
-      <div className="w-full max-w-sm mb-6">
-        <div className="timer-progress">
+      <div className="w-full max-w-xs mb-8">
+        <div className={`timer-progress ${settings.theme === 'nes-retro' ? 'timer-progress-nes' : ''}`}>
           <div
-            className="timer-progress-bar"
+            className={`timer-progress-bar ${
+              settings.theme === 'nes-retro' ? 'timer-progress-bar-nes' : 
+              settings.theme === 'netflix' ? 'timer-progress-bar-netflix' : ''
+            }`}
             style={{ width: `${calculateProgress()}%` }}
           ></div>
         </div>
       </div>
       
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-4 mb-8">
         {isRunning ? (
           <Button
             variant="outline"
             size="icon"
-            className="h-12 w-12 rounded-full"
+            className={`h-16 w-16 rounded-full ${settings.theme === 'nes-retro' ? 'nes-btn' : ''}`}
             onClick={pauseTimer}
           >
-            <Pause className="h-5 w-5" />
+            <Pause className="h-6 w-6" />
           </Button>
         ) : (
           <Button
             variant="default"
             size="icon"
-            className="h-12 w-12 rounded-full btn-primary"
+            className={`h-16 w-16 rounded-full btn-primary ${settings.theme === 'nes-retro' ? 'nes-btn' : ''}`}
             onClick={startTimer}
           >
-            <Play className="h-5 w-5" />
+            <Play className="h-6 w-6" />
           </Button>
         )}
         
         <Button
           variant="outline"
           size="icon"
-          className="h-10 w-10 rounded-full"
+          className={`h-12 w-12 rounded-full ${settings.theme === 'nes-retro' ? 'nes-btn' : ''}`}
           onClick={resetTimer}
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="h-5 w-5" />
         </Button>
         
         <Button
           variant="outline"
           size="icon"
-          className="h-10 w-10 rounded-full"
+          className={`h-12 w-12 rounded-full ${settings.theme === 'nes-retro' ? 'nes-btn' : ''}`}
           onClick={skipToNextPhase}
         >
-          <SkipForward className="h-4 w-4" />
+          <SkipForward className="h-5 w-5" />
         </Button>
       </div>
       
-      <div className="text-sm opacity-70">
+      <div className={`text-sm opacity-70 ${settings.theme === 'nes-retro' ? 'font-pixelated text-xs' : ''}`}>
         {pomodoroCount} {pomodoroCount === 1 ? 'Pomodoro' : 'Pomodoros'} Completed
       </div>
     </div>

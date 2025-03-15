@@ -63,6 +63,7 @@ export default {
           green: '#198754',
           yellow: '#ffc107',
           white: '#f8f9fa',
+          gold: '#a09010'
         },
         // Netflix theme colors
         netflix: {
@@ -72,6 +73,21 @@ export default {
           red: '#E50914',
           lightRed: '#F40612',
           white: '#FFFFFF',
+        },
+        // Isomorphic theme colors
+        isomorphic: {
+          blue: '#3B82F6',
+          blueLight: '#93C5FD',
+          gray: '#F3F4F6',
+          grayDark: '#374151',
+        },
+        // Minimalist theme colors
+        minimalist: {
+          black: '#1A1A1A',
+          white: '#FFFFFF',
+          gray: '#F5F5F5',
+          grayDark: '#333333',
+          grayLight: '#E5E5E5',
         }
       },
       fontFamily: {

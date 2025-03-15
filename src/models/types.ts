@@ -35,7 +35,7 @@ export interface PomodoroSession {
 }
 
 // Theme types
-export type ThemeOption = 'purple-space' | 'dark-blue' | 'dark-mode' | 'nes-retro' | 'netflix';
+export type ThemeOption = 'purple-space' | 'dark-blue' | 'dark-mode' | 'nes-retro' | 'netflix' | 'isomorphic' | 'minimalist';
 
 // YouTube Video type
 export interface YouTubeVideo {
