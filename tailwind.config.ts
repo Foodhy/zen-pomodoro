@@ -52,11 +52,32 @@ export default {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
+        },
+        // NES theme colors
+        nes: {
+          black: '#212529',
+          darkGray: '#343a40',
+          gray: '#495057',
+          blue: '#0d6efd',
+          red: '#dc3545',
+          green: '#198754',
+          yellow: '#ffc107',
+          white: '#f8f9fa',
+        },
+        // Netflix theme colors
+        netflix: {
+          black: '#000000',
+          darkGray: '#141414',
+          gray: '#333333',
+          red: '#E50914',
+          lightRed: '#F40612',
+          white: '#FFFFFF',
         }
       },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
+        pixelated: ['"Press Start 2P"', 'cursive'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -95,6 +116,10 @@ export default {
         'scale-down': {
           '0%': { transform: 'scale(1)', opacity: '1' },
           '100%': { transform: 'scale(0.95)', opacity: '0' }
+        },
+        'pixel-blink': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' }
         }
       },
       animation: {
@@ -105,7 +130,8 @@ export default {
         'slide-in-right': 'slide-in-right 0.3s ease-out',
         'slide-out-right': 'slide-out-right 0.3s ease-out',
         'scale-up': 'scale-up 0.2s ease-out',
-        'scale-down': 'scale-down 0.2s ease-out'
+        'scale-down': 'scale-down 0.2s ease-out',
+        'pixel-blink': 'pixel-blink 1s step-end infinite'
       }
     }
   },

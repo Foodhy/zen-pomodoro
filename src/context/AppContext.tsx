@@ -82,15 +82,40 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   // Apply theme when settings change
   useEffect(() => {
     // Apply theme to document
-    document.documentElement.classList.remove('theme-purple-space', 'theme-dark-blue', 'theme-dark-mode');
+    document.documentElement.classList.remove(
+      'theme-purple-space', 
+      'theme-dark-blue', 
+      'theme-dark-mode',
+      'theme-nes-retro',
+      'theme-netflix'
+    );
     
     if (settings.theme === 'dark-blue') {
       document.documentElement.classList.add('theme-dark-blue');
     } else if (settings.theme === 'dark-mode') {
       document.documentElement.classList.add('theme-dark-mode');
+    } else if (settings.theme === 'nes-retro') {
+      document.documentElement.classList.add('theme-nes-retro');
+    } else if (settings.theme === 'netflix') {
+      document.documentElement.classList.add('theme-netflix');
     }
     // Default 'purple-space' theme is the root theme, no need to add class
   }, [settings.theme]);
+
+  // Check for task notifications
+  useEffect(() => {
+    if (settings.notificationsEnabled) {
+      // Check for task notifications on load
+      notificationService.checkTaskNotifications(tasks);
+      
+      // Set up interval to check for notifications
+      const intervalId = setInterval(() => {
+        notificationService.checkTaskNotifications(tasks);
+      }, 60000); // Check every minute
+      
+      return () => clearInterval(intervalId);
+    }
+  }, [tasks, settings.notificationsEnabled]);
 
   // Profile methods
   const handleSetActiveProfile = (profile: Profile) => {

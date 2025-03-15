@@ -1,14 +1,23 @@
 
 import { toast } from "@/components/ui/use-toast";
+import { Task } from "../models/types";
 
 export class NotificationService {
   private static instance: NotificationService;
   private permission: NotificationPermission = 'default';
+  private notificationSound: HTMLAudioElement | null = null;
 
   private constructor() {
     // Initialize notification permission status
     if ('Notification' in window) {
       this.permission = Notification.permission;
+    }
+    
+    // Initialize notification sound
+    try {
+      this.notificationSound = new Audio('/notification.mp3');
+    } catch (error) {
+      console.warn('Could not load notification sound', error);
     }
   }
 
@@ -39,7 +48,21 @@ export class NotificationService {
     }
   }
 
+  private playSound(): void {
+    try {
+      if (this.notificationSound) {
+        this.notificationSound.currentTime = 0;
+        this.notificationSound.play().catch(e => console.warn('Could not play notification sound', e));
+      }
+    } catch (error) {
+      console.warn('Error playing notification sound', error);
+    }
+  }
+
   public async showNotification(title: string, options?: NotificationOptions): Promise<boolean> {
+    // Play sound regardless of notification permission
+    this.playSound();
+    
     if (!('Notification' in window)) {
       // Fallback to toast notification
       toast({
@@ -120,6 +143,25 @@ export class NotificationService {
     }
 
     await this.showNotification(title, { body });
+  }
+
+  // Check for tasks that need notifications
+  public checkTaskNotifications(tasks: Task[]): void {
+    const now = new Date();
+    
+    tasks.forEach(task => {
+      if (task.notifyAt && !task.completed) {
+        const notifyDate = new Date(task.notifyAt);
+        
+        // If the notification time is within the last minute (to account for polling intervals)
+        const diffMs = Math.abs(now.getTime() - notifyDate.getTime());
+        const diffMinutes = Math.floor(diffMs / 60000);
+        
+        if (diffMinutes < 1) {
+          this.notifyTaskReminder(task.title);
+        }
+      }
+    });
   }
 }
 

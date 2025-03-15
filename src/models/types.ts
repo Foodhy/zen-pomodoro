@@ -18,6 +18,7 @@ export interface Task {
   title: string;
   completed: boolean;
   notifyAt?: string; // ISO date string for notification, optional
+  notifyTime?: string; // Time string for notification (HH:MM), optional
   createdAt: string;
   updatedAt: string;
 }
@@ -34,7 +35,7 @@ export interface PomodoroSession {
 }
 
 // Theme types
-export type ThemeOption = 'purple-space' | 'dark-blue' | 'dark-mode';
+export type ThemeOption = 'purple-space' | 'dark-blue' | 'dark-mode' | 'nes-retro' | 'netflix';
 
 // YouTube Video type
 export interface YouTubeVideo {

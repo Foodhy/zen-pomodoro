@@ -1,198 +1,238 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* Purple Space Theme (Default) */
-    --background: 260 25% 11%;
-    --foreground: 210 40% 98%;
-    
-    --card: 260 25% 14%;
-    --card-foreground: 210 40% 98%;
-    
-    --popover: 260 25% 14%;
-    --popover-foreground: 210 40% 98%;
-    
-    --primary: 252 87% 73%;
-    --primary-foreground: 260 25% 11%;
-    
-    --secondary: 260 25% 18%;
-    --secondary-foreground: 210 40% 98%;
-    
-    --muted: 260 25% 18%;
-    --muted-foreground: 215 20.2% 75.1%;
-    
-    --accent: 252 87% 73%;
-    --accent-foreground: 260 25% 11%;
-    
-    --destructive: 0 62.8% 50.6%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 260 25% 20%;
-    --input: 260 25% 20%;
-    --ring: 252 87% 73%;
-    
-    --radius: 0.75rem;
-  }
-
-  .theme-dark-blue {
-    --background: 220 35% 11%;
-    --foreground: 210 40% 98%;
-    
-    --card: 220 35% 14%;
-    --card-foreground: 210 40% 98%;
-    
-    --popover: 220 35% 14%;
-    --popover-foreground: 210 40% 98%;
-    
-    --primary: 195 85% 65%;
-    --primary-foreground: 220 35% 11%;
-    
-    --secondary: 220 35% 18%;
-    --secondary-foreground: 210 40% 98%;
-    
-    --muted: 220 35% 18%;
-    --muted-foreground: 215 20.2% 75.1%;
-    
-    --accent: 195 85% 65%;
-    --accent-foreground: 220 35% 11%;
-    
-    --destructive: 0 62.8% 50.6%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 220 35% 20%;
-    --input: 220 35% 20%;
-    --ring: 195 85% 65%;
-  }
-
-  .theme-dark-mode {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    
-    --card: 240 10% 6.9%;
-    --card-foreground: 0 0% 98%;
-    
-    --popover: 240 10% 6.9%;
-    --popover-foreground: 0 0% 98%;
-    
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 10% 3.9%;
-    
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 0 0% 80%;
-  }
+:root {
+  --background: 271 100% 5%;
+  --foreground: 273 100% 97%;
+  
+  --card: 271 50% 10%;
+  --card-foreground: 273 100% 97%;
+  
+  --popover: 271 65% 8%;
+  --popover-foreground: 273 100% 97%;
+  
+  --primary: 270 100% 70%;
+  --primary-foreground: 273 100% 97%;
+  
+  --secondary: 272 30% 18%;
+  --secondary-foreground: 273 100% 97%;
+  
+  --muted: 272 30% 18%;
+  --muted-foreground: 273 50% 80%;
+  
+  --accent: 270 100% 70%;
+  --accent-foreground: 273 100% 97%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 273 100% 97%;
+  
+  --border: 272 30% 18%;
+  --input: 272 30% 18%;
+  --ring: 270 100% 70%;
+  
+  --radius: 0.5rem;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+.theme-dark-blue {
+  --background: 220 50% 5%;
+  --foreground: 220 50% 97%;
   
-  html,
-  body {
-    height: 100%;
-    overflow-x: hidden;
-  }
+  --card: 220 50% 10%;
+  --card-foreground: 220 50% 97%;
   
-  body {
-    @apply bg-background text-foreground font-inter antialiased;
-  }
+  --popover: 220 50% 8%;
+  --popover-foreground: 220 50% 97%;
   
-  #root {
-    @apply h-full max-w-full m-0 p-0;
-  }
+  --primary: 196 100% 50%;
+  --primary-foreground: 0 0% 0%;
   
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-montserrat font-medium;
-  }
+  --secondary: 220 30% 18%;
+  --secondary-foreground: 220 50% 97%;
+  
+  --muted: 220 30% 18%;
+  --muted-foreground: 220 50% 80%;
+  
+  --accent: 196 100% 50%;
+  --accent-foreground: 0 0% 0%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 220 50% 97%;
+  
+  --border: 220 30% 18%;
+  --input: 220 30% 18%;
+  --ring: 196 100% 50%;
 }
 
-@layer components {
-  .glass-panel {
-    @apply bg-card/80 backdrop-blur-lg border border-border/50 shadow-lg;
-  }
+.theme-dark-mode {
+  --background: 0 0% 5%;
+  --foreground: 0 0% 97%;
   
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all;
-  }
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 97%;
   
-  .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all;
-  }
+  --popover: 0 0% 8%;
+  --popover-foreground: 0 0% 97%;
   
-  .timer-display {
-    @apply font-montserrat text-6xl sm:text-8xl font-light tracking-tight;
-  }
+  --primary: 0 0% 80%;
+  --primary-foreground: 0 0% 0%;
   
-  .timer-progress {
-    @apply h-2 rounded-full bg-secondary overflow-hidden transition-all duration-300;
-  }
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 97%;
   
-  .timer-progress-bar {
-    @apply h-full bg-primary transition-all ease-linear;
-  }
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 70%;
+  
+  --accent: 0 0% 80%;
+  --accent-foreground: 0 0% 0%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 97%;
+  
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 0 0% 80%;
 }
 
-@layer utilities {
-  .fade-in {
-    animation: fadeIn 0.4s ease-out forwards;
-  }
+/* NES Retro Theme */
+.theme-nes-retro {
+  --background: 0 0% 10%;
+  --foreground: 56 100% 90%;
   
-  .slide-in {
-    animation: slideIn 0.5s ease-out forwards;
-  }
+  --card: 240 100% 15%;
+  --card-foreground: 56 100% 90%;
   
-  .scale-in {
-    animation: scaleIn 0.4s ease-out forwards;
-  }
+  --popover: 0 0% 10%;
+  --popover-foreground: 56 100% 90%;
   
-  .slide-up {
-    animation: slideUp 0.5s ease-out forwards;
-  }
+  --primary: 120 100% 40%;
+  --primary-foreground: 0 0% 0%;
   
-  .slide-right {
-    animation: slideRight 0.5s ease-out forwards;
-  }
+  --secondary: 0 100% 40%;
+  --secondary-foreground: 0 0% 100%;
+  
+  --muted: 240 5% 25%;
+  --muted-foreground: 56 10% 70%;
+  
+  --accent: 56 100% 50%;
+  --accent-foreground: 0 0% 0%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 56 100% 50%;
+  --input: 56 100% 10%;
+  --ring: 56 100% 50%;
+  
+  --radius: 0;
+  
+  font-family: "Press Start 2P", cursive;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Netflix Theme */
+.theme-netflix {
+  --background: 0 0% 8%;
+  --foreground: 0 0% 97%;
+  
+  --card: 0 0% 12%;
+  --card-foreground: 0 0% 97%;
+  
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 97%;
+  
+  --primary: 0 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 0 0% 20%;
+  --secondary-foreground: 0 0% 97%;
+  
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 70%;
+  
+  --accent: 0 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 97%;
+  
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 0 100% 50%;
+  
+  --radius: 0.25rem;
 }
 
-@keyframes slideIn {
-  from { transform: translateX(-20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-@keyframes scaleIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
 }
 
-@keyframes slideRight {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+/* Custom Theme Styles */
+
+/* NES Retro Theme Styles */
+.theme-nes-retro .glass-panel {
+  background-color: rgba(0, 0, 10, 0.8);
+  border: 2px solid hsl(var(--border));
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.9);
 }
+
+.theme-nes-retro button {
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.9);
+  transition: all 0.1s;
+}
+
+.theme-nes-retro button:active {
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+  transform: translate(2px, 2px);
+}
+
+.theme-nes-retro .text-gradient {
+  animation: pixel-blink 1s step-end infinite;
+}
+
+/* Netflix Theme Styles */
+.theme-netflix .glass-panel {
+  background-color: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-netflix button {
+  border-radius: 2px;
+}
+
+.theme-netflix input, .theme-netflix select {
+  background-color: #333;
+  border-color: #444;
+}
+
+/* Glass panels for all themes */
+.glass-panel {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Animations */
+.scale-in {
+  animation: scale-up 0.3s ease-out forwards;
+}
+
+/* Additional theme modifiers can be added here */

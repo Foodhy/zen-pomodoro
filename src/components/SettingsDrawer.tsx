@@ -141,6 +141,14 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   <RadioGroupItem value="dark-mode" id="theme-dark" />
                   <Label htmlFor="theme-dark">Dark Mode</Label>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="nes-retro" id="theme-nes" />
+                  <Label htmlFor="theme-nes">NES Retro</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="netflix" id="theme-netflix" />
+                  <Label htmlFor="theme-netflix">Netflix</Label>
+                </div>
               </RadioGroup>
             </div>
             

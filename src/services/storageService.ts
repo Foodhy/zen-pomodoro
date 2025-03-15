@@ -1,4 +1,3 @@
-
 import { 
   Profile, Task, PomodoroSession, 
   ThemeOption, AppSettings, YouTubeVideo
@@ -27,11 +26,11 @@ const DEFAULT_PROFILES: Profile[] = [
     updatedAt: new Date().toISOString()
   },
   {
-    id: 'profile-cleaning',
-    name: 'Cleaning',
+    id: 'profile-playing',
+    name: 'Playing',
     workDuration: 20,
-    shortBreakDuration: 5,
-    longBreakDuration: 15,
+    shortBreakDuration: 10,
+    longBreakDuration: 20,
     longBreakInterval: 3,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
