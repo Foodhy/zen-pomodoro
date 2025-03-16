@@ -11,7 +11,7 @@ import notificationService from "../services/notificationService";
 
 const MainApp: React.FC = () => {
   const { settings } = useApp();
-  const [isFullscreen, setIsFullscreen] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isTasksVisible, setIsTasksVisible] = useState(true);
   const [isYouTubeMinimized, setIsYouTubeMinimized] = useState(true);
@@ -43,7 +43,10 @@ const MainApp: React.FC = () => {
       <header className="py-4 px-6 border-b border-border/50 glass-panel">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center space-x-1">
-            <h1 className="text-xl font-medium">ZenPomodoro</h1>
+            <h1 className="text-sm hidden md:text-xl md:block font-bold">
+              Zen-Pomodoro
+            </h1>
+            <h1 className="text-sm sm:block md:hidden font-bold">ZP</h1>
           </div>
 
           <div className="flex items-center space-x-2">
@@ -75,7 +78,7 @@ const MainApp: React.FC = () => {
             <PomodoroTimer onToggleFullscreen={toggleFullscreen} />
 
             {/* Fullscreen toggle */}
-            <div className="absolute top-4 right-4 hidden md:block">
+            <div className="absolute top-4 right-4">
               <Button
                 variant="ghost"
                 size="icon"

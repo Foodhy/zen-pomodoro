@@ -262,17 +262,6 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                         className="pr-8 relative"
                       >
                         {video.title}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0 absolute right-1"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteVideo(video.id);
-                          }}
-                        >
-                          <Trash className="h-3 w-3" />
-                        </Button>
                       </SelectItem>
                     ))}
                   </SelectContent>
