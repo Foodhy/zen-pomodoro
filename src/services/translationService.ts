@@ -1,18 +1,154 @@
 
-import { LanguageOption } from "../models/types";
-
-// Dictionary for translations
-type TranslationDictionary = {
+interface Translations {
   [key: string]: {
-    [key in LanguageOption]: string;
+    en: string;
+    es: string;
   };
-};
+}
 
-export const translations: TranslationDictionary = {
-  // General
+const translations: Translations = {
+  // App
   "app.title": {
-    en: "Zen-Pomodoro",
-    es: "Zen-Pomodoro",
+    en: "Zen Pomodoro",
+    es: "Zen Pomodoro",
+  },
+  
+  // Settings
+  "settings.title": {
+    en: "Settings",
+    es: "Configuración",
+  },
+  "settings.customize": {
+    en: "Customize your experience",
+    es: "Personaliza tu experiencia",
+  },
+  "settings.app": {
+    en: "App",
+    es: "Aplicación",
+  },
+  "settings.theme": {
+    en: "Theme",
+    es: "Tema",
+  },
+  "settings.videos": {
+    en: "Videos",
+    es: "Videos",
+  },
+  "settings.history": {
+    en: "History",
+    es: "Historial",
+  },
+  "settings.language": {
+    en: "Language",
+    es: "Idioma",
+  },
+  "settings.notifications": {
+    en: "Notifications",
+    es: "Notificaciones",
+  },
+  "settings.notificationsEnable": {
+    en: "Enable notifications",
+    es: "Activar notificaciones",
+  },
+  "settings.soundEnable": {
+    en: "Enable sound",
+    es: "Activar sonido",
+  },
+  "settings.display": {
+    en: "Display",
+    es: "Visualización",
+  },
+  "settings.splitViewMode": {
+    en: "Split view mode",
+    es: "Modo vista dividida",
+  },
+  "settings.keyboard": {
+    en: "Keyboard",
+    es: "Teclado",
+  },
+  "settings.keyboardShortcuts": {
+    en: "Keyboard shortcuts",
+    es: "Atajos de teclado",
+  },
+  "settings.viewShortcuts": {
+    en: "View keyboard shortcuts",
+    es: "Ver atajos de teclado",
+  },
+  "settings.resetStorage": {
+    en: "Reset all data",
+    es: "Restablecer todos los datos",
+  },
+  "settings.newThemes": {
+    en: "New Themes",
+    es: "Nuevos Temas",
+  },
+  "settings.youtubeVideos": {
+    en: "YouTube Videos",
+    es: "Videos de YouTube",
+  },
+  "settings.add": {
+    en: "Add",
+    es: "Añadir",
+  },
+  "settings.addVideo": {
+    en: "Add Video",
+    es: "Añadir Video",
+  },
+  "settings.title": {
+    en: "Title",
+    es: "Título",
+  },
+  "settings.cancel": {
+    en: "Cancel",
+    es: "Cancelar",
+  },
+  "settings.noVideos": {
+    en: "No videos added yet",
+    es: "Aún no hay videos añadidos",
+  },
+  "settings.addYoutube": {
+    en: "Add your favorite YouTube videos for focus time",
+    es: "Añade tus videos favoritos de YouTube para tiempo de concentración",
+  },
+  "settings.pomodoroHistory": {
+    en: "Pomodoro History",
+    es: "Historial de Pomodoro",
+  },
+  "settings.exportMarkdown": {
+    en: "Export to Markdown",
+    es: "Exportar a Markdown",
+  },
+  "settings.noHistory": {
+    en: "No pomodoro history yet",
+    es: "Aún no hay historial de pomodoro",
+  },
+  "settings.completePomodoro": {
+    en: "Complete pomodoro sessions to see them here",
+    es: "Completa sesiones de pomodoro para verlas aquí",
+  },
+  "settings.duration": {
+    en: "Duration",
+    es: "Duración",
+  },
+  "settings.minutes": {
+    en: "minutes",
+    es: "minutos",
+  },
+  "settings.toggleTasks": {
+    en: "Toggle Tasks Panel",
+    es: "Alternar Panel de Tareas",
+  },
+  "settings.toggleFullscreen": {
+    en: "Toggle Fullscreen",
+    es: "Alternar Pantalla Completa",
+  },
+  "settings.toggleFocusMode": {
+    en: "Toggle Focus Mode",
+    es: "Alternar Modo Concentración",
+  },
+  "settings.toggleSettings": {
+    en: "Toggle Settings",
+    es: "Alternar Configuración",
   },
   
   // Timer
@@ -42,7 +178,7 @@ export const translations: TranslationDictionary = {
   },
   "timer.skip": {
     en: "Skip",
-    es: "Omitir",
+    es: "Saltar",
   },
   
   // Tasks
@@ -50,25 +186,9 @@ export const translations: TranslationDictionary = {
     en: "Tasks",
     es: "Tareas",
   },
-  "tasks.addNew": {
-    en: "Add a new task... and press enter",
-    es: "Agregar una nueva tarea... y presiona enter",
-  },
-  "tasks.noTasks": {
-    en: "No tasks yet",
-    es: "No hay tareas todavía",
-  },
-  "tasks.addToStart": {
-    en: "Add a task to get started",
-    es: "Agrega una tarea para comenzar",
-  },
-  "tasks.completed": {
-    en: "Completed",
-    es: "Completadas",
-  },
   "tasks.clearCompleted": {
-    en: "Clear Completed",
-    es: "Borrar Completadas",
+    en: "Clear completed",
+    es: "Borrar completadas",
   },
   "tasks.priority": {
     en: "Priority",
@@ -86,54 +206,44 @@ export const translations: TranslationDictionary = {
     en: "Low",
     es: "Baja",
   },
-  "tasks.export": {
-    en: "Export Tasks",
-    es: "Exportar Tareas",
+  "tasks.newest": {
+    en: "Newest first",
+    es: "Más reciente primero",
+  },
+  "tasks.oldest": {
+    en: "Oldest first",
+    es: "Más antiguo primero",
+  },
+  "tasks.addNew": {
+    en: "Add a new task...",
+    es: "Añadir nueva tarea...",
+  },
+  "tasks.add": {
+    en: "Add",
+    es: "Añadir",
   },
   "tasks.import": {
-    en: "Import Tasks",
-    es: "Importar Tareas",
+    en: "Import",
+    es: "Importar",
+  },
+  "tasks.export": {
+    en: "Export",
+    es: "Exportar",
+  },
+  "tasks.noTasks": {
+    en: "No tasks yet",
+    es: "Aún no hay tareas",
+  },
+  "tasks.addToStart": {
+    en: "Add a task to get started",
+    es: "Añade una tarea para comenzar",
+  },
+  "tasks.completed": {
+    en: "Completed",
+    es: "Completadas",
   },
   
-  // Settings
-  "settings.title": {
-    en: "Settings",
-    es: "Configuración",
-  },
-  "settings.theme": {
-    en: "Theme",
-    es: "Tema",
-  },
-  "settings.language": {
-    en: "Language",
-    es: "Idioma",
-  },
-  "settings.shortcuts": {
-    en: "Keyboard Shortcuts",
-    es: "Atajos de Teclado",
-  },
-  "settings.notifications": {
-    en: "Enable Notifications",
-    es: "Habilitar Notificaciones",
-  },
-  "settings.sound": {
-    en: "Enable Sound",
-    es: "Habilitar Sonido",
-  },
-  "settings.splitView": {
-    en: "Split View Mode",
-    es: "Modo Vista Dividida",
-  },
-  "settings.focusMode": {
-    en: "Focus Mode",
-    es: "Modo Enfoque",
-  },
-  "settings.reset": {
-    en: "Reset Local Storage",
-    es: "Reiniciar Almacenamiento Local",
-  },
-  
-  // Themes
+  // Theme names
   "theme.purpleSpace": {
     en: "Purple Space",
     es: "Espacio Púrpura",
@@ -148,7 +258,7 @@ export const translations: TranslationDictionary = {
   },
   "theme.nesRetro": {
     en: "NES Retro",
-    es: "NES Retro",
+    es: "Retro NES",
   },
   "theme.netflix": {
     en: "Netflix",
@@ -180,7 +290,7 @@ export const translations: TranslationDictionary = {
   },
   "theme.glassmorphism": {
     en: "Glassmorphism",
-    es: "Glassmorfismo",
+    es: "Glasmorfismo",
   },
   "theme.motion": {
     en: "Motion",
@@ -190,17 +300,87 @@ export const translations: TranslationDictionary = {
     en: "Illustration",
     es: "Ilustración",
   },
+  "theme.miroStyle": {
+    en: "Miro Style",
+    es: "Estilo Miro",
+  },
+  
+  // Notes
+  "notes.title": {
+    en: "Notes & Planning",
+    es: "Notas & Planificación",
+  },
+  "notes.export": {
+    en: "Export",
+    es: "Exportar",
+  },
+  "notes.titlePlaceholder": {
+    en: "Note title...",
+    es: "Título de la nota...",
+  },
+  "notes.contentPlaceholder": {
+    en: "Write your notes here. Use markdown, code, or plain text...",
+    es: "Escribe tus notas aquí. Usa markdown, código o texto plano...",
+  },
+  "notes.category": {
+    en: "Category",
+    es: "Categoría",
+  },
+  "notes.category.technical": {
+    en: "Technical",
+    es: "Técnica",
+  },
+  "notes.category.planning": {
+    en: "Planning",
+    es: "Planificación",
+  },
+  "notes.category.code": {
+    en: "Code",
+    es: "Código",
+  },
+  "notes.category.ideas": {
+    en: "Ideas",
+    es: "Ideas",
+  },
+  "notes.category.other": {
+    en: "Other",
+    es: "Otro",
+  },
+  "notes.tags": {
+    en: "Tags (comma separated)",
+    es: "Etiquetas (separadas por comas)",
+  },
+  "notes.add": {
+    en: "Add Note",
+    es: "Añadir Nota",
+  },
+  "notes.search": {
+    en: "Search notes...",
+    es: "Buscar notas...",
+  },
+  "notes.filter": {
+    en: "Filter by",
+    es: "Filtrar por",
+  },
+  "notes.filter.all": {
+    en: "All Categories",
+    es: "Todas las Categorías",
+  },
+  "notes.noNotes": {
+    en: "No notes yet",
+    es: "Aún no hay notas",
+  },
+  "notes.addToStart": {
+    en: "Add a note to get started",
+    es: "Añade una nota para comenzar",
+  }
 };
 
-// Translation helper function
-export const t = (key: string, language: LanguageOption = "en"): string => {
-  if (translations[key] && translations[key][language]) {
-    return translations[key][language];
+export const t = (key: string, language: string): string => {
+  if (!translations[key]) {
+    console.warn(`Missing translation for: ${key}`);
+    return key;
   }
-  // Fallback to English if translation not found
-  if (translations[key] && translations[key]["en"]) {
-    return translations[key]["en"];
-  }
-  // Return the key if no translation found
-  return key;
+  
+  return translations[key][language as 'en' | 'es'] || translations[key].en;
 };

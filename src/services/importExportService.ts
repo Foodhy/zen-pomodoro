@@ -1,5 +1,5 @@
 
-import { Task } from "../models/types";
+import { Task, Note } from "../models/types";
 
 export const exportTasksToJson = (tasks: Task[]): void => {
   const tasksJson = JSON.stringify(tasks, null, 2);
@@ -70,3 +70,68 @@ export const exportSessionsToMarkdown = (sessions: Record<string, any>): void =>
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 };
+
+export const exportNotesToMarkdown = (notes: Note[]): void => {
+  let markdown = `# Notes and Planning Assistant\n\n`;
+
+  // Group notes by category
+  const categorizedNotes: Record<string, Note[]> = {};
+  notes.forEach(note => {
+    if (!categorizedNotes[note.category]) {
+      categorizedNotes[note.category] = [];
+    }
+    categorizedNotes[note.category].push(note);
+  });
+
+  // Build markdown content by category
+  for (const category in categorizedNotes) {
+    markdown += `## ${getCategoryTitle(category)}\n\n`;
+    
+    categorizedNotes[category].forEach(note => {
+      markdown += `### ${note.title}\n`;
+      markdown += `*Created: ${new Date(note.createdAt).toLocaleString()}*\n\n`;
+      
+      // For code notes, format as code blocks
+      if (category === 'code') {
+        markdown += "```\n" + note.content + "\n```\n\n";
+      } else {
+        markdown += note.content + "\n\n";
+      }
+      
+      // Add tags if present
+      if (note.tags && note.tags.length > 0) {
+        markdown += `**Tags:** ${note.tags.join(', ')}\n\n`;
+      }
+      
+      markdown += "---\n\n";
+    });
+  }
+
+  const blob = new Blob([markdown], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "notes_planner.md";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+function getCategoryTitle(category: string): string {
+  switch (category) {
+    case 'technical':
+      return '🧩 Technical Notes';
+    case 'planning':
+      return '📋 Planning Notes';
+    case 'code':
+      return '💻 Code Snippets';
+    case 'ideas':
+      return '💡 Ideas';
+    case 'other':
+      return '📝 Other Notes';
+    default:
+      return 'Notes';
+  }
+}

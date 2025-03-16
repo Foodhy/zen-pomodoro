@@ -31,6 +31,27 @@ export interface Task {
   updatedAt: string;
 }
 
+// Note category enum
+export enum NoteCategory {
+  TECHNICAL = "technical",
+  PLANNING = "planning",
+  CODE = "code",
+  IDEAS = "ideas",
+  OTHER = "other",
+}
+
+// Note types
+export interface Note {
+  id: string;
+  profileId: string;
+  title: string;
+  content: string;
+  category: NoteCategory;
+  tags?: string[]; // For grouping and searching
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Pomodoro Timer types
 export interface PomodoroSession {
   id: string;
@@ -59,7 +80,8 @@ export type ThemeOption =
   'neumorphism' | 
   'glassmorphism' | 
   'motion' | 
-  'illustration';
+  'illustration' |
+  'miro-style';
 
 // Language options
 export type LanguageOption = 'en' | 'es';

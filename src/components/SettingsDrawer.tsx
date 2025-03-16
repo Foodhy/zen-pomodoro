@@ -4,12 +4,12 @@ import { useApp } from "../context/AppContext";
 import { ThemeOption, PomodoroSession, YouTubeVideo, LanguageOption, KeyboardShortcuts } from "../models/types";
 import { format } from "date-fns";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "@/components/ui/sheet";
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -169,21 +169,22 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   const shortcuts: KeyboardShortcuts = DEFAULT_SHORTCUTS;
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md overflow-y-auto">
-        <SheetHeader className="mb-6">
-          <SheetTitle>{t("settings.title", settings.language)}</SheetTitle>
-          <SheetDescription>
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent className="sm:max-w-md overflow-y-auto">
+        <DrawerHeader className="mb-6">
+          <DrawerTitle>{t("settings.title", settings.language)}</DrawerTitle>
+          <DrawerDescription>
             {t("settings.customize", settings.language)}
-          </SheetDescription>
-        </SheetHeader>
+          </DrawerDescription>
+        </DrawerHeader>
 
         <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid grid-cols-1 md:grid-cols-4 mb-4 h-auto">
+          <TabsList className="grid grid-cols-1 md:grid-cols-5 mb-4 h-auto">
             <TabsTrigger value="app">{t("settings.app", settings.language)}</TabsTrigger>
             <TabsTrigger value="themes">{t("settings.theme", settings.language)}</TabsTrigger>
             <TabsTrigger value="videos">{t("settings.videos", settings.language)}</TabsTrigger>
             <TabsTrigger value="history">{t("settings.history", settings.language)}</TabsTrigger>
+            <TabsTrigger value="notes">{t("notes.title", settings.language)}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="app" className="space-y-6">
@@ -341,6 +342,10 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="illustration" id="theme-illustration" />
                   <Label htmlFor="theme-illustration">{t("theme.illustration", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="miro-style" id="theme-miro" />
+                  <Label htmlFor="theme-miro">{t("theme.miroStyle", settings.language)}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -502,6 +507,43 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               )}
             </div>
           </TabsContent>
+
+          <TabsContent value="notes">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium">{t("notes.title", settings.language)}</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mb-4 gap-1"
+                  onClick={() => exportSessionsToMarkdown()}
+                >
+                  <FileDown className="h-4 w-4" />
+                  {t("notes.export", settings.language)}
+                </Button>
+              </div>
+
+              <div className="text-center py-8">
+                <p className="text-sm opacity-70">
+                  {t("notes.title", settings.language)}
+                </p>
+                <p className="text-xs mt-1 opacity-50">
+                  Organiza notas técnicas, extrae puntos clave y estructura código de manera eficiente.
+                </p>
+                <div className="mt-4 p-4 border border-primary/20 rounded-md bg-secondary/30 text-left">
+                  <p className="text-sm font-medium mb-2">📌 Funciones clave:</p>
+                  <ul className="text-xs space-y-1 list-disc pl-5">
+                    <li>Extraer ideas principales de notas técnicas.</li>
+                    <li>Generar listas de tareas con prioridades.</li>
+                    <li>Sugerir estructuras de código basadas en requisitos.</li>
+                    <li>Crear diagramas de flujo automáticos para visualizar lógica.</li>
+                    <li>Recomendar mejoras en el código según buenas prácticas.</li>
+                    <li>Establecer recordatorios automáticos para tareas de desarrollo.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
         </Tabs>
 
         {/* Keyboard shortcuts dialog */}
@@ -547,8 +589,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
           </DialogContent>
         </Dialog>
-      </SheetContent>
-    </Sheet>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

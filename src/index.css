@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Press+Start+2P&display=swap");
 
 @tailwind base;
@@ -239,6 +240,270 @@
   --radius: 0.25rem;
 }
 
+/* Skeuomorphism Theme */
+.theme-skeuomorphism {
+  --background: 0 0% 95%;
+  --foreground: 0 0% 10%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+
+  --primary: 210 100% 50%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 90%;
+  --secondary-foreground: 0 0% 10%;
+
+  --muted: 0 0% 85%;
+  --muted-foreground: 0 0% 40%;
+
+  --accent: 210 100% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 0 0% 85%;
+  --input: 0 0% 85%;
+  --ring: 210 100% 50%;
+
+  --radius: 0.5rem;
+}
+
+/* Flat Design Theme */
+.theme-flat-design {
+  --background: 200 33% 96%;
+  --foreground: 200 33% 10%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 200 33% 10%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 200 33% 10%;
+
+  --primary: 200 100% 45%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 160 100% 45%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 200 20% 88%;
+  --muted-foreground: 200 33% 30%;
+
+  --accent: 340 100% 55%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 55%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 200 20% 88%;
+  --input: 200 20% 88%;
+  --ring: 200 100% 45%;
+
+  --radius: 0.125rem;
+}
+
+/* Bauhaus Theme */
+.theme-bauhaus {
+  --background: 0 0% 98%;
+  --foreground: 0 0% 7%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 7%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7%;
+
+  --primary: 0 80% 50%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 80% 50%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 60 80% 60%;
+  --muted-foreground: 0 0% 7%;
+
+  --accent: 60 80% 60%;
+  --accent-foreground: 0 0% 7%;
+
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 0 0% 85%;
+  --input: 0 0% 85%;
+  --ring: 0 80% 50%;
+
+  --radius: 0;
+}
+
+/* Neumorphism Theme */
+.theme-neumorphism {
+  --background: 210 20% 92%;
+  --foreground: 210 20% 20%;
+
+  --card: 210 20% 92%;
+  --card-foreground: 210 20% 20%;
+
+  --popover: 210 20% 92%;
+  --popover-foreground: 210 20% 20%;
+
+  --primary: 210 100% 50%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 20% 85%;
+  --secondary-foreground: 210 20% 20%;
+
+  --muted: 210 20% 85%;
+  --muted-foreground: 210 20% 40%;
+
+  --accent: 210 100% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 210 20% 85%;
+  --input: 210 20% 85%;
+  --ring: 210 100% 50%;
+
+  --radius: 1rem;
+}
+
+/* Glassmorphism Theme */
+.theme-glassmorphism {
+  --background: 220 30% 10%;
+  --foreground: 0 0% 100%;
+
+  --card: 220 30% 15%;
+  --card-foreground: 0 0% 100%;
+
+  --popover: 220 30% 15%;
+  --popover-foreground: 0 0% 100%;
+
+  --primary: 249 100% 66%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 270 100% 66%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 220 30% 20%;
+  --muted-foreground: 0 0% 80%;
+
+  --accent: 300 100% 66%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 66%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 30% 20%;
+  --input: 220 30% 20%;
+  --ring: 249 100% 66%;
+
+  --radius: 1.25rem;
+}
+
+/* Motion Theme */
+.theme-motion {
+  --background: 260 40% 5%;
+  --foreground: 260 40% 98%;
+
+  --card: 260 40% 10%;
+  --card-foreground: 260 40% 98%;
+
+  --popover: 260 40% 10%;
+  --popover-foreground: 260 40% 98%;
+
+  --primary: 260 100% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 335 100% 60%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 260 40% 15%;
+  --muted-foreground: 260 40% 70%;
+
+  --accent: 190 100% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 260 40% 15%;
+  --input: 260 40% 15%;
+  --ring: 260 100% 60%;
+
+  --radius: 1rem;
+}
+
+/* Illustration Theme */
+.theme-illustration {
+  --background: 262 83% 7%;
+  --foreground: 210 20% 98%;
+
+  --card: 262 83% 10%;
+  --card-foreground: 210 20% 98%;
+
+  --popover: 262 83% 10%;
+  --popover-foreground: 210 20% 98%;
+
+  --primary: 283 100% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 338 100% 60%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 262 83% 15%;
+  --muted-foreground: 210 20% 70%;
+
+  --accent: 31 100% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 262 83% 15%;
+  --input: 262 83% 15%;
+  --ring: 283 100% 60%;
+
+  --radius: 1rem;
+}
+
+/* Miro Style Theme */
+.theme-miro-style {
+  --background: 0 0% 98%;
+  --foreground: 0 0% 10%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+
+  --primary: 215 100% 50%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 10%;
+
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 40%;
+
+  --accent: 340 100% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 0 0% 80%;
+  --input: 0 0% 90%;
+  --ring: 215 100% 50%;
+
+  --radius: 0.5rem;
+}
+
 html,
 body,
 #root {
@@ -352,6 +617,256 @@ h6 {
   transition: all 0.2s;
 }
 
+/* Skeuomorphism Theme Styles */
+.theme-skeuomorphism .glass-panel {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8),
+              0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.theme-skeuomorphism button {
+  background: linear-gradient(to bottom, #fdfdfd, #e6e6e6);
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 0 white;
+}
+
+.theme-skeuomorphism button:active {
+  background: linear-gradient(to bottom, #e6e6e6, #fdfdfd);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.theme-skeuomorphism input,
+.theme-skeuomorphism select {
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #f5f5f5, #fff);
+}
+
+/* Flat Design Theme Styles */
+.theme-flat-design .glass-panel {
+  background-color: #fff;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.theme-flat-design button {
+  border: none;
+  box-shadow: none;
+  transition: background-color 0.2s;
+}
+
+.theme-flat-design input,
+.theme-flat-design select {
+  border: 2px solid #eee;
+  box-shadow: none;
+}
+
+/* Bauhaus Theme Styles */
+.theme-bauhaus .glass-panel {
+  background-color: #fff;
+  border: 4px solid #000;
+  box-shadow: none;
+}
+
+.theme-bauhaus button {
+  border: 3px solid #000;
+  box-shadow: none;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+.theme-bauhaus input,
+.theme-bauhaus select {
+  border: 3px solid #000;
+  border-radius: 0;
+}
+
+.theme-bauhaus h1, 
+.theme-bauhaus h2, 
+.theme-bauhaus h3 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+/* Neumorphism Theme Styles */
+.theme-neumorphism .glass-panel {
+  background-color: #e0e5ec;
+  border-radius: 20px;
+  box-shadow: 8px 8px 16px rgba(174, 174, 192, 0.4),
+              -8px -8px 16px rgba(255, 255, 255, 0.8);
+  border: none;
+}
+
+.theme-neumorphism button {
+  border: none;
+  background-color: #e0e5ec;
+  box-shadow: 5px 5px 10px rgba(174, 174, 192, 0.4),
+              -5px -5px 10px rgba(255, 255, 255, 0.8);
+}
+
+.theme-neumorphism button:active {
+  box-shadow: inset 5px 5px 10px rgba(174, 174, 192, 0.4),
+              inset -5px -5px 10px rgba(255, 255, 255, 0.8);
+}
+
+.theme-neumorphism input,
+.theme-neumorphism select {
+  background-color: #e0e5ec;
+  border: none;
+  box-shadow: inset 2px 2px 5px rgba(174, 174, 192, 0.4),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+}
+
+/* Glassmorphism Theme Styles */
+.theme-glassmorphism .glass-panel {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.theme-glassmorphism button {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-glassmorphism input,
+.theme-glassmorphism select {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Motion Theme Styles */
+.theme-motion .glass-panel {
+  animation: pulse-gentle 4s infinite;
+  background-color: rgba(30, 30, 50, 0.8);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.theme-motion button {
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.theme-motion button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.theme-motion button:active {
+  transform: translateY(0);
+}
+
+/* Illustration Theme Styles */
+.theme-illustration .glass-panel {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="10" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="30" r="15" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="70" r="20" fill="rgba(255,255,255,0.05)"/></svg>');
+  background-color: rgba(30, 30, 60, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-illustration button {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-illustration button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="5" cy="5" r="1" fill="rgba(255,255,255,0.3)"/><circle cx="15" cy="5" r="1" fill="rgba(255,255,255,0.3)"/><circle cx="5" cy="15" r="1" fill="rgba(255,255,255,0.3)"/><circle cx="15" cy="15" r="1" fill="rgba(255,255,255,0.3)"/></svg>');
+  opacity: 0.3;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Miro Style Theme */
+.theme-miro-style .glass-panel {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.theme-miro-style button {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.theme-miro-style input,
+.theme-miro-style select {
+  border: 1px solid #e0e0e0;
+}
+
+.theme-miro-style .miro-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.theme-miro-style .miro-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.theme-miro-style .miro-card.yellow {
+  background-color: #fff9c4;
+}
+
+.theme-miro-style .miro-card.blue {
+  background-color: #e3f2fd;
+}
+
+.theme-miro-style .miro-card.green {
+  background-color: #e8f5e9;
+}
+
+.theme-miro-style .miro-card.pink {
+  background-color: #fce4ec;
+}
+
+.theme-miro-style .miro-card.orange {
+  background-color: #fff3e0;
+}
+
+.theme-miro-style .miro-card.purple {
+  background-color: #f3e5f5;
+}
+
+/* Focus Mode */
+.focus-mode {
+  background-color: hsl(var(--background)) !important;
+}
+
+.focus-mode .glass-panel,
+.focus-mode .sidebar,
+.focus-mode .tasks-panel {
+  display: none !important;
+}
+
+.focus-mode .timer-display {
+  font-size: 8rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.focus-mode .timer-progress {
+  width: 50% !important;
+  margin: 0 auto !important;
+}
+
 /* Glass panels for all themes */
 .glass-panel {
   backdrop-filter: blur(10px);
@@ -443,5 +958,14 @@ h6 {
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
   }
 }
