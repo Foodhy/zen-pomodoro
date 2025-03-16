@@ -313,6 +313,10 @@ const translations: Translations = {
     en: "Export",
     es: "Exportar",
   },
+  "notes.import": {
+    en: "Import",
+    es: "Importar",
+  },
   "notes.titlePlaceholder": {
     en: "Note title...",
     es: "Título de la nota...",
@@ -353,6 +357,26 @@ const translations: Translations = {
     en: "Add Note",
     es: "Añadir Nota",
   },
+  "notes.save": {
+    en: "Save",
+    es: "Guardar",
+  },
+  "notes.update": {
+    en: "Update",
+    es: "Actualizar",
+  },
+  "notes.editNote": {
+    en: "Edit Note",
+    es: "Editar Nota",
+  },
+  "notes.deleteNote": {
+    en: "Delete Note",
+    es: "Eliminar Nota",
+  },
+  "notes.content": {
+    en: "Content",
+    es: "Contenido",
+  },
   "notes.search": {
     en: "Search notes...",
     es: "Buscar notas...",
@@ -372,6 +396,10 @@ const translations: Translations = {
   "notes.addToStart": {
     en: "Add a note to get started",
     es: "Añade una nota para comenzar",
+  },
+  "notes.addFirstNote": {
+    en: "Add your first note to start planning",
+    es: "Agrega tu primera nota para comenzar a planificar",
   }
 };
 

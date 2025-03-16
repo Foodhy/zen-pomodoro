@@ -1,7 +1,7 @@
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useApp } from "../context/AppContext";
-import { ThemeOption, PomodoroSession, YouTubeVideo, LanguageOption, KeyboardShortcuts } from "../models/types";
+import { ThemeOption, PomodoroSession, YouTubeVideo, LanguageOption, KeyboardShortcuts, Note, NoteCategory } from "../models/types";
 import { format } from "date-fns";
 import {
   Drawer,
@@ -36,10 +36,14 @@ import {
   Languages,
   Save,
   PencilLine,
+  Upload,
+  Import,
+  FileUp,
 } from "lucide-react";
 import notificationService from "../services/notificationService";
 import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
 import { t } from "../services/translationService";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SettingsDrawerProps {
   open: boolean;
@@ -75,7 +79,10 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
+  const [newNoteCategory, setNewNoteCategory] = useState<NoteCategory>(NoteCategory.TECHNICAL);
+  const [newNoteTags, setNewNoteTags] = useState("");
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleThemeChange = (value: string) => {
     setTheme(value as ThemeOption);
@@ -152,6 +159,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
   const handleAddOrUpdateNote = () => {
     if (newNoteTitle.trim() && newNoteContent.trim() && activeProfile) {
+      const tags = newNoteTags.split(",").map(tag => tag.trim()).filter(tag => tag !== "");
+      
       if (editingNoteId) {
         // Update existing note
         const updatedNote = notes.find(note => note.id === editingNoteId);
@@ -160,6 +169,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             ...updatedNote,
             title: newNoteTitle.trim(),
             content: newNoteContent.trim(),
+            category: newNoteCategory,
+            tags: tags,
             updatedAt: new Date().toISOString(),
           });
         }
@@ -170,6 +181,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
           profileId: activeProfile.id,
           title: newNoteTitle.trim(),
           content: newNoteContent.trim(),
+          category: newNoteCategory,
+          tags: tags,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
@@ -177,6 +190,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
       setNewNoteTitle("");
       setNewNoteContent("");
+      setNewNoteCategory(NoteCategory.TECHNICAL);
+      setNewNoteTags("");
       setEditingNoteId(null);
       setShowNoteDialog(false);
     }
@@ -187,6 +202,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     if (noteToEdit) {
       setNewNoteTitle(noteToEdit.title);
       setNewNoteContent(noteToEdit.content);
+      setNewNoteCategory(noteToEdit.category || NoteCategory.TECHNICAL);
+      setNewNoteTags(noteToEdit.tags ? noteToEdit.tags.join(", ") : "");
       setEditingNoteId(noteId);
       setShowNoteDialog(true);
     }
@@ -198,6 +215,11 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
   const handleExportNotes = () => {
     exportNotesToMarkdown();
+  };
+
+  const handleResetAllData = () => {
+    localStorage.clear();
+    window.location.reload();
   };
 
   const sessionsToRender = activeProfile
@@ -245,7 +267,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         </DrawerHeader>
 
         <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 gap-1 mb-4 h-auto">
+          <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 h-auto">
             <TabsTrigger value="app">{t("settings.app", settings.language)}</TabsTrigger>
             <TabsTrigger value="themes">{t("settings.theme", settings.language)}</TabsTrigger>
             <TabsTrigger value="videos">{t("settings.videos", settings.language)}</TabsTrigger>
@@ -328,10 +350,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
 
             <Button
-              onClick={() => {
-                localStorage.clear();
-                window.location.reload();
-              }}
+              onClick={handleResetAllData}
+              className="w-full"
             >
               {t("settings.resetStorage", settings.language)}
             </Button>
@@ -437,7 +457,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                     <div className="grid gap-4 py-4">
                       <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="title" className="text-right">
-                          {t("settings.title", settings.language)}
+                          {t("settings.titleField", settings.language)}
                         </Label>
                         <Input
                           id="title"
@@ -594,7 +614,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   >
                     <DialogTrigger asChild>
                       <Button size="sm" variant="default">
-                        <Plus className="h-4 w-4 mr-2" /> {t("notes.addNote", settings.language)}
+                        <Plus className="h-4 w-4 mr-2" /> {t("notes.add", settings.language)}
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[525px]">
@@ -602,13 +622,13 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                         <DialogTitle>
                           {editingNoteId 
                             ? t("notes.editNote", settings.language) 
-                            : t("notes.addNote", settings.language)}
+                            : t("notes.add", settings.language)}
                         </DialogTitle>
                       </DialogHeader>
                       <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="note-title" className="text-right">
-                            {t("notes.title", settings.language)}
+                            {t("notes.titlePlaceholder", settings.language)}
                           </Label>
                           <Input
                             id="note-title"
@@ -619,7 +639,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                         </div>
                         <div className="grid grid-cols-4 items-start gap-4">
                           <Label htmlFor="note-content" className="text-right pt-2">
-                            {t("notes.content", settings.language)}
+                            {t("notes.contentPlaceholder", settings.language)}
                           </Label>
                           <Textarea
                             id="note-content"
@@ -629,13 +649,45 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                             placeholder={t("notes.contentPlaceholder", settings.language)}
                           />
                         </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="note-category" className="text-right">
+                            {t("notes.category", settings.language)}
+                          </Label>
+                          <Select 
+                            value={newNoteCategory} 
+                            onValueChange={(value) => setNewNoteCategory(value as NoteCategory)}
+                          >
+                            <SelectTrigger className="col-span-3">
+                              <SelectValue placeholder={t("notes.category", settings.language)} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NoteCategory.TECHNICAL}>{t("notes.category.technical", settings.language)}</SelectItem>
+                              <SelectItem value={NoteCategory.PLANNING}>{t("notes.category.planning", settings.language)}</SelectItem>
+                              <SelectItem value={NoteCategory.CODE}>{t("notes.category.code", settings.language)}</SelectItem>
+                              <SelectItem value={NoteCategory.IDEAS}>{t("notes.category.ideas", settings.language)}</SelectItem>
+                              <SelectItem value={NoteCategory.OTHER}>{t("notes.category.other", settings.language)}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="note-tags" className="text-right">
+                            {t("notes.tags", settings.language)}
+                          </Label>
+                          <Input
+                            id="note-tags"
+                            value={newNoteTags}
+                            onChange={(e) => setNewNoteTags(e.target.value)}
+                            className="col-span-3"
+                            placeholder={t("notes.tags", settings.language)}
+                          />
+                        </div>
                       </div>
                       <DialogFooter>
                         <DialogClose asChild>
                           <Button variant="outline">{t("settings.cancel", settings.language)}</Button>
                         </DialogClose>
                         <Button onClick={handleAddOrUpdateNote}>
-                          {editingNoteId ? t("notes.update", settings.language) : t("notes.save", settings.language)}
+                          {editingNoteId ? t("notes.save", settings.language) : t("notes.add", settings.language)}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -648,7 +700,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   <div className="text-center py-8">
                     <p className="text-sm opacity-70">{t("notes.noNotes", settings.language)}</p>
                     <p className="text-xs mt-1 opacity-50">
-                      {t("notes.addFirstNote", settings.language)}
+                      {t("notes.addToStart", settings.language)}
                     </p>
                   </div>
                 ) : (
@@ -681,6 +733,20 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                           ? `${note.content.substring(0, 200)}...` 
                           : note.content}
                       </div>
+                      {note.category && (
+                        <div className="text-xs inline-flex items-center px-2 py-1 mt-2 bg-primary/10 rounded-full">
+                          {t(`notes.category.${note.category}`, settings.language)}
+                        </div>
+                      )}
+                      {note.tags && note.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {note.tags.map((tag, index) => (
+                            <span key={index} className="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary/50 text-xs">
+                              # {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <div className="text-xs text-muted-foreground mt-2">
                         {format(new Date(note.updatedAt), "MMM d, yyyy h:mm a")}
                       </div>
