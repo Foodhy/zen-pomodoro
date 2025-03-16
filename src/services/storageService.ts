@@ -1,3 +1,4 @@
+
 import {
   Profile,
   Task,
@@ -5,7 +6,9 @@ import {
   ThemeOption,
   AppSettings,
   YouTubeVideo,
+  LanguageOption,
 } from "../models/types";
+import { exportSessionsToMarkdown as exportToMarkdown } from "../services/importExportService";
 
 // Default predefined profiles
 const DEFAULT_PROFILES: Profile[] = [
@@ -66,6 +69,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   notificationsEnabled: true,
   soundEnabled: true,
   splitView: true,
+  language: "en",
+  keyboardShortcutsEnabled: true,
+  focusModeEnabled: false,
 };
 
 // Storage keys
@@ -189,6 +195,46 @@ export const deleteCompletedTasks = (profileId: string): void => {
   localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(filteredTasks));
 };
 
+export const bulkImportTasks = (importedTasks: Task[]): void => {
+  // Get existing tasks
+  const existingTasks = getTasks();
+  
+  // Process each imported task
+  const tasksToSave = importedTasks.map(importedTask => {
+    // Check if task already exists
+    const existingTask = existingTasks.find(task => task.id === importedTask.id);
+    
+    if (existingTask) {
+      // Update existing task with imported data
+      return {
+        ...existingTask,
+        ...importedTask,
+        updatedAt: new Date().toISOString()
+      };
+    } else {
+      // Add new task
+      return {
+        ...importedTask,
+        id: importedTask.id || `task-${Date.now()}`,
+        createdAt: importedTask.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+    }
+  });
+  
+  // Combine non-imported existing tasks with imported tasks
+  const nonImportedTasks = existingTasks.filter(
+    existingTask => !importedTasks.some(importedTask => 
+      importedTask.id === existingTask.id
+    )
+  );
+  
+  const allTasks = [...nonImportedTasks, ...tasksToSave];
+  
+  // Save all tasks
+  localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(allTasks));
+};
+
 // Pomodoro session methods
 export const getPomodoroSessions = (): PomodoroSession[] => {
   return initializeData<PomodoroSession[]>(STORAGE_KEYS.POMODORO_SESSIONS, []);
@@ -216,6 +262,44 @@ export const saveSession = (session: PomodoroSession): void => {
     STORAGE_KEYS.POMODORO_SESSIONS,
     JSON.stringify(sessions)
   );
+};
+
+export const getFormattedSessionsForExport = (profileId: string): Record<string, any> => {
+  const sessions = getSessionsByProfile(profileId);
+  const tasks = getTasksByProfile(profileId);
+  
+  // Group sessions by date
+  const groupedSessions: Record<string, any[]> = {};
+  
+  sessions.forEach(session => {
+    const date = new Date(session.startTime).toISOString().split('T')[0];
+    if (!groupedSessions[date]) {
+      groupedSessions[date] = [];
+    }
+    
+    // Find associated task if available
+    let taskTitle = '';
+    if (session.associatedTaskId) {
+      const task = tasks.find(t => t.id === session.associatedTaskId);
+      if (task) {
+        taskTitle = task.title;
+      }
+    }
+    
+    groupedSessions[date].push({
+      time: new Date(session.startTime).toLocaleTimeString(),
+      type: session.type,
+      duration: session.duration,
+      task: taskTitle,
+      notes: session.notes || ''
+    });
+  });
+  
+  return groupedSessions;
+};
+
+export const exportSessionsToMarkdown = (sessions: Record<string, any[]>): void => {
+  exportToMarkdown(sessions);
 };
 
 // Settings methods

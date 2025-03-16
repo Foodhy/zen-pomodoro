@@ -1,3 +1,4 @@
+
 import React, {
   createContext,
   useContext,
@@ -12,9 +13,11 @@ import {
   ThemeOption,
   AppSettings,
   YouTubeVideo,
+  LanguageOption,
 } from "../models/types";
 import * as storageService from "../services/storageService";
 import notificationService from "../services/notificationService";
+import { t } from "../services/translationService";
 
 interface AppContextType {
   // Profiles
@@ -29,20 +32,29 @@ interface AppContextType {
   saveTask: (task: Task) => void;
   deleteTask: (id: string) => void;
   deleteCompletedTasks: () => void;
+  bulkImportTasks: (tasks: Task[]) => void;
 
   // Pomodoro Sessions
   sessions: PomodoroSession[];
   saveSession: (session: PomodoroSession) => void;
+  exportSessionsToMarkdown: () => void;
 
   // Settings
   settings: AppSettings;
   saveSettings: (settings: AppSettings) => void;
   setTheme: (theme: ThemeOption) => void;
+  setLanguage: (language: LanguageOption) => void;
+  toggleFocusMode: () => void;
 
   // YouTube Videos
   videos: YouTubeVideo[];
   saveVideo: (video: YouTubeVideo) => void;
   deleteVideo: (id: string) => void;
+
+  // UI States
+  isFocusMode: boolean;
+  isFullscreen: boolean;
+  setIsFullscreen: (isFullscreen: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -58,6 +70,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     storageService.getSettings()
   );
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  
+  // UI state
+  const [isFocusMode, setIsFocusMode] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   // Load data on mount
   useEffect(() => {
@@ -106,23 +122,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       "theme-nes-retro",
       "theme-netflix",
       "theme-isomorphic",
-      "theme-minimalist"
+      "theme-minimalist",
+      "theme-skeuomorphism",
+      "theme-flat-design",
+      "theme-bauhaus",
+      "theme-neumorphism",
+      "theme-glassmorphism",
+      "theme-motion",
+      "theme-illustration"
     );
 
-    if (settings.theme === "dark-blue") {
-      document.documentElement.classList.add("theme-dark-blue");
-    } else if (settings.theme === "dark-mode") {
-      document.documentElement.classList.add("theme-dark-mode");
-    } else if (settings.theme === "nes-retro") {
-      document.documentElement.classList.add("theme-nes-retro");
-    } else if (settings.theme === "netflix") {
-      document.documentElement.classList.add("theme-netflix");
-    } else if (settings.theme === "isomorphic") {
-      document.documentElement.classList.add("theme-isomorphic");
-    } else if (settings.theme === "minimalist") {
-      document.documentElement.classList.add("theme-minimalist");
-    }
-    // Default 'purple-space' theme is the root theme, no need to add class
+    document.documentElement.classList.add(`theme-${settings.theme}`);
   }, [settings.theme]);
 
   // Check for task notifications
@@ -204,11 +214,32 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const handleBulkImportTasks = (importedTasks: Task[]) => {
+    if (activeProfile) {
+      // Make sure all tasks have the current profile ID
+      const profileTasks = importedTasks.map(task => ({
+        ...task,
+        profileId: activeProfile.id
+      }));
+      
+      storageService.bulkImportTasks(profileTasks);
+      setTasks(storageService.getTasksByProfile(activeProfile.id));
+    }
+  };
+
   // Session methods
   const handleSaveSession = (session: PomodoroSession) => {
     storageService.saveSession(session);
     if (activeProfile) {
       setSessions(storageService.getSessionsByProfile(activeProfile.id));
+    }
+  };
+
+  const handleExportSessionsToMarkdown = () => {
+    if (activeProfile) {
+      // Format sessions for markdown export
+      const formattedSessions = storageService.getFormattedSessionsForExport(activeProfile.id);
+      storageService.exportSessionsToMarkdown(formattedSessions);
     }
   };
 
@@ -220,6 +251,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleSetTheme = (theme: ThemeOption) => {
     handleSaveSettings({ ...settings, theme });
+  };
+
+  const handleSetLanguage = (language: LanguageOption) => {
+    handleSaveSettings({ ...settings, language });
+  };
+
+  const handleToggleFocusMode = () => {
+    setIsFocusMode(!isFocusMode);
   };
 
   // YouTube video methods
@@ -244,17 +283,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     saveTask: handleSaveTask,
     deleteTask: handleDeleteTask,
     deleteCompletedTasks: handleDeleteCompletedTasks,
+    bulkImportTasks: handleBulkImportTasks,
 
     sessions,
     saveSession: handleSaveSession,
+    exportSessionsToMarkdown: handleExportSessionsToMarkdown,
 
     settings,
     saveSettings: handleSaveSettings,
     setTheme: handleSetTheme,
+    setLanguage: handleSetLanguage,
+    toggleFocusMode: handleToggleFocusMode,
 
     videos,
     saveVideo: handleSaveVideo,
     deleteVideo: handleDeleteVideo,
+
+    isFocusMode,
+    isFullscreen,
+    setIsFullscreen,
   };
 
   return (

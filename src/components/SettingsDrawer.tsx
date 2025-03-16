@@ -1,6 +1,7 @@
+
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
-import { ThemeOption, PomodoroSession, YouTubeVideo } from "../models/types";
+import { ThemeOption, PomodoroSession, YouTubeVideo, LanguageOption, KeyboardShortcuts } from "../models/types";
 import { format } from "date-fns";
 import {
   Sheet,
@@ -24,8 +25,18 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Youtube, Trash, Plus } from "lucide-react";
+import {
+  Youtube,
+  Trash,
+  Plus,
+  Keyboard,
+  FileDown,
+  Download,
+  Languages,
+} from "lucide-react";
 import notificationService from "../services/notificationService";
+import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
+import { t } from "../services/translationService";
 
 interface SettingsDrawerProps {
   open: boolean;
@@ -40,20 +51,27 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     settings,
     saveSettings,
     setTheme,
+    setLanguage,
     sessions,
     activeProfile,
     videos,
     saveVideo,
     deleteVideo,
+    exportSessionsToMarkdown,
   } = useApp();
 
   const [notificationsRequested, setNotificationsRequested] = useState(false);
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoUrl, setNewVideoUrl] = useState("");
+  const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
 
   const handleThemeChange = (value: string) => {
     setTheme(value as ThemeOption);
+  };
+
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value as LanguageOption);
   };
 
   const handleNotificationsToggle = async (checked: boolean) => {
@@ -91,6 +109,13 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     });
   };
 
+  const handleKeyboardShortcutsToggle = (checked: boolean) => {
+    saveSettings({
+      ...settings,
+      keyboardShortcutsEnabled: checked,
+    });
+  };
+
   const handleAddVideo = () => {
     if (newVideoTitle.trim() && newVideoUrl.trim()) {
       const newVideo: YouTubeVideo = {
@@ -108,6 +133,10 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
   const handleDeleteVideo = (id: string) => {
     deleteVideo(id);
+  };
+
+  const handleExportMarkdown = () => {
+    exportSessionsToMarkdown();
   };
 
   const sessionsToRender = activeProfile
@@ -136,67 +165,51 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     return new Date(b).getTime() - new Date(a).getTime();
   });
 
+  // Keyboard shortcuts
+  const shortcuts: KeyboardShortcuts = DEFAULT_SHORTCUTS;
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-md overflow-y-auto">
         <SheetHeader className="mb-6">
-          <SheetTitle>Settings</SheetTitle>
+          <SheetTitle>{t("settings.title", settings.language)}</SheetTitle>
           <SheetDescription>
-            Customize your Pomodoro experience and view your activity history.
+            {t("settings.customize", settings.language)}
           </SheetDescription>
         </SheetHeader>
 
         <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid grid-cols-1 md:grid-cols-3 mb-4 h-auto">
-            <TabsTrigger value="app">App</TabsTrigger>
-            <TabsTrigger value="videos">Videos</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
+          <TabsList className="grid grid-cols-1 md:grid-cols-4 mb-4 h-auto">
+            <TabsTrigger value="app">{t("settings.app", settings.language)}</TabsTrigger>
+            <TabsTrigger value="themes">{t("settings.theme", settings.language)}</TabsTrigger>
+            <TabsTrigger value="videos">{t("settings.videos", settings.language)}</TabsTrigger>
+            <TabsTrigger value="history">{t("settings.history", settings.language)}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="app" className="space-y-6">
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Theme</h3>
+              <h3 className="text-sm font-medium">{t("settings.language", settings.language)}</h3>
               <RadioGroup
-                value={settings.theme}
-                onValueChange={handleThemeChange}
+                value={settings.language}
+                onValueChange={handleLanguageChange}
                 className="space-y-2"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="purple-space" id="theme-purple" />
-                  <Label htmlFor="theme-purple">Purple Space</Label>
+                  <RadioGroupItem value="en" id="lang-en" />
+                  <Label htmlFor="lang-en">English</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="dark-blue" id="theme-blue" />
-                  <Label htmlFor="theme-blue">Dark Blue</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="dark-mode" id="theme-dark" />
-                  <Label htmlFor="theme-dark">Dark Mode</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="nes-retro" id="theme-nes" />
-                  <Label htmlFor="theme-nes">NES Retro</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="netflix" id="theme-netflix" />
-                  <Label htmlFor="theme-netflix">Netflix</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="isomorphic" id="theme-isomorphic" />
-                  <Label htmlFor="theme-isomorphic">Isomorphic</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="minimalist" id="theme-minimalist" />
-                  <Label htmlFor="theme-minimalist">Minimalist</Label>
+                  <RadioGroupItem value="es" id="lang-es" />
+                  <Label htmlFor="lang-es">Español</Label>
                 </div>
               </RadioGroup>
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Notifications & Sound</h3>
+              <h3 className="text-sm font-medium">{t("settings.notifications", settings.language)}</h3>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="notifications">Enable Notifications</Label>
+                  <Label htmlFor="notifications">{t("settings.notificationsEnable", settings.language)}</Label>
                   <Switch
                     id="notifications"
                     checked={settings.notificationsEnabled}
@@ -204,7 +217,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="sound">Enable Sound</Label>
+                  <Label htmlFor="sound">{t("settings.soundEnable", settings.language)}</Label>
                   <Switch
                     id="sound"
                     checked={settings.soundEnabled}
@@ -215,9 +228,9 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Display</h3>
+              <h3 className="text-sm font-medium">{t("settings.display", settings.language)}</h3>
               <div className="flex items-center justify-between">
-                <Label htmlFor="split-view">Split View Mode</Label>
+                <Label htmlFor="split-view">{t("settings.splitViewMode", settings.language)}</Label>
                 <Switch
                   id="split-view"
                   checked={settings.splitView}
@@ -225,38 +238,135 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                 />
               </div>
             </div>
-            {/* reset local storage */}
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">{t("settings.keyboard", settings.language)}</h3>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="keyboard-shortcuts">{t("settings.keyboardShortcuts", settings.language)}</Label>
+                <Switch
+                  id="keyboard-shortcuts"
+                  checked={settings.keyboardShortcutsEnabled}
+                  onCheckedChange={handleKeyboardShortcutsToggle}
+                />
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full flex items-center gap-2"
+                onClick={() => setShowShortcutsDialog(true)}
+              >
+                <Keyboard className="h-4 w-4" />
+                {t("settings.viewShortcuts", settings.language)}
+              </Button>
+            </div>
+
             <Button
               onClick={() => {
                 localStorage.clear();
                 window.location.reload();
               }}
             >
-              Reset Local Storage
+              {t("settings.resetStorage", settings.language)}
             </Button>
+          </TabsContent>
+
+          <TabsContent value="themes" className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">{t("settings.theme", settings.language)}</h3>
+              <RadioGroup
+                value={settings.theme}
+                onValueChange={handleThemeChange}
+                className="space-y-2"
+              >
+                {/* Original themes */}
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="purple-space" id="theme-purple" />
+                  <Label htmlFor="theme-purple">{t("theme.purpleSpace", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="dark-blue" id="theme-blue" />
+                  <Label htmlFor="theme-blue">{t("theme.darkBlue", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="dark-mode" id="theme-dark" />
+                  <Label htmlFor="theme-dark">{t("theme.darkMode", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="nes-retro" id="theme-nes" />
+                  <Label htmlFor="theme-nes">{t("theme.nesRetro", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="netflix" id="theme-netflix" />
+                  <Label htmlFor="theme-netflix">{t("theme.netflix", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="isomorphic" id="theme-isomorphic" />
+                  <Label htmlFor="theme-isomorphic">{t("theme.isomorphic", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="minimalist" id="theme-minimalist" />
+                  <Label htmlFor="theme-minimalist">{t("theme.minimalist", settings.language)}</Label>
+                </div>
+
+                {/* New themes */}
+                <div className="pt-2 border-t border-border/30">
+                  <div className="text-xs font-medium text-muted-foreground mb-2">
+                    {t("settings.newThemes", settings.language)}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="skeuomorphism" id="theme-skeuomorphism" />
+                  <Label htmlFor="theme-skeuomorphism">{t("theme.skeuomorphism", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="flat-design" id="theme-flat-design" />
+                  <Label htmlFor="theme-flat-design">{t("theme.flatDesign", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="bauhaus" id="theme-bauhaus" />
+                  <Label htmlFor="theme-bauhaus">{t("theme.bauhaus", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="neumorphism" id="theme-neumorphism" />
+                  <Label htmlFor="theme-neumorphism">{t("theme.neumorphism", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="glassmorphism" id="theme-glassmorphism" />
+                  <Label htmlFor="theme-glassmorphism">{t("theme.glassmorphism", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="motion" id="theme-motion" />
+                  <Label htmlFor="theme-motion">{t("theme.motion", settings.language)}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="illustration" id="theme-illustration" />
+                  <Label htmlFor="theme-illustration">{t("theme.illustration", settings.language)}</Label>
+                </div>
+              </RadioGroup>
+            </div>
           </TabsContent>
 
           <TabsContent value="videos">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">YouTube Videos</h3>
+                <h3 className="text-sm font-medium">{t("settings.youtubeVideos", settings.language)}</h3>
                 <Dialog
                   open={showVideoDialog}
                   onOpenChange={setShowVideoDialog}
                 >
                   <DialogTrigger asChild>
                     <Button size="sm" variant="outline">
-                      <Plus className="h-4 w-4 mr-2" /> Add
+                      <Plus className="h-4 w-4 mr-2" /> {t("settings.add", settings.language)}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                      <DialogTitle>Add YouTube Video</DialogTitle>
+                      <DialogTitle>{t("settings.addVideo", settings.language)}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                       <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="title" className="text-right">
-                          Title
+                          {t("settings.title", settings.language)}
                         </Label>
                         <Input
                           id="title"
@@ -280,9 +390,9 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                     </div>
                     <DialogFooter>
                       <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
+                        <Button variant="outline">{t("settings.cancel", settings.language)}</Button>
                       </DialogClose>
-                      <Button onClick={handleAddVideo}>Add Video</Button>
+                      <Button onClick={handleAddVideo}>{t("settings.add", settings.language)}</Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -291,9 +401,9 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               <div className="space-y-2">
                 {videos.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-sm opacity-70">No videos added</p>
+                    <p className="text-sm opacity-70">{t("settings.noVideos", settings.language)}</p>
                     <p className="text-xs mt-1 opacity-50">
-                      Add YouTube videos for focus music
+                      {t("settings.addYoutube", settings.language)}
                     </p>
                   </div>
                 ) : (
@@ -329,13 +439,24 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
           <TabsContent value="history">
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Pomodoro History</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium">{t("settings.pomodoroHistory", settings.language)}</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mb-4 gap-1"
+                  onClick={handleExportMarkdown}
+                >
+                  <FileDown className="h-4 w-4" />
+                  {t("settings.exportMarkdown", settings.language)}
+                </Button>
+              </div>
 
               {sessionsToRender.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-sm opacity-70">No history available</p>
+                  <p className="text-sm opacity-70">{t("settings.noHistory", settings.language)}</p>
                   <p className="text-xs mt-1 opacity-50">
-                    Complete a Pomodoro to see it here
+                    {t("settings.completePomodoro", settings.language)}
                   </p>
                 </div>
               ) : (
@@ -359,18 +480,18 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                             <div className="flex justify-between">
                               <span>
                                 {session.type === "work"
-                                  ? "Work Session"
+                                  ? t("timer.work", settings.language)
                                   : session.type === "shortBreak"
-                                  ? "Short Break"
-                                  : "Long Break"}
+                                  ? t("timer.shortBreak", settings.language)
+                                  : t("timer.longBreak", settings.language)}
                               </span>
                               <span>
                                 {format(new Date(session.startTime), "h:mm a")}
                               </span>
                             </div>
                             <div className="mt-1 opacity-70">
-                              Duration: {Math.round(session.duration / 60)}{" "}
-                              minutes
+                              {t("settings.duration", settings.language)}: {Math.round(session.duration / 60)}{" "}
+                              {t("settings.minutes", settings.language)}
                             </div>
                           </div>
                         ))}
@@ -382,6 +503,50 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Keyboard shortcuts dialog */}
+        <Dialog
+          open={showShortcutsDialog}
+          onOpenChange={setShowShortcutsDialog}
+        >
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>{t("settings.keyboardShortcuts", settings.language)}</DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("timer.start", settings.language)}/{t("timer.pause", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.startTimer}/{shortcuts.pauseTimer}</kbd>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("timer.reset", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.resetTimer}</kbd>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("timer.skip", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.skipPhase}</kbd>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("settings.toggleTasks", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.toggleTasks}</kbd>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("settings.toggleFullscreen", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.toggleFullscreen}</kbd>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("settings.toggleFocusMode", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.toggleFocusMode}</kbd>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">{t("settings.toggleSettings", settings.language)}</span>
+                  <kbd className="px-2 py-1 bg-muted rounded text-xs font-mono">{shortcuts.toggleSettings}</kbd>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </SheetContent>
     </Sheet>
   );
