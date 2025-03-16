@@ -1,3 +1,4 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { 
   Profile, 
@@ -50,9 +51,10 @@ const KEYS = {
 export const getProfiles = (): Profile[] => {
   const profiles = localStorage.getItem(KEYS.PROFILES);
   if (!profiles) {
-    // Initialize with default profile
-    saveProfile(DEFAULT_PROFILE);
-    return [DEFAULT_PROFILE];
+    // Initialize with default profile without recursive call to saveProfile
+    const defaultProfiles = [DEFAULT_PROFILE];
+    localStorage.setItem(KEYS.PROFILES, JSON.stringify(defaultProfiles));
+    return defaultProfiles;
   }
   return JSON.parse(profiles);
 };
@@ -366,8 +368,9 @@ export const resetAllStorage = (): void => {
   localStorage.removeItem(KEYS.VIDEOS);
   localStorage.removeItem(KEYS.NOTES);
   
-  // Initialize with defaults
-  saveProfile(DEFAULT_PROFILE);
+  // Initialize with defaults - avoid circular reference
+  const defaultProfiles = [DEFAULT_PROFILE];
+  localStorage.setItem(KEYS.PROFILES, JSON.stringify(defaultProfiles));
   setActiveProfileId(DEFAULT_PROFILE.id);
   saveSettings(DEFAULT_SETTINGS);
 };
