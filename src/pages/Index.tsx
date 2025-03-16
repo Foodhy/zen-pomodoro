@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { AppProvider, useApp } from "../context/AppContext";
 import PomodoroTimer from "../components/PomodoroTimer";
@@ -13,17 +12,17 @@ import { initKeyboardShortcuts } from "../services/keyboardService";
 import { t } from "../services/translationService";
 
 const MainApp: React.FC = () => {
-  const { 
-    settings, 
-    setIsFullscreen, 
-    isFocusMode, 
+  const {
+    settings,
+    setIsFullscreen,
+    isFocusMode,
     toggleFocusMode,
-    isFullscreen
+    isFullscreen,
   } = useApp();
-  
+
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isTasksVisible, setIsTasksVisible] = useState(true);
-  const [isYouTubeMinimized, setIsYouTubeMinimized] = useState(true);
+  const [isYouTubeMinimized, setIsYouTubeMinimized] = useState(false);
 
   // Request notification permission on first load
   useEffect(() => {
@@ -35,16 +34,25 @@ const MainApp: React.FC = () => {
   // Set up keyboard shortcuts
   useEffect(() => {
     if (settings.keyboardShortcutsEnabled) {
-      const cleanup = initKeyboardShortcuts({
-        onToggleFullscreen: () => setIsFullscreen(!isFullscreen),
-        onToggleTasks: () => setIsTasksVisible(!isTasksVisible),
-        onToggleSettings: () => setIsSettingsOpen(!isSettingsOpen),
-        onToggleFocusMode: () => toggleFocusMode(),
-      }, settings.keyboardShortcutsEnabled);
-      
+      const cleanup = initKeyboardShortcuts(
+        {
+          onToggleFullscreen: () => setIsFullscreen(!isFullscreen),
+          onToggleTasks: () => setIsTasksVisible(!isTasksVisible),
+          onToggleSettings: () => setIsSettingsOpen(!isSettingsOpen),
+          onToggleFocusMode: () => toggleFocusMode(),
+        },
+        settings.keyboardShortcutsEnabled
+      );
+
       return cleanup;
     }
-  }, [settings.keyboardShortcutsEnabled, isFullscreen, isTasksVisible, isSettingsOpen, isFocusMode]);
+  }, [
+    settings.keyboardShortcutsEnabled,
+    isFullscreen,
+    isTasksVisible,
+    isSettingsOpen,
+    isFocusMode,
+  ]);
 
   // Toggle fullscreen mode
   const handleToggleFullscreen = () => {
@@ -94,7 +102,10 @@ const MainApp: React.FC = () => {
         {/* Timer section */}
         <div
           className={`transition-all duration-300 ease-in-out ${
-            settings.splitView && isTasksVisible && !isFullscreen && !isFocusMode
+            settings.splitView &&
+            isTasksVisible &&
+            !isFullscreen &&
+            !isFocusMode
               ? "w-full md:w-3/5 border-r border-border/50"
               : "w-full"
           }`}
@@ -183,6 +194,7 @@ const MainApp: React.FC = () => {
       <YouTubePlayer
         minimized={isYouTubeMinimized}
         onToggleMinimize={() => setIsYouTubeMinimized(!isYouTubeMinimized)}
+        setIsYouTubeMinimized={setIsYouTubeMinimized}
       />
     </div>
   );

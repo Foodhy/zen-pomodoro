@@ -38,11 +38,13 @@ import { YouTubeVideo } from "../models/types";
 interface YouTubePlayerProps {
   minimized?: boolean;
   onToggleMinimize: () => void;
+  setIsYouTubeMinimized: any;
 }
 
 export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   minimized = false,
   onToggleMinimize,
+  setIsYouTubeMinimized,
 }) => {
   const { videos, saveVideo, deleteVideo } = useApp();
   const [selectedVideoId, setSelectedVideoId] = useState<string>("");
@@ -54,7 +56,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   }); // Start bottom left
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [isClosed, setIsClosed] = useState(false);
+  const [isClosed, setIsClosed] = useState(true);
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoUrl, setNewVideoUrl] = useState("");
   const [showVideoDialog, setShowVideoDialog] = useState(false);
@@ -140,10 +142,12 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   }, [isDragging]);
 
   const handleClose = () => {
+    setIsYouTubeMinimized(true);
     setIsClosed(true);
   };
 
   const handleReopen = () => {
+    setIsYouTubeMinimized(false);
     setIsClosed(false);
   };
 
@@ -173,28 +177,28 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }
   };
 
-  if (minimized) {
-    return (
-      <div
-        className="fixed z-50 cursor-move"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-        }}
-        ref={playerRef}
-        onMouseDown={handleDragStart}
-      >
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-10 w-10 rounded-full p-0 shadow-md glass-panel"
-          onClick={onToggleMinimize}
-        >
-          <Music className="h-5 w-5" />
-        </Button>
-      </div>
-    );
-  }
+  // if (minimized) {
+  //   return (
+  //     <div
+  //       className="fixed z-50 cursor-move"
+  //       style={{
+  //         left: `${position.x}px`,
+  //         top: `${position.y}px`,
+  //       }}
+  //       ref={playerRef}
+  //       onMouseDown={handleDragStart}
+  //     >
+  //       <Button
+  //         variant="outline"
+  //         size="sm"
+  //         className="h-10 w-10 rounded-full p-0 shadow-md glass-panel"
+  //         onClick={onToggleMinimize}
+  //       >
+  //         <Music className="h-5 w-5" />
+  //       </Button>
+  //     </div>
+  //   );
+  // }
 
   if (isClosed) {
     return (
@@ -229,7 +233,9 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       ref={playerRef}
     >
       <div
-        className="glass-panel rounded-lg w-[320px] shadow-lg overflow-hidden"
+        className={`glass-panel rounded-lg w-[320px] shadow-lg overflow-hidden ${
+          minimized ? "w-fit" : ""
+        }`}
         onMouseDown={handleDragStart}
       >
         <div className="flex justify-between items-center p-2 border-b border-border/50">
@@ -339,7 +345,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         </div>
 
         {videoUrl && (
-          <div className="aspect-video w-full">
+          <div className={`aspect-video w-full ${minimized ? "hidden" : ""}`}>
             <iframe
               ref={iframeRef}
               width="100%"
