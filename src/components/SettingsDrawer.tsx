@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +34,8 @@ import {
   FileDown,
   Download,
   Languages,
+  Save,
+  PencilLine,
 } from "lucide-react";
 import notificationService from "../services/notificationService";
 import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
@@ -58,6 +61,10 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     saveVideo,
     deleteVideo,
     exportSessionsToMarkdown,
+    notes,
+    saveNote,
+    deleteNote,
+    exportNotesToMarkdown,
   } = useApp();
 
   const [notificationsRequested, setNotificationsRequested] = useState(false);
@@ -65,6 +72,10 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoUrl, setNewVideoUrl] = useState("");
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
+  const [showNoteDialog, setShowNoteDialog] = useState(false);
+  const [newNoteTitle, setNewNoteTitle] = useState("");
+  const [newNoteContent, setNewNoteContent] = useState("");
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
 
   const handleThemeChange = (value: string) => {
     setTheme(value as ThemeOption);
@@ -139,6 +150,56 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     exportSessionsToMarkdown();
   };
 
+  const handleAddOrUpdateNote = () => {
+    if (newNoteTitle.trim() && newNoteContent.trim() && activeProfile) {
+      if (editingNoteId) {
+        // Update existing note
+        const updatedNote = notes.find(note => note.id === editingNoteId);
+        if (updatedNote) {
+          saveNote({
+            ...updatedNote,
+            title: newNoteTitle.trim(),
+            content: newNoteContent.trim(),
+            updatedAt: new Date().toISOString(),
+          });
+        }
+      } else {
+        // Add new note
+        saveNote({
+          id: `note-${Date.now()}`,
+          profileId: activeProfile.id,
+          title: newNoteTitle.trim(),
+          content: newNoteContent.trim(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+      }
+
+      setNewNoteTitle("");
+      setNewNoteContent("");
+      setEditingNoteId(null);
+      setShowNoteDialog(false);
+    }
+  };
+
+  const handleEditNote = (noteId: string) => {
+    const noteToEdit = notes.find(note => note.id === noteId);
+    if (noteToEdit) {
+      setNewNoteTitle(noteToEdit.title);
+      setNewNoteContent(noteToEdit.content);
+      setEditingNoteId(noteId);
+      setShowNoteDialog(true);
+    }
+  };
+
+  const handleDeleteNote = (id: string) => {
+    deleteNote(id);
+  };
+
+  const handleExportNotes = () => {
+    exportNotesToMarkdown();
+  };
+
   const sessionsToRender = activeProfile
     ? sessions.filter(
         (session) => session.profileId === activeProfile.id && session.completed
@@ -165,13 +226,18 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     return new Date(b).getTime() - new Date(a).getTime();
   });
 
+  // Filter notes for active profile
+  const profileNotes = activeProfile
+    ? notes.filter(note => note.profileId === activeProfile.id)
+    : [];
+
   // Keyboard shortcuts
   const shortcuts: KeyboardShortcuts = DEFAULT_SHORTCUTS;
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="sm:max-w-md overflow-y-auto">
-        <DrawerHeader className="mb-6">
+      <DrawerContent className="max-h-[85vh] overflow-y-auto p-4">
+        <DrawerHeader className="mb-4 px-0">
           <DrawerTitle>{t("settings.title", settings.language)}</DrawerTitle>
           <DrawerDescription>
             {t("settings.customize", settings.language)}
@@ -179,7 +245,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         </DrawerHeader>
 
         <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid grid-cols-1 md:grid-cols-5 mb-4 h-auto">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 gap-1 mb-4 h-auto">
             <TabsTrigger value="app">{t("settings.app", settings.language)}</TabsTrigger>
             <TabsTrigger value="themes">{t("settings.theme", settings.language)}</TabsTrigger>
             <TabsTrigger value="videos">{t("settings.videos", settings.language)}</TabsTrigger>
@@ -512,35 +578,115 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium">{t("notes.title", settings.language)}</h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mb-4 gap-1"
-                  onClick={() => exportSessionsToMarkdown()}
-                >
-                  <FileDown className="h-4 w-4" />
-                  {t("notes.export", settings.language)}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1"
+                    onClick={handleExportNotes}
+                  >
+                    <FileDown className="h-4 w-4" />
+                    {t("notes.export", settings.language)}
+                  </Button>
+                  <Dialog
+                    open={showNoteDialog}
+                    onOpenChange={setShowNoteDialog}
+                  >
+                    <DialogTrigger asChild>
+                      <Button size="sm" variant="default">
+                        <Plus className="h-4 w-4 mr-2" /> {t("notes.addNote", settings.language)}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[525px]">
+                      <DialogHeader>
+                        <DialogTitle>
+                          {editingNoteId 
+                            ? t("notes.editNote", settings.language) 
+                            : t("notes.addNote", settings.language)}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="note-title" className="text-right">
+                            {t("notes.title", settings.language)}
+                          </Label>
+                          <Input
+                            id="note-title"
+                            value={newNoteTitle}
+                            onChange={(e) => setNewNoteTitle(e.target.value)}
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-start gap-4">
+                          <Label htmlFor="note-content" className="text-right pt-2">
+                            {t("notes.content", settings.language)}
+                          </Label>
+                          <Textarea
+                            id="note-content"
+                            value={newNoteContent}
+                            onChange={(e) => setNewNoteContent(e.target.value)}
+                            className="col-span-3 h-32"
+                            placeholder={t("notes.contentPlaceholder", settings.language)}
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">{t("settings.cancel", settings.language)}</Button>
+                        </DialogClose>
+                        <Button onClick={handleAddOrUpdateNote}>
+                          {editingNoteId ? t("notes.update", settings.language) : t("notes.save", settings.language)}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
 
-              <div className="text-center py-8">
-                <p className="text-sm opacity-70">
-                  {t("notes.title", settings.language)}
-                </p>
-                <p className="text-xs mt-1 opacity-50">
-                  Organiza notas técnicas, extrae puntos clave y estructura código de manera eficiente.
-                </p>
-                <div className="mt-4 p-4 border border-primary/20 rounded-md bg-secondary/30 text-left">
-                  <p className="text-sm font-medium mb-2">📌 Funciones clave:</p>
-                  <ul className="text-xs space-y-1 list-disc pl-5">
-                    <li>Extraer ideas principales de notas técnicas.</li>
-                    <li>Generar listas de tareas con prioridades.</li>
-                    <li>Sugerir estructuras de código basadas en requisitos.</li>
-                    <li>Crear diagramas de flujo automáticos para visualizar lógica.</li>
-                    <li>Recomendar mejoras en el código según buenas prácticas.</li>
-                    <li>Establecer recordatorios automáticos para tareas de desarrollo.</li>
-                  </ul>
-                </div>
+              <div className="space-y-2">
+                {profileNotes.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm opacity-70">{t("notes.noNotes", settings.language)}</p>
+                    <p className="text-xs mt-1 opacity-50">
+                      {t("notes.addFirstNote", settings.language)}
+                    </p>
+                  </div>
+                ) : (
+                  profileNotes.map((note) => (
+                    <div
+                      key={note.id}
+                      className="flex flex-col p-3 rounded-md bg-secondary/30"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-sm font-medium">{note.title}</div>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditNote(note.id)}
+                          >
+                            <PencilLine className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteNote(note.id)}
+                          >
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-xs whitespace-pre-wrap">
+                        {note.content.length > 200 
+                          ? `${note.content.substring(0, 200)}...` 
+                          : note.content}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-2">
+                        {format(new Date(note.updatedAt), "MMM d, yyyy h:mm a")}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </TabsContent>
