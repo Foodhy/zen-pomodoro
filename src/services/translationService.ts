@@ -1,4 +1,3 @@
-
 interface Translations {
   [key: string]: {
     en: string;
@@ -94,7 +93,7 @@ const translations: Translations = {
     en: "Add Video",
     es: "Añadir Video",
   },
-  "settings.title": {
+  "settings.titleField": {
     en: "Title",
     es: "Título",
   },

@@ -1,4 +1,3 @@
-
 import React, {
   createContext,
   useContext,
@@ -14,10 +13,13 @@ import {
   AppSettings,
   YouTubeVideo,
   LanguageOption,
+  Note,
+  NoteCategory,
 } from "../models/types";
 import * as storageService from "../services/storageService";
 import notificationService from "../services/notificationService";
 import { t } from "../services/translationService";
+import { exportNotesToMarkdown as exportNotes } from "../services/importExportService";
 
 interface AppContextType {
   // Profiles
@@ -38,6 +40,12 @@ interface AppContextType {
   sessions: PomodoroSession[];
   saveSession: (session: PomodoroSession) => void;
   exportSessionsToMarkdown: () => void;
+
+  // Notes
+  notes: Note[];
+  saveNote: (note: Note) => void;
+  deleteNote: (id: string) => void;
+  exportNotesToMarkdown: () => void;
 
   // Settings
   settings: AppSettings;
@@ -66,6 +74,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [sessions, setSessions] = useState<PomodoroSession[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [settings, setSettings] = useState<AppSettings>(
     storageService.getSettings()
   );
@@ -100,6 +109,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
           activeProf.id
         );
         setSessions(profileSessions);
+        
+        // Load notes for active profile
+        const profileNotes = storageService.getNotesByProfile(activeProf.id);
+        setNotes(profileNotes);
       }
 
       // Load settings
@@ -162,6 +175,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     // Load sessions for the selected profile
     const profileSessions = storageService.getSessionsByProfile(profile.id);
     setSessions(profileSessions);
+    
+    // Load notes for the selected profile
+    const profileNotes = storageService.getNotesByProfile(profile.id);
+    setNotes(profileNotes);
   };
 
   const handleSaveProfile = (profile: Profile) => {
@@ -243,6 +260,29 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  // Notes methods
+  const handleSaveNote = (note: Note) => {
+    if (activeProfile) {
+      const updatedNote = { ...note, profileId: activeProfile.id };
+      storageService.saveNote(updatedNote);
+      setNotes(storageService.getNotesByProfile(activeProfile.id));
+    }
+  };
+
+  const handleDeleteNote = (id: string) => {
+    storageService.deleteNote(id);
+    if (activeProfile) {
+      setNotes(storageService.getNotesByProfile(activeProfile.id));
+    }
+  };
+
+  const handleExportNotesToMarkdown = () => {
+    if (activeProfile) {
+      const profileNotes = storageService.getNotesByProfile(activeProfile.id);
+      exportNotes(profileNotes);
+    }
+  };
+
   // Settings methods
   const handleSaveSettings = (newSettings: AppSettings) => {
     storageService.saveSettings(newSettings);
@@ -282,12 +322,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     tasks,
     saveTask: handleSaveTask,
     deleteTask: handleDeleteTask,
-    deleteCompletedTasks: handleDeleteCompletedTasks,
+    deleteCompletedTasks: handleBulkImportTasks,
     bulkImportTasks: handleBulkImportTasks,
 
     sessions,
     saveSession: handleSaveSession,
     exportSessionsToMarkdown: handleExportSessionsToMarkdown,
+    
+    notes,
+    saveNote: handleSaveNote,
+    deleteNote: handleDeleteNote,
+    exportNotesToMarkdown: handleExportNotesToMarkdown,
 
     settings,
     saveSettings: handleSaveSettings,

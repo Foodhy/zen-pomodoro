@@ -1,345 +1,374 @@
 
-import {
-  Profile,
-  Task,
-  PomodoroSession,
-  ThemeOption,
-  AppSettings,
+import { v4 as uuidv4 } from 'uuid';
+import { 
+  Profile, 
+  Task, 
+  PomodoroSession, 
+  AppSettings, 
   YouTubeVideo,
-  LanguageOption,
-} from "../models/types";
-import { exportSessionsToMarkdown as exportToMarkdown } from "../services/importExportService";
+  ThemeOption,
+  Note
+} from '../models/types';
+import { exportNotesToMarkdown, exportSessionsToMarkdown } from './importExportService';
 
-// Default predefined profiles
-const DEFAULT_PROFILES: Profile[] = [
-  {
-    id: "profile-work",
-    name: "Work",
-    workDuration: 25,
-    shortBreakDuration: 5,
-    longBreakDuration: 15,
-    longBreakInterval: 4,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "profile-study",
-    name: "Study",
-    workDuration: 50,
-    shortBreakDuration: 10,
-    longBreakDuration: 30,
-    longBreakInterval: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "profile-playing",
-    name: "Playing",
-    workDuration: 20,
-    shortBreakDuration: 10,
-    longBreakDuration: 20,
-    longBreakInterval: 3,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-// Default YouTube videos
-const DEFAULT_VIDEOS: YouTubeVideo[] = [
-  {
-    id: "video-1",
-    title: "Lofi Hip Hop Radio",
-    url: "https://www.youtube.com/watch?v=jfKfPfyJRdk",
-  },
-  {
-    id: "video-2",
-    title: "synthwave radio 🌌 beats to chill",
-    url: "https://www.youtube.com/watch?v=4xDzrJKXOOY",
-  },
-  {
-    id: "video-3",
-    title: "Focus Music",
-    url: "https://www.youtube.com/watch?v=brnafxH_0E8",
-  },
-];
-
-// Default app settings
+// Default settings
 const DEFAULT_SETTINGS: AppSettings = {
-  theme: "purple-space",
+  theme: 'purple-space',
   notificationsEnabled: true,
   soundEnabled: true,
   splitView: true,
-  language: "en",
+  language: 'en',
   keyboardShortcutsEnabled: true,
-  focusModeEnabled: false,
+  focusModeEnabled: false
 };
 
-// Storage keys
-const STORAGE_KEYS = {
-  PROFILES: "zenpomodoro-profiles",
-  TASKS: "zenpomodoro-tasks",
-  POMODORO_SESSIONS: "zenpomodoro-sessions",
-  SETTINGS: "zenpomodoro-settings",
-  ACTIVE_PROFILE_ID: "zenpomodoro-active-profile",
-  YOUTUBE_VIDEOS: "zenpomodoro-youtube-videos",
+// Default profile
+const DEFAULT_PROFILE: Profile = {
+  id: 'default',
+  name: 'Default Profile',
+  workDuration: 25,
+  shortBreakDuration: 5,
+  longBreakDuration: 15,
+  longBreakInterval: 4,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString()
 };
 
-// Helper functions to initialize data
-const initializeData = <T>(key: string, defaultData: T): T => {
-  const storedData = localStorage.getItem(key);
-  if (!storedData) {
-    localStorage.setItem(key, JSON.stringify(defaultData));
-    return defaultData;
-  }
-  return JSON.parse(storedData);
+// Local storage keys
+const KEYS = {
+  PROFILES: 'zen_profiles',
+  ACTIVE_PROFILE: 'zen_active_profile',
+  TASKS: 'zen_tasks',
+  SESSIONS: 'zen_sessions',
+  SETTINGS: 'zen_settings',
+  VIDEOS: 'zen_youtube_videos',
+  NOTES: 'zen_notes'
 };
 
-// Profile methods
+// PROFILES
+
+// Get all profiles
 export const getProfiles = (): Profile[] => {
-  return initializeData<Profile[]>(STORAGE_KEYS.PROFILES, DEFAULT_PROFILES);
+  const profiles = localStorage.getItem(KEYS.PROFILES);
+  if (!profiles) {
+    // Initialize with default profile
+    saveProfile(DEFAULT_PROFILE);
+    return [DEFAULT_PROFILE];
+  }
+  return JSON.parse(profiles);
 };
 
-export const getProfile = (id: string): Profile | undefined => {
-  const profiles = getProfiles();
-  return profiles.find((profile) => profile.id === id);
-};
-
+// Save a profile
 export const saveProfile = (profile: Profile): void => {
   const profiles = getProfiles();
-  const existingIndex = profiles.findIndex((p) => p.id === profile.id);
-
-  if (existingIndex >= 0) {
-    profiles[existingIndex] = {
-      ...profile,
-      updatedAt: new Date().toISOString(),
-    };
+  const now = new Date().toISOString();
+  
+  if (!profile.id) {
+    // New profile
+    profile.id = uuidv4();
+    profile.createdAt = now;
+    profile.updatedAt = now;
+    profiles.push(profile);
   } else {
-    profiles.push({
-      ...profile,
-      id: profile.id || `profile-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-  }
-
-  localStorage.setItem(STORAGE_KEYS.PROFILES, JSON.stringify(profiles));
-};
-
-export const deleteProfile = (id: string): void => {
-  const profiles = getProfiles();
-  const filteredProfiles = profiles.filter((profile) => profile.id !== id);
-  localStorage.setItem(STORAGE_KEYS.PROFILES, JSON.stringify(filteredProfiles));
-
-  // Also delete associated tasks
-  const tasks = getTasks();
-  const filteredTasks = tasks.filter((task) => task.profileId !== id);
-  localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(filteredTasks));
-};
-
-// Active profile methods
-export const getActiveProfileId = (): string => {
-  const activeId = localStorage.getItem(STORAGE_KEYS.ACTIVE_PROFILE_ID);
-  if (!activeId) {
-    const profiles = getProfiles();
-    if (profiles.length > 0) {
-      localStorage.setItem(STORAGE_KEYS.ACTIVE_PROFILE_ID, profiles[0].id);
-      return profiles[0].id;
+    // Update existing profile
+    const index = profiles.findIndex(p => p.id === profile.id);
+    if (index >= 0) {
+      profile.updatedAt = now;
+      profiles[index] = profile;
+    } else {
+      // Not found, add as new
+      profile.createdAt = now;
+      profile.updatedAt = now;
+      profiles.push(profile);
     }
   }
-  return activeId || "";
+  
+  localStorage.setItem(KEYS.PROFILES, JSON.stringify(profiles));
 };
 
-export const setActiveProfileId = (id: string): void => {
-  localStorage.setItem(STORAGE_KEYS.ACTIVE_PROFILE_ID, id);
-};
-
-// Task methods
-export const getTasks = (): Task[] => {
-  return initializeData<Task[]>(STORAGE_KEYS.TASKS, []);
-};
-
-export const getTasksByProfile = (profileId: string): Task[] => {
-  const tasks = getTasks();
-  return tasks.filter((task) => task.profileId === profileId);
-};
-
-export const saveTask = (task: Task): void => {
-  const tasks = getTasks();
-  const existingIndex = tasks.findIndex((t) => t.id === task.id);
-
-  if (existingIndex >= 0) {
-    tasks[existingIndex] = { ...task, updatedAt: new Date().toISOString() };
-  } else {
-    tasks.push({
-      ...task,
-      id: task.id || `task-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
+// Delete a profile
+export const deleteProfile = (id: string): void => {
+  const profiles = getProfiles().filter(p => p.id !== id);
+  localStorage.setItem(KEYS.PROFILES, JSON.stringify(profiles));
+  
+  // If we deleted the active profile, set another one as active
+  if (getActiveProfileId() === id && profiles.length > 0) {
+    setActiveProfileId(profiles[0].id);
   }
-
-  localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
 };
 
+// Get active profile ID
+export const getActiveProfileId = (): string => {
+  return localStorage.getItem(KEYS.ACTIVE_PROFILE) || '';
+};
+
+// Set active profile ID
+export const setActiveProfileId = (id: string): void => {
+  localStorage.setItem(KEYS.ACTIVE_PROFILE, id);
+};
+
+// TASKS
+
+// Get tasks for a profile
+export const getTasksByProfile = (profileId: string): Task[] => {
+  const tasks = getAllTasks();
+  return tasks.filter(task => task.profileId === profileId);
+};
+
+// Get all tasks
+export const getAllTasks = (): Task[] => {
+  const tasks = localStorage.getItem(KEYS.TASKS);
+  return tasks ? JSON.parse(tasks) : [];
+};
+
+// Save a task
+export const saveTask = (task: Task): void => {
+  const tasks = getAllTasks();
+  const now = new Date().toISOString();
+  
+  if (!task.id) {
+    // New task
+    task.id = uuidv4();
+    task.createdAt = now;
+    task.updatedAt = now;
+    tasks.push(task);
+  } else {
+    // Update existing task
+    const index = tasks.findIndex(t => t.id === task.id);
+    if (index >= 0) {
+      task.updatedAt = now;
+      tasks[index] = task;
+    } else {
+      // Not found, add as new
+      task.createdAt = now;
+      task.updatedAt = now;
+      tasks.push(task);
+    }
+  }
+  
+  localStorage.setItem(KEYS.TASKS, JSON.stringify(tasks));
+};
+
+// Delete a task
 export const deleteTask = (id: string): void => {
-  const tasks = getTasks();
-  const filteredTasks = tasks.filter((task) => task.id !== id);
-  localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(filteredTasks));
+  const tasks = getAllTasks().filter(t => t.id !== id);
+  localStorage.setItem(KEYS.TASKS, JSON.stringify(tasks));
 };
 
+// Delete completed tasks for a profile
 export const deleteCompletedTasks = (profileId: string): void => {
-  const tasks = getTasks();
-  const filteredTasks = tasks.filter(
-    (task) => !(task.profileId === profileId && task.completed)
-  );
-  localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(filteredTasks));
+  const tasks = getAllTasks().filter(t => !t.completed || t.profileId !== profileId);
+  localStorage.setItem(KEYS.TASKS, JSON.stringify(tasks));
 };
 
-export const bulkImportTasks = (importedTasks: Task[]): void => {
-  // Get existing tasks
-  const existingTasks = getTasks();
+// Bulk import tasks
+export const bulkImportTasks = (tasksToImport: Task[]): void => {
+  const existingTasks = getAllTasks();
+  const now = new Date().toISOString();
   
   // Process each imported task
-  const tasksToSave = importedTasks.map(importedTask => {
-    // Check if task already exists
-    const existingTask = existingTasks.find(task => task.id === importedTask.id);
-    
-    if (existingTask) {
-      // Update existing task with imported data
-      return {
-        ...existingTask,
-        ...importedTask,
-        updatedAt: new Date().toISOString()
-      };
+  const processedTasks = tasksToImport.map(task => {
+    if (!task.id) {
+      task.id = uuidv4();
+    }
+    if (!task.createdAt) {
+      task.createdAt = now;
+    }
+    task.updatedAt = now;
+    return task;
+  });
+  
+  // Combine existing and new tasks, replacing any duplicates
+  const allTasks = [...existingTasks];
+  
+  processedTasks.forEach(newTask => {
+    const existingIndex = allTasks.findIndex(t => t.id === newTask.id);
+    if (existingIndex >= 0) {
+      allTasks[existingIndex] = newTask;
     } else {
-      // Add new task
-      return {
-        ...importedTask,
-        id: importedTask.id || `task-${Date.now()}`,
-        createdAt: importedTask.createdAt || new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
+      allTasks.push(newTask);
     }
   });
   
-  // Combine non-imported existing tasks with imported tasks
-  const nonImportedTasks = existingTasks.filter(
-    existingTask => !importedTasks.some(importedTask => 
-      importedTask.id === existingTask.id
-    )
-  );
-  
-  const allTasks = [...nonImportedTasks, ...tasksToSave];
-  
-  // Save all tasks
-  localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(allTasks));
+  localStorage.setItem(KEYS.TASKS, JSON.stringify(allTasks));
 };
 
-// Pomodoro session methods
-export const getPomodoroSessions = (): PomodoroSession[] => {
-  return initializeData<PomodoroSession[]>(STORAGE_KEYS.POMODORO_SESSIONS, []);
-};
+// SESSIONS
 
+// Get sessions for a profile
 export const getSessionsByProfile = (profileId: string): PomodoroSession[] => {
-  const sessions = getPomodoroSessions();
-  return sessions.filter((session) => session.profileId === profileId);
+  const sessions = getAllSessions();
+  return sessions.filter(session => session.profileId === profileId);
 };
 
+// Get all sessions
+export const getAllSessions = (): PomodoroSession[] => {
+  const sessions = localStorage.getItem(KEYS.SESSIONS);
+  return sessions ? JSON.parse(sessions) : [];
+};
+
+// Save a session
 export const saveSession = (session: PomodoroSession): void => {
-  const sessions = getPomodoroSessions();
-  const existingIndex = sessions.findIndex((s) => s.id === session.id);
-
-  if (existingIndex >= 0) {
-    sessions[existingIndex] = session;
+  const sessions = getAllSessions();
+  
+  if (!session.id) {
+    session.id = uuidv4();
+    sessions.push(session);
   } else {
-    sessions.push({
-      ...session,
-      id: session.id || `session-${Date.now()}`,
-    });
+    const index = sessions.findIndex(s => s.id === session.id);
+    if (index >= 0) {
+      sessions[index] = session;
+    } else {
+      sessions.push(session);
+    }
   }
-
-  localStorage.setItem(
-    STORAGE_KEYS.POMODORO_SESSIONS,
-    JSON.stringify(sessions)
-  );
+  
+  localStorage.setItem(KEYS.SESSIONS, JSON.stringify(sessions));
 };
 
+// Format sessions for export
 export const getFormattedSessionsForExport = (profileId: string): Record<string, any> => {
   const sessions = getSessionsByProfile(profileId);
-  const tasks = getTasksByProfile(profileId);
-  
-  // Group sessions by date
-  const groupedSessions: Record<string, any[]> = {};
+  const formattedSessions: Record<string, any[]> = {};
   
   sessions.forEach(session => {
     const date = new Date(session.startTime).toISOString().split('T')[0];
-    if (!groupedSessions[date]) {
-      groupedSessions[date] = [];
+    const time = new Date(session.startTime).toLocaleTimeString();
+    
+    if (!formattedSessions[date]) {
+      formattedSessions[date] = [];
     }
     
-    // Find associated task if available
-    let taskTitle = '';
-    if (session.associatedTaskId) {
-      const task = tasks.find(t => t.id === session.associatedTaskId);
-      if (task) {
-        taskTitle = task.title;
-      }
-    }
-    
-    groupedSessions[date].push({
-      time: new Date(session.startTime).toLocaleTimeString(),
+    formattedSessions[date].push({
+      time,
       type: session.type,
       duration: session.duration,
-      task: taskTitle,
-      notes: session.notes || ''
+      notes: session.notes || '',
+      task: session.associatedTaskId ? getTaskTitle(session.associatedTaskId) : ''
     });
   });
   
-  return groupedSessions;
+  return formattedSessions;
 };
 
-export const exportSessionsToMarkdown = (sessions: Record<string, any[]>): void => {
-  exportToMarkdown(sessions);
+// Helper function to get task title by ID
+const getTaskTitle = (taskId: string): string => {
+  const tasks = getAllTasks();
+  const task = tasks.find(t => t.id === taskId);
+  return task ? task.title : 'Unknown Task';
 };
 
-// Settings methods
+// Export sessions to markdown
+export const exportSessionsToMarkdown = (formattedSessions: Record<string, any>): void => {
+  exportSessionsToMarkdown(formattedSessions);
+};
+
+// NOTES
+
+// Get notes for a profile
+export const getNotesByProfile = (profileId: string): Note[] => {
+  const notes = getAllNotes();
+  return notes.filter(note => note.profileId === profileId);
+};
+
+// Get all notes
+export const getAllNotes = (): Note[] => {
+  const notes = localStorage.getItem(KEYS.NOTES);
+  return notes ? JSON.parse(notes) : [];
+};
+
+// Save a note
+export const saveNote = (note: Note): void => {
+  const notes = getAllNotes();
+  const now = new Date().toISOString();
+  
+  if (!note.id) {
+    // New note
+    note.id = uuidv4();
+    note.createdAt = now;
+    note.updatedAt = now;
+    notes.push(note);
+  } else {
+    // Update existing note
+    const index = notes.findIndex(n => n.id === note.id);
+    if (index >= 0) {
+      note.updatedAt = now;
+      notes[index] = note;
+    } else {
+      // Not found, add as new
+      note.createdAt = now;
+      note.updatedAt = now;
+      notes.push(note);
+    }
+  }
+  
+  localStorage.setItem(KEYS.NOTES, JSON.stringify(notes));
+};
+
+// Delete a note
+export const deleteNote = (id: string): void => {
+  const notes = getAllNotes().filter(n => n.id !== id);
+  localStorage.setItem(KEYS.NOTES, JSON.stringify(notes));
+};
+
+// SETTINGS
+
+// Get app settings
 export const getSettings = (): AppSettings => {
-  return initializeData<AppSettings>(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
+  const settings = localStorage.getItem(KEYS.SETTINGS);
+  return settings ? JSON.parse(settings) : DEFAULT_SETTINGS;
 };
 
+// Save app settings
 export const saveSettings = (settings: AppSettings): void => {
-  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+  localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
 };
 
-// YouTube videos methods
+// YOUTUBE VIDEOS
+
+// Get all YouTube videos
 export const getYouTubeVideos = (): YouTubeVideo[] => {
-  return initializeData<YouTubeVideo[]>(
-    STORAGE_KEYS.YOUTUBE_VIDEOS,
-    DEFAULT_VIDEOS
-  );
+  const videos = localStorage.getItem(KEYS.VIDEOS);
+  return videos ? JSON.parse(videos) : [];
 };
 
+// Save a YouTube video
 export const saveYouTubeVideo = (video: YouTubeVideo): void => {
   const videos = getYouTubeVideos();
-  const existingIndex = videos.findIndex((v) => v.id === video.id);
-
-  if (existingIndex >= 0) {
-    videos[existingIndex] = video;
+  
+  if (!video.id) {
+    video.id = uuidv4();
+    videos.push(video);
   } else {
-    videos.push({
-      ...video,
-      id: video.id || `video-${Date.now()}`,
-    });
+    const index = videos.findIndex(v => v.id === video.id);
+    if (index >= 0) {
+      videos[index] = video;
+    } else {
+      videos.push(video);
+    }
   }
-
-  localStorage.setItem(STORAGE_KEYS.YOUTUBE_VIDEOS, JSON.stringify(videos));
+  
+  localStorage.setItem(KEYS.VIDEOS, JSON.stringify(videos));
 };
 
+// Delete a YouTube video
 export const deleteYouTubeVideo = (id: string): void => {
-  const videos = getYouTubeVideos();
-  const filteredVideos = videos.filter((video) => video.id !== id);
-  localStorage.setItem(
-    STORAGE_KEYS.YOUTUBE_VIDEOS,
-    JSON.stringify(filteredVideos)
-  );
+  const videos = getYouTubeVideos().filter(v => v.id !== id);
+  localStorage.setItem(KEYS.VIDEOS, JSON.stringify(videos));
+};
+
+// Reset all storage (for development/testing)
+export const resetAllStorage = (): void => {
+  localStorage.removeItem(KEYS.PROFILES);
+  localStorage.removeItem(KEYS.ACTIVE_PROFILE);
+  localStorage.removeItem(KEYS.TASKS);
+  localStorage.removeItem(KEYS.SESSIONS);
+  localStorage.removeItem(KEYS.SETTINGS);
+  localStorage.removeItem(KEYS.VIDEOS);
+  localStorage.removeItem(KEYS.NOTES);
+  
+  // Initialize with defaults
+  saveProfile(DEFAULT_PROFILE);
+  setActiveProfileId(DEFAULT_PROFILE.id);
+  saveSettings(DEFAULT_SETTINGS);
 };
