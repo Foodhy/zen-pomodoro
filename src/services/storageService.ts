@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { 
   Profile, 
@@ -9,7 +8,7 @@ import {
   ThemeOption,
   Note
 } from '../models/types';
-import { exportNotesToMarkdown, exportSessionsToMarkdown } from './importExportService';
+import { exportNotesToMarkdown, exportSessionsToMarkdown as exportSessionsToMd } from './importExportService';
 
 // Default settings
 const DEFAULT_SETTINGS: AppSettings = {
@@ -260,7 +259,7 @@ const getTaskTitle = (taskId: string): string => {
 
 // Export sessions to markdown
 export const exportSessionsToMarkdown = (formattedSessions: Record<string, any>): void => {
-  exportSessionsToMarkdown(formattedSessions);
+  exportSessionsToMd(formattedSessions);
 };
 
 // NOTES
