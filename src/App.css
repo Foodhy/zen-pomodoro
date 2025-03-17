@@ -45,22 +45,21 @@
 /* Fix drawer content visibility */
 [data-vaul-drawer-content] {
   background-color: var(--background);
-  max-height: 90vh !important;
-  overflow-y: auto !important;
-  padding-bottom: 5rem !important;
-}
-
-/* Improve scroll areas inside drawers */
-[data-vaul-drawer-content] [data-radix-scroll-area-viewport] {
   height: auto !important;
-  max-height: unset !important;
+  min-height: 200px;
+  max-height: 90dvh !important;
+  padding-bottom: 50px !important;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto !important;
 }
 
-/* Remove any height restrictions on tab content */
+/* Improve tab content display */
 .tab-content {
-  height: auto;
-  min-height: 50vh;
-  padding-bottom: 6rem;
+  height: auto !important;
+  min-height: 100px;
+  padding-bottom: 100px !important;
+  overflow-y: visible !important;
 }
 
 /* Ensure all form control rows are fully visible */
@@ -71,4 +70,21 @@
 /* Improve visibility of settings sections */
 .bg-background {
   padding-bottom: 1rem;
+}
+
+/* Fix mobile overlapping button issue */
+@media (max-width: 768px) {
+  .drawer-close-button {
+    top: 1rem;
+    right: 1rem;
+    position: absolute;
+    z-index: 50;
+  }
+  
+  .filter-button {
+    top: 1rem;
+    left: 1rem;
+    position: absolute;
+    z-index: 49;
+  }
 }
