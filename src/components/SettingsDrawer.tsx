@@ -9,6 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
+  DrawerClose,
 } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
@@ -39,6 +40,7 @@ import {
   Upload,
   Import,
   FileUp,
+  X,
 } from "lucide-react";
 import notificationService from "../services/notificationService";
 import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
@@ -259,6 +261,11 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="max-h-[85vh] p-4 bg-background border-t border-border">
+        <DrawerClose className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none drawer-close-button">
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </DrawerClose>
+        
         <DrawerHeader className="mb-4 px-0">
           <DrawerTitle>{t("settings.title", settings.language)}</DrawerTitle>
           <DrawerDescription>
