@@ -128,12 +128,13 @@ export const TaskList: React.FC<TaskListProps> = ({ collapsed = false }) => {
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-medium">{t("tasks.title", settings.language)}</h2>
 
-        <div className="flex gap-1">
+        <div className="flex gap-1 sm:gap-2">
+          {/* Show clean completed tasks button */}
           {completedTasks.length > 0 && (
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 gap-1 text-xs"
+              className="h-8 gap-1 text-xs hidden md:flex"
               onClick={() => deleteCompletedTasks()}
             >
               <Trash className="h-3.5 w-3.5" />
@@ -141,17 +142,18 @@ export const TaskList: React.FC<TaskListProps> = ({ collapsed = false }) => {
             </Button>
           )}
           
+          {/* Filter dropdown - moved slightly to the left on mobile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 p-0 ml-auto"
               >
                 <Filter className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setSortOption("priority-desc")}>
                 {t("tasks.priority", settings.language)}: {t("tasks.priority.high", settings.language)} → {t("tasks.priority.low", settings.language)}
               </DropdownMenuItem>
@@ -207,7 +209,7 @@ export const TaskList: React.FC<TaskListProps> = ({ collapsed = false }) => {
         </div>
       </form>
 
-      <div className="flex justify-between mb-4">
+      <div className="grid grid-cols-2 gap-2 mb-4">
         <Button
           variant="outline"
           size="sm"
@@ -236,7 +238,8 @@ export const TaskList: React.FC<TaskListProps> = ({ collapsed = false }) => {
         </Button>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      {/* Responsive task list container with better scrolling */}
+      <div className="flex-1 overflow-y-auto pb-8">
         {activeTasks.length === 0 && completedTasks.length === 0 ? (
           <div className="text-center py-8 opacity-60">
             <p className="text-sm">{t("tasks.noTasks", settings.language)}</p>
@@ -263,6 +266,21 @@ export const TaskList: React.FC<TaskListProps> = ({ collapsed = false }) => {
           </div>
         )}
       </div>
+      
+      {/* Mobile-only trash button for completed tasks */}
+      {completedTasks.length > 0 && (
+        <div className="mt-2 pt-2 border-t border-border/30 md:hidden">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full h-8 gap-1 text-xs justify-center"
+            onClick={() => deleteCompletedTasks()}
+          >
+            <Trash className="h-3.5 w-3.5" />
+            {t("tasks.clearCompleted", settings.language)}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

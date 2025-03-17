@@ -45,4 +45,19 @@
 /* Make sure drawer content is visible */
 [data-vaul-drawer-content] {
   background-color: var(--background);
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* Fix scroll issues within drawers */
+[data-vaul-drawer-content] [data-radix-scroll-area-viewport] {
+  height: 100% !important;
+  max-height: 70vh !important;
+}
+
+/* Ensure tab content is visible */
+.tab-content {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
 }
