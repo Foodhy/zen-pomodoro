@@ -42,22 +42,33 @@
   color: #888;
 }
 
-/* Make sure drawer content is visible */
+/* Fix drawer content visibility */
 [data-vaul-drawer-content] {
   background-color: var(--background);
-  max-height: 85vh;
-  overflow-y: auto;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  padding-bottom: 5rem !important;
 }
 
-/* Fix scroll issues within drawers */
+/* Improve scroll areas inside drawers */
 [data-vaul-drawer-content] [data-radix-scroll-area-viewport] {
-  height: 100% !important;
-  max-height: 70vh !important;
+  height: auto !important;
+  max-height: unset !important;
 }
 
-/* Ensure tab content is visible */
+/* Remove any height restrictions on tab content */
 .tab-content {
-  max-height: 65vh;
-  overflow-y: auto;
-  padding-bottom: 2rem;
+  height: auto;
+  min-height: 50vh;
+  padding-bottom: 6rem;
+}
+
+/* Ensure all form control rows are fully visible */
+.space-y-2, .space-y-4, .space-y-6 {
+  margin-bottom: 1rem;
+}
+
+/* Improve visibility of settings sections */
+.bg-background {
+  padding-bottom: 1rem;
 }
