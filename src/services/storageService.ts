@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { 
   Profile, 
@@ -33,6 +32,45 @@ const DEFAULT_PROFILE: Profile = {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString()
 };
+
+// Default YouTube videos
+const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
+  {
+    id: 'yt-default-1',
+    title: '🎵 lofi hip hop radio 📚 beats to relax/study to',
+    url: 'https://www.youtube.com/watch?v=jfKfPfyJRdk'
+  },
+  {
+    id: 'yt-default-2',
+    title: '🎵 jazz lofi radio 🎷 beats to chill/study to',
+    url: 'https://www.youtube.com/watch?v=HuFYqnbVbzY'
+  },
+  {
+    id: 'yt-default-3',
+    title: '🎵 synthwave radio 🌌 beats to chill/game to',
+    url: 'https://www.youtube.com/watch?v=4xDzrJKXOOY'
+  },
+  {
+    id: 'yt-default-4',
+    title: '🎵 3 A.M Coding Session - Chillstep Beats',
+    url: 'https://www.youtube.com/watch?v=Yd7vDterctQ'
+  },
+  {
+    id: 'yt-default-5',
+    title: '🎵 1 9 9 4　ＦRＥQ U E Ｎ C Y // Synthwave',
+    url: 'https://www.youtube.com/watch?v=-0VRrnJx7u8'
+  },
+  {
+    id: 'yt-default-6',
+    title: '🎵 THE BEST GYM PHONK 2025',
+    url: 'https://www.youtube.com/watch?v=zM1H3NkMYv4'
+  },
+  {
+    id: 'yt-default-7',
+    title: '🎵 Lofi POV',
+    url: 'https://www.youtube.com/watch?v=uFlzUaisbig'
+  }
+];
 
 // Local storage keys
 const KEYS = {
@@ -330,7 +368,12 @@ export const saveSettings = (settings: AppSettings): void => {
 // Get all YouTube videos
 export const getYouTubeVideos = (): YouTubeVideo[] => {
   const videos = localStorage.getItem(KEYS.VIDEOS);
-  return videos ? JSON.parse(videos) : [];
+  if (!videos) {
+    // Initialize with default videos
+    localStorage.setItem(KEYS.VIDEOS, JSON.stringify(DEFAULT_YOUTUBE_VIDEOS));
+    return DEFAULT_YOUTUBE_VIDEOS;
+  }
+  return JSON.parse(videos);
 };
 
 // Save a YouTube video
@@ -373,4 +416,5 @@ export const resetAllStorage = (): void => {
   localStorage.setItem(KEYS.PROFILES, JSON.stringify(defaultProfiles));
   setActiveProfileId(DEFAULT_PROFILE.id);
   saveSettings(DEFAULT_SETTINGS);
+  localStorage.setItem(KEYS.VIDEOS, JSON.stringify(DEFAULT_YOUTUBE_VIDEOS));
 };

@@ -72,6 +72,14 @@
   padding-bottom: 1rem;
 }
 
+/* Priority badge styling */
+.badge-priority {
+  font-size: 0.65rem;
+  padding: 0 0.35rem;
+  border-radius: 0.25rem;
+  margin-left: 0.25rem;
+}
+
 /* Fix mobile overlapping button issue */
 @media (max-width: 768px) {
   .drawer-close-button {
