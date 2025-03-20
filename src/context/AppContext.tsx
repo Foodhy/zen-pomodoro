@@ -19,7 +19,12 @@ import {
 import * as storageService from "../services/storageService";
 import notificationService from "../services/notificationService";
 import { t } from "../services/translationService";
-import { exportNotesToMarkdown as exportNotes } from "../services/importExportService";
+import { 
+  exportNotesToMarkdown as exportNotes,
+  importVideosFromJson, 
+  importSessionsFromJson, 
+  importNotesFromJson
+} from "../services/importExportService";
 
 interface AppContextType {
   // Profiles
@@ -40,12 +45,16 @@ interface AppContextType {
   sessions: PomodoroSession[];
   saveSession: (session: PomodoroSession) => void;
   exportSessionsToMarkdown: () => void;
+  exportSessionsToJson: () => void;
+  importSessionsFromJsonFile: (file: File) => Promise<void>;
 
   // Notes
   notes: Note[];
   saveNote: (note: Note) => void;
   deleteNote: (id: string) => void;
   exportNotesToMarkdown: () => void;
+  exportNotesToJson: () => void;
+  importNotesFromJsonFile: (file: File) => Promise<void>;
 
   // Settings
   settings: AppSettings;
@@ -58,6 +67,8 @@ interface AppContextType {
   videos: YouTubeVideo[];
   saveVideo: (video: YouTubeVideo) => void;
   deleteVideo: (id: string) => void;
+  exportVideosToJson: () => void;
+  importVideosFromJsonFile: (file: File) => Promise<void>;
 
   // UI States
   isFocusMode: boolean;
@@ -260,6 +271,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const handleExportSessionsToJson = () => {
+    if (activeProfile) {
+      storageService.exportSessionsToJsonFile(activeProfile.id);
+    }
+  };
+
+  const handleImportSessionsFromJsonFile = async (file: File): Promise<void> => {
+    try {
+      if (activeProfile) {
+        const importedSessions = await importSessionsFromJson(file);
+        storageService.bulkImportSessions(importedSessions, activeProfile.id);
+        setSessions(storageService.getSessionsByProfile(activeProfile.id));
+      }
+    } catch (error) {
+      console.error("Error importing sessions:", error);
+      throw error;
+    }
+  };
+
   // Notes methods
   const handleSaveNote = (note: Note) => {
     if (activeProfile) {
@@ -280,6 +310,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     if (activeProfile) {
       const profileNotes = storageService.getNotesByProfile(activeProfile.id);
       exportNotes(profileNotes);
+    }
+  };
+
+  const handleExportNotesToJson = () => {
+    if (activeProfile) {
+      storageService.exportNotesToJsonFile(activeProfile.id);
+    }
+  };
+
+  const handleImportNotesFromJsonFile = async (file: File): Promise<void> => {
+    try {
+      if (activeProfile) {
+        const importedNotes = await importNotesFromJson(file);
+        storageService.bulkImportNotes(importedNotes, activeProfile.id);
+        setNotes(storageService.getNotesByProfile(activeProfile.id));
+      }
+    } catch (error) {
+      console.error("Error importing notes:", error);
+      throw error;
     }
   };
 
@@ -312,6 +361,21 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setVideos(storageService.getYouTubeVideos());
   };
 
+  const handleExportVideosToJson = () => {
+    storageService.exportVideosToJsonFile();
+  };
+
+  const handleImportVideosFromJsonFile = async (file: File): Promise<void> => {
+    try {
+      const importedVideos = await importVideosFromJson(file);
+      storageService.bulkImportVideos(importedVideos);
+      setVideos(storageService.getYouTubeVideos());
+    } catch (error) {
+      console.error("Error importing videos:", error);
+      throw error;
+    }
+  };
+
   const contextValue: AppContextType = {
     profiles,
     activeProfile,
@@ -322,17 +386,21 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     tasks,
     saveTask: handleSaveTask,
     deleteTask: handleDeleteTask,
-    deleteCompletedTasks: handleDeleteCompletedTasks,
+    deleteCompletedTasks: handleCompletedTasks,
     bulkImportTasks: handleBulkImportTasks,
 
     sessions,
     saveSession: handleSaveSession,
     exportSessionsToMarkdown: handleExportSessionsToMarkdown,
+    exportSessionsToJson: handleExportSessionsToJson,
+    importSessionsFromJsonFile: handleImportSessionsFromJsonFile,
     
     notes,
     saveNote: handleSaveNote,
     deleteNote: handleDeleteNote,
     exportNotesToMarkdown: handleExportNotesToMarkdown,
+    exportNotesToJson: handleExportNotesToJson,
+    importNotesFromJsonFile: handleImportNotesFromJsonFile,
 
     settings,
     saveSettings: handleSaveSettings,
@@ -343,6 +411,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     videos,
     saveVideo: handleSaveVideo,
     deleteVideo: handleDeleteVideo,
+    exportVideosToJson: handleExportVideosToJson,
+    importVideosFromJsonFile: handleImportVideosFromJsonFile,
 
     isFocusMode,
     isFullscreen,

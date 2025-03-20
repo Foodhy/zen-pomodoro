@@ -1,3 +1,4 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { 
   Profile, 
@@ -8,7 +9,13 @@ import {
   ThemeOption,
   Note
 } from '../models/types';
-import { exportNotesToMarkdown, exportSessionsToMarkdown as exportSessionsToMd } from './importExportService';
+import { 
+  exportNotesToMarkdown, 
+  exportSessionsToMarkdown as exportSessionsToMd,
+  exportVideosToJson,
+  exportSessionsToJson,
+  exportNotesToJson
+} from './importExportService';
 
 // Default settings
 const DEFAULT_SETTINGS: AppSettings = {
@@ -300,6 +307,114 @@ const getTaskTitle = (taskId: string): string => {
 // Export sessions to markdown
 export const exportSessionsToMarkdown = (formattedSessions: Record<string, any>): void => {
   exportSessionsToMd(formattedSessions);
+};
+
+// Export videos to JSON
+export const exportVideosToJsonFile = (): void => {
+  const videos = getYouTubeVideos();
+  exportVideosToJson(videos);
+};
+
+// Export sessions to JSON
+export const exportSessionsToJsonFile = (profileId: string): void => {
+  const sessions = getSessionsByProfile(profileId);
+  exportSessionsToJson(sessions);
+};
+
+// Export notes to JSON
+export const exportNotesToJsonFile = (profileId: string): void => {
+  const notes = getNotesByProfile(profileId);
+  exportNotesToJson(notes);
+};
+
+// Import videos from JSON
+export const bulkImportVideos = (videosToImport: YouTubeVideo[]): void => {
+  const existingVideos = getYouTubeVideos();
+  
+  // Process each imported video
+  const processedVideos = videosToImport.map(video => {
+    if (!video.id) {
+      video.id = uuidv4();
+    }
+    return video;
+  });
+  
+  // Combine existing and new videos, replacing any duplicates
+  const allVideos = [...existingVideos];
+  
+  processedVideos.forEach(newVideo => {
+    const existingIndex = allVideos.findIndex(v => v.id === newVideo.id);
+    if (existingIndex >= 0) {
+      allVideos[existingIndex] = newVideo;
+    } else {
+      allVideos.push(newVideo);
+    }
+  });
+  
+  localStorage.setItem(KEYS.VIDEOS, JSON.stringify(allVideos));
+};
+
+// Import sessions
+export const bulkImportSessions = (sessionsToImport: PomodoroSession[], profileId: string): void => {
+  const existingSessions = getAllSessions();
+  
+  // Process each imported session
+  const processedSessions = sessionsToImport.map(session => {
+    if (!session.id) {
+      session.id = uuidv4();
+    }
+    // Ensure profileId is set to the current profile
+    session.profileId = profileId;
+    return session;
+  });
+  
+  // Combine existing and new sessions, replacing any duplicates
+  const allSessions = [...existingSessions];
+  
+  processedSessions.forEach(newSession => {
+    const existingIndex = allSessions.findIndex(s => s.id === newSession.id);
+    if (existingIndex >= 0) {
+      allSessions[existingIndex] = newSession;
+    } else {
+      allSessions.push(newSession);
+    }
+  });
+  
+  localStorage.setItem(KEYS.SESSIONS, JSON.stringify(allSessions));
+};
+
+// Import notes
+export const bulkImportNotes = (notesToImport: Note[], profileId: string): void => {
+  const existingNotes = getAllNotes();
+  const now = new Date().toISOString();
+  
+  // Process each imported note
+  const processedNotes = notesToImport.map(note => {
+    if (!note.id) {
+      note.id = uuidv4();
+    }
+    if (!note.createdAt) {
+      note.createdAt = now;
+    }
+    note.updatedAt = now;
+    // Ensure profileId is set to the current profile
+    note.profileId = profileId;
+    return note;
+  });
+  
+  // Combine existing and new notes, replacing any duplicates
+  const allNotes = [...existingNotes];
+  
+  processedNotes.forEach(newNote => {
+    const existingIndex = allNotes.findIndex(n => n.id === newNote.id);
+    if (existingIndex >= 0) {
+      allNotes[existingIndex] = newNote;
+    } else {
+      allNotes.push(newNote);
+    }
+  });
+  
+  localStorage.setItem(KEYS.NOTES, JSON.stringify(allNotes));
 };
 
 // NOTES

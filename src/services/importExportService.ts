@@ -1,5 +1,5 @@
 
-import { Task, Note } from "../models/types";
+import { Task, Note, YouTubeVideo, PomodoroSession } from "../models/types";
 
 export const exportTasksToJson = (tasks: Task[]): void => {
   const tasksJson = JSON.stringify(tasks, null, 2);
@@ -24,6 +24,86 @@ export const importTasksFromJson = (file: File): Promise<Task[]> => {
         if (event.target?.result) {
           const tasks = JSON.parse(event.target.result as string) as Task[];
           resolve(tasks);
+        } else {
+          reject(new Error("Failed to read file content"));
+        }
+      } catch (error) {
+        reject(new Error("Invalid JSON format"));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error("Error reading file"));
+    };
+    
+    reader.readAsText(file);
+  });
+};
+
+// Video export and import functions
+export const exportVideosToJson = (videos: YouTubeVideo[]): void => {
+  const videosJson = JSON.stringify(videos, null, 2);
+  const blob = new Blob([videosJson], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "zen-pomodoro-videos.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const importVideosFromJson = (file: File): Promise<YouTubeVideo[]> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+      try {
+        if (event.target?.result) {
+          const videos = JSON.parse(event.target.result as string) as YouTubeVideo[];
+          resolve(videos);
+        } else {
+          reject(new Error("Failed to read file content"));
+        }
+      } catch (error) {
+        reject(new Error("Invalid JSON format"));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error("Error reading file"));
+    };
+    
+    reader.readAsText(file);
+  });
+};
+
+// Session export functions
+export const exportSessionsToJson = (sessions: PomodoroSession[]): void => {
+  const sessionsJson = JSON.stringify(sessions, null, 2);
+  const blob = new Blob([sessionsJson], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "zen-pomodoro-sessions.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const importSessionsFromJson = (file: File): Promise<PomodoroSession[]> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+      try {
+        if (event.target?.result) {
+          const sessions = JSON.parse(event.target.result as string) as PomodoroSession[];
+          resolve(sessions);
         } else {
           reject(new Error("Failed to read file content"));
         }
@@ -69,6 +149,46 @@ export const exportSessionsToMarkdown = (sessions: Record<string, any>): void =>
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+};
+
+// Note export functions
+export const exportNotesToJson = (notes: Note[]): void => {
+  const notesJson = JSON.stringify(notes, null, 2);
+  const blob = new Blob([notesJson], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "zen-pomodoro-notes.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const importNotesFromJson = (file: File): Promise<Note[]> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+      try {
+        if (event.target?.result) {
+          const notes = JSON.parse(event.target.result as string) as Note[];
+          resolve(notes);
+        } else {
+          reject(new Error("Failed to read file content"));
+        }
+      } catch (error) {
+        reject(new Error("Invalid JSON format"));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error("Error reading file"));
+    };
+    
+    reader.readAsText(file);
+  });
 };
 
 export const exportNotesToMarkdown = (notes: Note[]): void => {
