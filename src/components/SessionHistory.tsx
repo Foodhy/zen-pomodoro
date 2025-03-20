@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
-import { FileDown, FileMd, Calendar } from 'lucide-react';
+import { FileDown, FileText, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import ImportExportButtons from './ImportExportButtons';
 
@@ -50,7 +49,7 @@ const SessionHistory = () => {
               onClick={exportSessionsToMarkdown}
               className="flex items-center gap-1"
             >
-              <FileMd className="h-4 w-4" />
+              <FileText className="h-4 w-4" />
               Export MD
             </Button>
           </div>

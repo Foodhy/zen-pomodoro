@@ -386,7 +386,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     tasks,
     saveTask: handleSaveTask,
     deleteTask: handleDeleteTask,
-    deleteCompletedTasks: handleCompletedTasks,
+    deleteCompletedTasks: handleDeleteCompletedTasks,
     bulkImportTasks: handleBulkImportTasks,
 
     sessions,

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from './ui/button';
-import { FileDown, FileMd } from 'lucide-react';
+import { FileDown, FileText } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import ImportExportButtons from './ImportExportButtons';
 
@@ -23,7 +23,7 @@ const NotesImportExport: React.FC = () => {
         onClick={exportNotesToMarkdown}
         className="flex items-center gap-1"
       >
-        <FileMd className="h-4 w-4" />
+        <FileText className="h-4 w-4" />
         Export MD
       </Button>
     </div>

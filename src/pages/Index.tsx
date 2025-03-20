@@ -17,6 +17,7 @@ const Index = () => {
   const { settings, isFullscreen, setIsFullscreen, isFocusMode } = useApp();
   const [activeTab, setActiveTab] = useState('timer');
   const [hasMounted, setHasMounted] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Handle fullscreen toggle
   const toggleFullscreen = () => {
@@ -72,7 +73,7 @@ const Index = () => {
           >
             {isFullscreen ? <Minimize /> : <Maximize />}
           </Button>
-          <SettingsDrawer />
+          <SettingsDrawer open={settingsOpen} onOpenChange={setSettingsOpen} />
         </div>
       </header>
 
@@ -88,7 +89,7 @@ const Index = () => {
               {activeTab === 'notes' && <NotesImportExport />}
             </div>
             <TabsContent value="timer" className="tab-content">
-              <PomodoroTimer />
+              <PomodoroTimer onToggleFullscreen={toggleFullscreen} />
             </TabsContent>
             <TabsContent value="tasks" className="tab-content">
               <TaskList />
