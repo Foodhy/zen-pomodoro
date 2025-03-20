@@ -8,7 +8,7 @@ import ProfileSelector from '../components/ProfileSelector';
 import SettingsDrawer from '../components/SettingsDrawer';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/button';
-import { Maximize, Minimize } from 'lucide-react';
+import { Maximize, Minimize, Settings } from 'lucide-react';
 import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImportExport';
 import SessionHistory from '../components/SessionHistory';
 import NotesImportExport from '../components/NotesImportExport';
@@ -103,15 +103,58 @@ const Index = () => {
         {settings.splitView && (
           <div className="space-y-4">
             <Tabs defaultValue="history">
-              <TabsList className="grid grid-cols-2">
+              <TabsList className="grid grid-cols-3">
                 <TabsTrigger value="history">History</TabsTrigger>
                 <TabsTrigger value="music">Music</TabsTrigger>
+                <TabsTrigger value="app">App</TabsTrigger>
               </TabsList>
               <TabsContent value="history" className="tab-content">
                 <SessionHistory />
               </TabsContent>
               <TabsContent value="music" className="tab-content">
                 <YouTubePlayerWithImportExport />
+              </TabsContent>
+              <TabsContent value="app" className="tab-content">
+                <div className="space-y-4 p-4 bg-background rounded-lg border">
+                  <h3 className="text-lg font-medium">App Settings</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium">Language</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button 
+                          variant={settings.language === 'en' ? 'default' : 'outline'}
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => settings.language !== 'en' && setActiveTab('en')}
+                        >
+                          English
+                        </Button>
+                        <Button 
+                          variant={settings.language === 'es' ? 'default' : 'outline'}
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => settings.language !== 'es' && setActiveTab('es')}
+                        >
+                          Español
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium">Display</h4>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full flex justify-between items-center"
+                        onClick={() => setSettingsOpen(true)}
+                      >
+                        <span>More Settings</span>
+                        <Settings className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
