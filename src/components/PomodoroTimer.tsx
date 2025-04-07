@@ -5,31 +5,29 @@ import TimerDisplay from './timer/TimerDisplay';
 import TimerProgress from './timer/TimerProgress';
 import TimerControls from './timer/TimerControls';
 import PomodoroCount from './timer/PomodoroCount';
-import useTimer from './timer/useTimer';
 
 interface PomodoroTimerProps {
   onToggleFullscreen: () => void;
 }
 
 export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onToggleFullscreen }) => {
-  const { settings } = useApp();
-  
-  const {
-    timeLeft,
-    isRunning,
-    currentPhase,
-    pomodoroCount,
-    startTimer,
-    pauseTimer,
-    resetTimer,
-    skipToNextPhase,
-    calculateProgress,
-  } = useTimer();
+  const { 
+    settings,
+    timeLeft, 
+    isTimerRunning, 
+    timerPhase, 
+    pomodoroCount, 
+    startTimer, 
+    pauseTimer, 
+    resetTimer, 
+    skipToNextPhase, 
+    calculateProgress
+  } = useApp();
   
   return (
     <div className="flex flex-col items-center justify-center py-6 fade-in">
       <TimerDisplay 
-        currentPhase={currentPhase} 
+        currentPhase={timerPhase} 
         timeLeft={timeLeft} 
         theme={settings.theme}
       />
@@ -40,7 +38,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onToggleFullscreen
       />
       
       <TimerControls 
-        isRunning={isRunning}
+        isRunning={isTimerRunning}
         onStart={startTimer}
         onPause={pauseTimer}
         onReset={resetTimer}

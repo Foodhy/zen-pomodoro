@@ -1,3 +1,4 @@
+
 import React, {
   createContext,
   useContext,
@@ -25,6 +26,9 @@ import {
   importSessionsFromJson, 
   importNotesFromJson
 } from "../services/importExportService";
+
+// Timer types
+type TimerPhase = 'work' | 'shortBreak' | 'longBreak';
 
 interface AppContextType {
   // Profiles
@@ -74,6 +78,18 @@ interface AppContextType {
   isFocusMode: boolean;
   isFullscreen: boolean;
   setIsFullscreen: (isFullscreen: boolean) => void;
+
+  // Timer States
+  timerPhase: TimerPhase;
+  timeLeft: number;
+  isTimerRunning: boolean;
+  pomodoroCount: number;
+  currentSession: PomodoroSession | null;
+  startTimer: () => void;
+  pauseTimer: () => void;
+  resetTimer: () => void;
+  skipToNextPhase: () => void;
+  calculateProgress: () => number;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -94,6 +110,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   // UI state
   const [isFocusMode, setIsFocusMode] = useState<boolean>(false);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+  const [timerPhase, setTimerPhase] = useState<TimerPhase>('work');
+  const [pomodoroCount, setPomodoroCount] = useState<number>(0);
+  const [currentSession, setCurrentSession] = useState<PomodoroSession | null>(null);
+  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   // Load data on mount
   useEffect(() => {
@@ -136,6 +161,61 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     loadData();
   }, []);
 
+  // Initialize timer when active profile changes
+  useEffect(() => {
+    if (activeProfile) {
+      resetTimer();
+    }
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [activeProfile]);
+  
+  // Setup audio for timer notifications
+  useEffect(() => {
+    audioRef.current = new Audio('/notification.mp3');
+    audioRef.current.volume = 0.7;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+  
+  // Timer logic
+  useEffect(() => {
+    if (isTimerRunning) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current!);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isTimerRunning]);
+  
+  // Timer completion logic
+  useEffect(() => {
+    if (timeLeft === 0 && isTimerRunning) {
+      handleTimerComplete();
+    }
+  }, [timeLeft, isTimerRunning]);
+
   // Apply theme when settings change
   useEffect(() => {
     // Apply theme to document
@@ -173,6 +253,132 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       return () => clearInterval(intervalId);
     }
   }, [tasks, settings.notificationsEnabled]);
+
+  // Timer Functions
+  const handleTimerComplete = async () => {
+    setIsTimerRunning(false);
+    
+    // Play sound if enabled
+    if (settings.soundEnabled && audioRef.current) {
+      try {
+        await audioRef.current.play();
+      } catch (error) {
+        console.error('Audio playback failed:', error);
+      }
+    }
+    
+    // Send notification
+    if (settings.notificationsEnabled) {
+      await notificationService.notifyPomodoroCompleted(timerPhase);
+    }
+    
+    // Update current session as completed
+    if (currentSession) {
+      const completedSession: PomodoroSession = {
+        ...currentSession,
+        endTime: new Date().toISOString(),
+        completed: true
+      };
+      handleSaveSession(completedSession);
+      setCurrentSession(null);
+    }
+    
+    // Determine next phase
+    if (timerPhase === 'work') {
+      const newCount = pomodoroCount + 1;
+      setPomodoroCount(newCount);
+      
+      if (activeProfile && newCount % activeProfile.longBreakInterval === 0) {
+        setTimerPhase('longBreak');
+        setTimeLeft(activeProfile.longBreakDuration * 60);
+      } else {
+        setTimerPhase('shortBreak');
+        setTimeLeft(activeProfile?.shortBreakDuration ? activeProfile.shortBreakDuration * 60 : 5 * 60);
+      }
+    } else {
+      setTimerPhase('work');
+      setTimeLeft(activeProfile?.workDuration ? activeProfile.workDuration * 60 : 25 * 60);
+    }
+  };
+  
+  const startTimer = () => {
+    if (timeLeft > 0) {
+      setIsTimerRunning(true);
+      
+      // Create a new session when starting work phase
+      if (timerPhase === 'work' && !currentSession && activeProfile) {
+        const newSession: PomodoroSession = {
+          id: `session-${Date.now()}`,
+          profileId: activeProfile.id,
+          startTime: new Date().toISOString(),
+          duration: activeProfile.workDuration * 60,
+          type: 'work',
+          completed: false
+        };
+        
+        setCurrentSession(newSession);
+        handleSaveSession(newSession);
+      }
+      
+      // Send notification of phase started
+      if (settings.notificationsEnabled) {
+        notificationService.notifyPhaseStarted(timerPhase);
+      }
+    }
+  };
+  
+  const pauseTimer = () => {
+    setIsTimerRunning(false);
+  };
+  
+  const resetTimer = () => {
+    setIsTimerRunning(false);
+    
+    if (activeProfile) {
+      if (timerPhase === 'work') {
+        setTimeLeft(activeProfile.workDuration * 60);
+      } else if (timerPhase === 'shortBreak') {
+        setTimeLeft(activeProfile.shortBreakDuration * 60);
+      } else {
+        setTimeLeft(activeProfile.longBreakDuration * 60);
+      }
+    }
+    
+    // Clear current session if resetting during work phase
+    if (timerPhase === 'work' && currentSession) {
+      setCurrentSession(null);
+    }
+  };
+  
+  const skipToNextPhase = () => {
+    if (currentSession && timerPhase === 'work') {
+      const completedSession: PomodoroSession = {
+        ...currentSession,
+        endTime: new Date().toISOString(),
+        completed: true
+      };
+      handleSaveSession(completedSession);
+      setCurrentSession(null);
+    }
+    
+    handleTimerComplete();
+  };
+  
+  // Calculate progress percentage
+  const calculateProgress = (): number => {
+    if (!activeProfile) return 0;
+    
+    let totalSeconds;
+    if (timerPhase === 'work') {
+      totalSeconds = activeProfile.workDuration * 60;
+    } else if (timerPhase === 'shortBreak') {
+      totalSeconds = activeProfile.shortBreakDuration * 60;
+    } else {
+      totalSeconds = activeProfile.longBreakDuration * 60;
+    }
+    
+    return 100 - ((timeLeft / totalSeconds) * 100);
+  };
 
   // Profile methods
   const handleSetActiveProfile = (profile: Profile) => {
@@ -417,6 +623,18 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     isFocusMode,
     isFullscreen,
     setIsFullscreen,
+    
+    // Timer states and functions
+    timeLeft,
+    isTimerRunning,
+    timerPhase,
+    pomodoroCount,
+    currentSession,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+    skipToNextPhase,
+    calculateProgress,
   };
 
   return (
