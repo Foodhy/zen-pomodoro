@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 
 interface TimerControlsProps {
@@ -20,45 +19,46 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   onSkip,
   theme
 }) => {
+  const isNes = theme === 'nes-retro';
+
   return (
-    <div className="flex items-center gap-4 mb-8">
-      {isRunning ? (
-        <Button
-          variant="outline"
-          size="icon"
-          className={`h-16 w-16 rounded-full ${theme === 'nes-retro' ? 'nes-btn' : ''}`}
-          onClick={onPause}
-        >
-          <Pause className="h-6 w-6" />
-        </Button>
-      ) : (
-        <Button
-          variant="default"
-          size="icon"
-          className={`h-16 w-16 rounded-full btn-primary ${theme === 'nes-retro' ? 'nes-btn' : ''}`}
-          onClick={onStart}
-        >
-          <Play className="h-6 w-6" />
-        </Button>
-      )}
-      
-      <Button
-        variant="outline"
-        size="icon"
-        className={`h-12 w-12 rounded-full ${theme === 'nes-retro' ? 'nes-btn' : ''}`}
+    <div className="flex items-center justify-center gap-4 mb-7">
+      {/* Reset */}
+      <button
         onClick={onReset}
+        className={`zen-ctrl-btn zen-ctrl-sm ${isNes ? 'nes-btn' : ''}`}
+        aria-label="Reset timer"
       >
-        <RotateCcw className="h-5 w-5" />
-      </Button>
-      
-      <Button
-        variant="outline"
-        size="icon"
-        className={`h-12 w-12 rounded-full ${theme === 'nes-retro' ? 'nes-btn' : ''}`}
+        <RotateCcw className="h-4 w-4" />
+      </button>
+
+      {/* Play / Pause - primary */}
+      {isRunning ? (
+        <button
+          onClick={onPause}
+          className={`zen-ctrl-btn zen-ctrl-primary ${isNes ? 'nes-btn' : ''}`}
+          aria-label="Pause timer"
+        >
+          <Pause className="h-5 w-5" />
+        </button>
+      ) : (
+        <button
+          onClick={onStart}
+          className={`zen-ctrl-btn zen-ctrl-primary zen-ctrl-accent ${isNes ? 'nes-btn' : ''}`}
+          aria-label="Start timer"
+        >
+          <Play className="h-5 w-5" />
+        </button>
+      )}
+
+      {/* Skip */}
+      <button
         onClick={onSkip}
+        className={`zen-ctrl-btn zen-ctrl-sm ${isNes ? 'nes-btn' : ''}`}
+        aria-label="Skip phase"
       >
-        <SkipForward className="h-5 w-5" />
-      </Button>
+        <SkipForward className="h-4 w-4" />
+      </button>
     </div>
   );
 };

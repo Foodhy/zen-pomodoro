@@ -25,7 +25,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onToggleFullscreen
   } = useApp();
   
   return (
-    <div className="flex flex-col items-center justify-center py-6 fade-in">
+    <div className="flex flex-col items-center justify-center py-8 px-6 fade-in">
       <TimerDisplay 
         currentPhase={timerPhase} 
         timeLeft={timeLeft} 

@@ -7,9 +7,26 @@ interface PomodoroCountProps {
 }
 
 export const PomodoroCount: React.FC<PomodoroCountProps> = ({ count, theme }) => {
+  // Show dots representing pomodoros in current long-break cycle (up to 4)
+  const dots = Array.from({ length: 4 }, (_, i) => i < (count % 4 || (count > 0 && count % 4 === 0 ? 4 : 0)));
+
   return (
-    <div className={`text-sm opacity-70 ${theme === 'nes-retro' ? 'font-pixelated text-xs' : ''}`}>
-      {count} {count === 1 ? 'Pomodoro' : 'Pomodoros'} Completed
+    <div className="flex flex-col items-center gap-2">
+      <div className="flex gap-1.5">
+        {dots.map((filled, i) => (
+          <div
+            key={i}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              filled
+                ? 'bg-primary opacity-100'
+                : 'bg-muted opacity-40'
+            } ${theme === 'nes-retro' ? 'rounded-none' : ''}`}
+          />
+        ))}
+      </div>
+      <p className={`text-xs opacity-40 ${theme === 'nes-retro' ? 'font-pixelated' : ''}`}>
+        {count} {count === 1 ? 'pomodoro' : 'pomodoros'} today
+      </p>
     </div>
   );
 };
