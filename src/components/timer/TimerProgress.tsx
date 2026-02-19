@@ -8,7 +8,7 @@ interface TimerProgressProps {
 
 export const TimerProgress: React.FC<TimerProgressProps> = ({ progress, theme }) => {
   return (
-    <div className="w-full max-w-xs mb-8">
+    <div className="w-full max-w-xs mb-7">
       <div className={`timer-progress ${theme === 'nes-retro' ? 'timer-progress-nes' : ''}`}>
         <div
           className={`timer-progress-bar ${
@@ -16,7 +16,7 @@ export const TimerProgress: React.FC<TimerProgressProps> = ({ progress, theme })
             theme === 'netflix' ? 'timer-progress-bar-netflix' : ''
           }`}
           style={{ width: `${progress}%` }}
-        ></div>
+        />
       </div>
     </div>
   );
