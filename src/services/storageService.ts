@@ -28,17 +28,40 @@ const DEFAULT_SETTINGS: AppSettings = {
   focusModeEnabled: false
 };
 
-// Default profile
-const DEFAULT_PROFILE: Profile = {
-  id: 'default',
-  name: 'Default Profile',
-  workDuration: 25,
-  shortBreakDuration: 5,
-  longBreakDuration: 15,
-  longBreakInterval: 4,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString()
-};
+// Default profiles
+const DEFAULT_PROFILES: Profile[] = [
+  {
+    id: 'default',
+    name: 'Focus',
+    workDuration: 25,
+    shortBreakDuration: 5,
+    longBreakDuration: 15,
+    longBreakInterval: 4,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'deep-work',
+    name: 'Deep Work',
+    workDuration: 50,
+    shortBreakDuration: 10,
+    longBreakDuration: 30,
+    longBreakInterval: 3,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'short-sprint',
+    name: 'Short Sprint',
+    workDuration: 15,
+    shortBreakDuration: 3,
+    longBreakDuration: 10,
+    longBreakInterval: 4,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+];
+
 
 // Default YouTube videos
 const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
@@ -96,13 +119,13 @@ const KEYS = {
 export const getProfiles = (): Profile[] => {
   const profiles = localStorage.getItem(KEYS.PROFILES);
   if (!profiles) {
-    // Initialize with default profile without recursive call to saveProfile
-    const defaultProfiles = [DEFAULT_PROFILE];
-    localStorage.setItem(KEYS.PROFILES, JSON.stringify(defaultProfiles));
-    return defaultProfiles;
+    // Initialize with default profiles
+    localStorage.setItem(KEYS.PROFILES, JSON.stringify(DEFAULT_PROFILES));
+    return DEFAULT_PROFILES;
   }
   return JSON.parse(profiles);
 };
+
 
 // Save a profile
 export const saveProfile = (profile: Profile): void => {
@@ -526,10 +549,10 @@ export const resetAllStorage = (): void => {
   localStorage.removeItem(KEYS.VIDEOS);
   localStorage.removeItem(KEYS.NOTES);
   
-  // Initialize with defaults - avoid circular reference
-  const defaultProfiles = [DEFAULT_PROFILE];
-  localStorage.setItem(KEYS.PROFILES, JSON.stringify(defaultProfiles));
-  setActiveProfileId(DEFAULT_PROFILE.id);
+  // Initialize with defaults
+  localStorage.setItem(KEYS.PROFILES, JSON.stringify(DEFAULT_PROFILES));
+  setActiveProfileId(DEFAULT_PROFILES[0].id);
   saveSettings(DEFAULT_SETTINGS);
   localStorage.setItem(KEYS.VIDEOS, JSON.stringify(DEFAULT_YOUTUBE_VIDEOS));
 };
+

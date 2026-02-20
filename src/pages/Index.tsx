@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import PomodoroTimer from '../components/PomodoroTimer';
 import TaskList from '../components/TaskList';
@@ -21,6 +22,10 @@ const Index = () => {
   const [rightTab, setRightTab] = useState<RightTab>('tasks');
   const [hasMounted, setHasMounted] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  
+  // Split view: when enabled, show two columns; when disabled, show single panel with tabs
+  const isSplitView = settings.splitView;
+  const [singleTab, setSingleTab] = useState<'timer' | 'notes' | 'tasks' | 'history' | 'music'>('timer');
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -61,16 +66,17 @@ const Index = () => {
     <div className={`zen-layout relative z-10 ${isFocusMode ? 'focus-mode' : ''}`}>
       {/* Header */}
       <header className="zen-header">
-        <div className="flex items-center gap-3">
+        <div className="zen-header-left">
           <h1 className="zen-brand">Zen Pomodoro</h1>
           <ProfileSelector />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="zen-header-right">
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleFullscreen}
             className="zen-icon-btn"
+            aria-label="Toggle fullscreen"
           >
             {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
           </Button>
@@ -79,6 +85,7 @@ const Index = () => {
             size="icon"
             onClick={() => setSettingsOpen(true)}
             className="zen-icon-btn"
+            aria-label="Open settings"
           >
             <Settings className="h-4 w-4" />
           </Button>
@@ -87,76 +94,111 @@ const Index = () => {
       </header>
 
       {/* Main content */}
-      <main className="zen-main">
-        {/* Left panel - Timer */}
-        <div className="zen-card">
-          {/* Left tab bar */}
-          <div className="zen-tab-bar">
-            <button
-              className={`zen-tab ${leftTab === 'timer' ? 'zen-tab-active' : ''}`}
-              onClick={() => setLeftTab('timer')}
-            >
-              <Timer className="h-3.5 w-3.5" />
-              Timer
-            </button>
-            <button
-              className={`zen-tab ${leftTab === 'notes' ? 'zen-tab-active' : ''}`}
-              onClick={() => setLeftTab('notes')}
-            >
-              <FileText className="h-3.5 w-3.5" />
-              Notes
+      {isSplitView ? (
+        /* Split view: two panels side by side */
+        <main className="zen-main">
+          {/* Left panel - Timer / Notes */}
+          <div className="zen-card">
+            <div className="zen-tab-bar">
+              <button
+                className={`zen-tab ${leftTab === 'timer' ? 'zen-tab-active' : ''}`}
+                onClick={() => setLeftTab('timer')}
+              >
+                <Timer className="h-3.5 w-3.5" />
+                Timer
+              </button>
+              <button
+                className={`zen-tab ${leftTab === 'notes' ? 'zen-tab-active' : ''}`}
+                onClick={() => setLeftTab('notes')}
+              >
+                <FileText className="h-3.5 w-3.5" />
+                Notes
+              </button>
               {leftTab === 'notes' && (
-                <span className="ml-auto">
+                <span className="zen-tab-action">
                   <NotesImportExport />
                 </span>
               )}
-            </button>
+            </div>
+            <div className="zen-panel-body">
+              {leftTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
+              {leftTab === 'notes' && <NotesPlanner />}
+            </div>
           </div>
 
-          <div className="zen-panel-body">
-            {leftTab === 'timer' && (
-              <PomodoroTimer onToggleFullscreen={toggleFullscreen} />
-            )}
-            {leftTab === 'notes' && (
-              <NotesPlanner />
-            )}
+          {/* Right panel - Tasks / History / Music */}
+          <div className="zen-card">
+            <div className="zen-tab-bar">
+              <button
+                className={`zen-tab ${rightTab === 'tasks' ? 'zen-tab-active' : ''}`}
+                onClick={() => setRightTab('tasks')}
+              >
+                <CheckSquare className="h-3.5 w-3.5" />
+                Tasks
+              </button>
+              <button
+                className={`zen-tab ${rightTab === 'history' ? 'zen-tab-active' : ''}`}
+                onClick={() => setRightTab('history')}
+              >
+                <History className="h-3.5 w-3.5" />
+                History
+              </button>
+              <button
+                className={`zen-tab ${rightTab === 'music' ? 'zen-tab-active' : ''}`}
+                onClick={() => setRightTab('music')}
+              >
+                <Music className="h-3.5 w-3.5" />
+                Music
+              </button>
+            </div>
+            <div className="zen-panel-body">
+              {rightTab === 'tasks' && <TaskList />}
+              {rightTab === 'history' && <SessionHistory />}
+              {rightTab === 'music' && <YouTubePlayerWithImportExport />}
+            </div>
           </div>
-        </div>
-
-        {/* Right panel - Tasks / History / Music */}
-        <div className="zen-card">
-          {/* Right tab bar */}
-          <div className="zen-tab-bar">
-            <button
-              className={`zen-tab ${rightTab === 'tasks' ? 'zen-tab-active' : ''}`}
-              onClick={() => setRightTab('tasks')}
-            >
-              <CheckSquare className="h-3.5 w-3.5" />
-              Tasks
-            </button>
-            <button
-              className={`zen-tab ${rightTab === 'history' ? 'zen-tab-active' : ''}`}
-              onClick={() => setRightTab('history')}
-            >
-              <History className="h-3.5 w-3.5" />
-              History
-            </button>
-            <button
-              className={`zen-tab ${rightTab === 'music' ? 'zen-tab-active' : ''}`}
-              onClick={() => setRightTab('music')}
-            >
-              <Music className="h-3.5 w-3.5" />
-              Music
-            </button>
+        </main>
+      ) : (
+        /* Single panel mode: all tabs in one card */
+        <main className="zen-main-single">
+          <div className="zen-card">
+            <div className="zen-tab-bar">
+              <button className={`zen-tab ${singleTab === 'timer' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('timer')}>
+                <Timer className="h-3.5 w-3.5" />
+                Timer
+              </button>
+              <button className={`zen-tab ${singleTab === 'notes' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('notes')}>
+                <FileText className="h-3.5 w-3.5" />
+                Notes
+              </button>
+              {singleTab === 'notes' && (
+                <span className="zen-tab-action">
+                  <NotesImportExport />
+                </span>
+              )}
+              <button className={`zen-tab ${singleTab === 'tasks' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('tasks')}>
+                <CheckSquare className="h-3.5 w-3.5" />
+                Tasks
+              </button>
+              <button className={`zen-tab ${singleTab === 'history' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('history')}>
+                <History className="h-3.5 w-3.5" />
+                History
+              </button>
+              <button className={`zen-tab ${singleTab === 'music' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('music')}>
+                <Music className="h-3.5 w-3.5" />
+                Music
+              </button>
+            </div>
+            <div className="zen-panel-body">
+              {singleTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
+              {singleTab === 'notes' && <NotesPlanner />}
+              {singleTab === 'tasks' && <TaskList />}
+              {singleTab === 'history' && <SessionHistory />}
+              {singleTab === 'music' && <YouTubePlayerWithImportExport />}
+            </div>
           </div>
-
-          <div className="zen-panel-body">
-            {rightTab === 'tasks' && <TaskList />}
-            {rightTab === 'history' && <SessionHistory />}
-            {rightTab === 'music' && <YouTubePlayerWithImportExport />}
-          </div>
-        </div>
-      </main>
+        </main>
+      )}
 
       {/* Stats row */}
       <div className="zen-stats">
@@ -176,3 +218,4 @@ const Index = () => {
 };
 
 export default Index;
+

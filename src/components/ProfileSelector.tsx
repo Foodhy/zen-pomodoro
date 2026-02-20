@@ -131,12 +131,12 @@ export const ProfileSelector: React.FC = () => {
   };
   
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center gap-1.5">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="flex items-center gap-2">
-            {activeProfile?.name || 'Select Profile'}
-            <ChevronDown className="h-4 w-4" />
+          <Button variant="outline" size="sm" className="flex items-center gap-1.5 h-8 px-2.5 text-xs max-w-[140px] sm:max-w-none">
+            <span className="truncate">{activeProfile?.name || 'Profile'}</span>
+            <ChevronDown className="h-3.5 w-3.5 flex-shrink-0" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-56">
@@ -181,8 +181,8 @@ export const ProfileSelector: React.FC = () => {
       
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
         <DialogTrigger asChild>
-          <Button size="icon" variant="ghost" className="h-9 w-9">
-            <Plus className="h-5 w-5" />
+          <Button size="icon" variant="ghost" className="h-8 w-8">
+            <Plus className="h-4 w-4" />
           </Button>
         </DialogTrigger>
         <DialogContent>
