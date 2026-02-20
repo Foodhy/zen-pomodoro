@@ -1,30 +1,51 @@
 
 import React from 'react';
 import { Button } from './ui/button';
-import { FileDown, FileText } from 'lucide-react';
+import { FileText, FileDown, FileUp } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import ImportExportButtons from './ImportExportButtons';
 
 const NotesImportExport: React.FC = () => {
   const { exportNotesToMarkdown, exportNotesToJson, importNotesFromJsonFile } = useApp();
 
+  const handleImportClick = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) importNotesFromJsonFile(file);
+    };
+    input.click();
+  };
+
   return (
-    <div className="flex items-center gap-2">
-      <ImportExportButtons
-        onExport={exportNotesToJson}
-        onImport={importNotesFromJsonFile}
-        buttonSize="sm"
-        exportLabel="Export JSON"
-        importLabel="Import JSON"
-      />
-      <Button 
-        variant="outline" 
-        size="sm" 
-        onClick={exportNotesToMarkdown}
-        className="flex items-center gap-1"
+    <div className="flex items-center gap-1">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-7 w-7"
+        onClick={exportNotesToJson}
+        title="Export JSON"
       >
-        <FileText className="h-4 w-4" />
-        Export MD
+        <FileDown className="h-3.5 w-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-7 w-7"
+        onClick={handleImportClick}
+        title="Import JSON"
+      >
+        <FileUp className="h-3.5 w-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-7 w-7"
+        onClick={exportNotesToMarkdown}
+        title="Export Markdown"
+      >
+        <FileText className="h-3.5 w-3.5" />
       </Button>
     </div>
   );
