@@ -10,7 +10,7 @@ import { Button } from '../components/ui/button';
 import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music } from 'lucide-react';
 import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImportExport';
 import SessionHistory from '../components/SessionHistory';
-import NotesImportExport from '../components/NotesImportExport';
+
 
 type LeftTab = 'timer' | 'tasks' | 'notes';
 type RightTab = 'history' | 'music';
@@ -141,11 +141,6 @@ const Index = () => {
                 <FileText className="h-3.5 w-3.5" />
                 Notes
               </button>
-              {leftTab === 'notes' && (
-                <span className="zen-tab-action">
-                  <NotesImportExport />
-                </span>
-              )}
             </div>
             <div className="zen-panel-body">
               {leftTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
@@ -181,7 +176,7 @@ const Index = () => {
       ) : (
         /* Single panel mode */
         <main className="zen-main-single">
-          <div className="zen-card">
+          <div className="zen-card zen-card-expanded">
             <div className="zen-tab-bar">
               <button className={`zen-tab ${singleTab === 'timer' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('timer')}>
                 <Timer className="h-3.5 w-3.5" />
@@ -195,11 +190,6 @@ const Index = () => {
                 <FileText className="h-3.5 w-3.5" />
                 Notes
               </button>
-              {singleTab === 'notes' && (
-                <span className="zen-tab-action">
-                  <NotesImportExport />
-                </span>
-              )}
               <button className={`zen-tab ${singleTab === 'history' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('history')}>
                 <History className="h-3.5 w-3.5" />
                 History
