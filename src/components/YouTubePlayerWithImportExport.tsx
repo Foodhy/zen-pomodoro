@@ -1,12 +1,10 @@
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import React, { useState } from 'react';
 import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Pencil, Music } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { useState } from 'react';
 import ImportExportButtons from './ImportExportButtons';
 
 const YouTubePlayerWithImportExport = () => {
@@ -33,9 +31,7 @@ const YouTubePlayerWithImportExport = () => {
 
   const handleVideoSelect = (url: string) => {
     const video = videos.find(v => v.url === url);
-    if (video) {
-      setSelectedVideo(video);
-    }
+    if (video) setSelectedVideo(video);
   };
 
   const handleEditVideo = (video: any) => {
@@ -53,123 +49,133 @@ const YouTubePlayerWithImportExport = () => {
   };
 
   const getEmbedUrl = (url: string) => {
-    const videoId = extractVideoId(url);
-    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : '';
+    const id = extractVideoId(url);
+    return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : '';
   };
 
-  // Render with embedded iframe if a video is selected
   return (
-    <Card className="w-full h-full flex flex-col bg-background">
-      <CardHeader className="pb-2 pt-4">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-xl">Music & Ambience</CardTitle>
-          <div className="flex items-center gap-2">
-            <ImportExportButtons
-              onExport={exportVideosToJson}
-              onImport={importVideosFromJsonFile}
-              buttonSize="sm"
-              exportLabel="Export"
-              importLabel="Import"
-            />
-            <Button variant="outline" size="sm" onClick={() => setShowVideoDialog(true)}>Add Video</Button>
-          </div>
+    <div className="zen-music-container">
+      {/* Header row */}
+      <div className="zen-music-header">
+        <div className="flex items-center gap-1.5">
+          <Music className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium text-foreground">Music & Ambience</span>
         </div>
-      </CardHeader>
-      <CardContent className="flex-1 flex flex-col space-y-4">
-        {/* Video selection buttons */}
-        <div className="flex flex-wrap gap-2 mb-2">
-          {videos.map((video) => (
-            <div key={video.id} className="flex items-center gap-1">
-              <Button
-                variant={selectedVideo?.id === video.id ? "default" : "outline"}
-                size="sm"
-                onClick={() => handleVideoSelect(video.url)}
-                className="max-w-[200px] truncate"
-              >
-                {video.title}
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 p-0"
-                onClick={() => handleEditVideo(video)}
-              >
-                <span className="sr-only">Edit</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4"
-                >
-                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                  <path d="m15 5 4 4" />
-                </svg>
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 p-0 text-destructive"
-                onClick={() => deleteVideo(video.id)}
-              >
-                <span className="sr-only">Delete</span>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
+        <div className="flex items-center gap-1">
+          <ImportExportButtons
+            onExport={exportVideosToJson}
+            onImport={importVideosFromJsonFile}
+            buttonSize="sm"
+            exportLabel=""
+            importLabel=""
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => { setVideoId(''); setVideoTitle(''); setVideoUrl(''); setShowVideoDialog(true); }}
+            title="Add video"
+          >
+            <Plus className="h-3.5 w-3.5" />
+          </Button>
         </div>
+      </div>
 
-        {/* Embedded video */}
-        {selectedVideo && (
-          <div className="w-full flex-1 min-h-[200px]">
-            <iframe
-              className="w-full h-full aspect-video"
-              src={getEmbedUrl(selectedVideo.url)}
-              title={selectedVideo.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+      {/* Video chips */}
+      <div className="zen-music-chips">
+        {videos.map((video) => (
+          <div
+            key={video.id}
+            className={`zen-music-chip ${selectedVideo?.id === video.id ? 'zen-music-chip-active' : ''}`}
+          >
+            <button
+              className="zen-music-chip-label"
+              onClick={() => handleVideoSelect(video.url)}
+            >
+              {video.title}
+            </button>
+            <button
+              className="zen-music-chip-action"
+              onClick={() => handleEditVideo(video)}
+              title="Edit"
+            >
+              <Pencil className="h-3 w-3" />
+            </button>
+            <button
+              className="zen-music-chip-action zen-music-chip-delete"
+              onClick={() => deleteVideo(video.id)}
+              title="Remove"
+            >
+              <X className="h-3 w-3" />
+            </button>
           </div>
-        )}
+        ))}
+      </div>
 
-        {/* Dialog for adding/editing videos */}
-        <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{videoId ? 'Edit Video' : 'Add Video'}</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <label htmlFor="title">Title</label>
-                <Input
-                  id="title"
-                  value={videoTitle}
-                  onChange={(e) => setVideoTitle(e.target.value)}
-                  placeholder="Enter video title"
-                />
-              </div>
-              <div className="grid gap-2">
-                <label htmlFor="url">YouTube URL</label>
-                <Input
-                  id="url"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  placeholder="Enter YouTube URL"
-                />
-              </div>
+      {/* Embedded video */}
+      {selectedVideo && (
+        <div className="zen-music-player">
+          <iframe
+            className="w-full h-full rounded-lg"
+            src={getEmbedUrl(selectedVideo.url)}
+            title={selectedVideo.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+
+      {/* Empty state */}
+      {videos.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+          <Music className="h-8 w-8 mb-3 opacity-40" />
+          <p className="text-sm">No videos yet</p>
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-3"
+            onClick={() => setShowVideoDialog(true)}
+          >
+            <Plus className="h-3.5 w-3.5 mr-1.5" />
+            Add your first video
+          </Button>
+        </div>
+      )}
+
+      {/* Dialog */}
+      <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{videoId ? 'Edit Video' : 'Add Video'}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label htmlFor="title" className="text-sm font-medium">Title</label>
+              <Input
+                id="title"
+                value={videoTitle}
+                onChange={(e) => setVideoTitle(e.target.value)}
+                placeholder="e.g. Lofi Hip Hop Radio"
+              />
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowVideoDialog(false)}>Cancel</Button>
-              <Button onClick={handleAddVideo}>{videoId ? 'Update' : 'Add'}</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </CardContent>
-    </Card>
+            <div className="grid gap-2">
+              <label htmlFor="url" className="text-sm font-medium">YouTube URL</label>
+              <Input
+                id="url"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowVideoDialog(false)}>Cancel</Button>
+            <Button onClick={handleAddVideo}>{videoId ? 'Update' : 'Add'}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 
