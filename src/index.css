@@ -629,6 +629,31 @@ h6 {
   min-height: 0;
 }
 
+/* Bigger timer when in single-panel (split off) */
+.zen-card-expanded .timer-display {
+  font-size: 8rem;
+}
+
+.zen-card-expanded .zen-ctrl-sm {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.zen-card-expanded .zen-ctrl-primary {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+@media (max-width: 640px) {
+  .zen-card-expanded .timer-display {
+    font-size: 5.5rem;
+  }
+  .zen-card-expanded .zen-ctrl-primary {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+}
+
 @media (max-width: 768px) {
   .zen-main {
     grid-template-columns: 1fr;
@@ -721,7 +746,7 @@ h6 {
 .zen-panel-body {
   flex: 1;
   overflow-y: auto;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
   min-height: 0;
 }
 
@@ -735,11 +760,11 @@ h6 {
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.125rem 1.75rem;
+  padding: 0.875rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  min-width: 140px;
+  gap: 0.125rem;
+  min-width: 120px;
 }
 
 .zen-stat-label {

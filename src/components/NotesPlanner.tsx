@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
-  FileDown, 
-  Pen, 
   Tag, 
   Trash, 
   Code, 
@@ -19,6 +17,7 @@ import {
   Clipboard,
   Plus
 } from "lucide-react";
+import NotesImportExport from "./NotesImportExport";
 import { t } from "../services/translationService";
 
 interface NotesPlannerProps {
@@ -113,20 +112,12 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-medium">{t("notes.title", settings.language)}</h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleExportNotes}
-          className="gap-1"
-        >
-          <FileDown className="h-4 w-4" />
-          {t("notes.export", settings.language)}
-        </Button>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-sm font-medium opacity-70">{t("notes.title", settings.language)}</h2>
+        <NotesImportExport />
       </div>
 
-      <form onSubmit={handleAddNote} className="space-y-3 mb-4 p-3 border border-border/30 rounded-md">
+      <form onSubmit={handleAddNote} className="space-y-2 mb-3 p-2.5 border border-border/30 rounded-md">
         <Input
           type="text"
           placeholder={t("notes.titlePlaceholder", settings.language)}
@@ -139,7 +130,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
           placeholder={t("notes.contentPlaceholder", settings.language)}
           value={newNoteContent}
           onChange={(e) => setNewNoteContent(e.target.value)}
-          className="min-h-[100px] text-sm font-mono"
+          className="min-h-[70px] text-sm font-mono"
         />
         
         <div className="flex gap-2">
@@ -179,7 +170,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
         </Button>
       </form>
 
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-3">
         <Input
           type="text"
           placeholder={t("notes.search", settings.language)}
