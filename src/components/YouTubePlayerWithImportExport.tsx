@@ -85,14 +85,6 @@ const YouTubePlayerWithImportExport = () => {
         </div>
       </div>
 
-        {/* Now playing bar */}
-        {selectedVideo && (
-          <div className="zen-music-now-playing">
-            <span className="zen-music-now-playing-dot" />
-            <span className="zen-music-now-playing-title">{selectedVideo.title}</span>
-          </div>
-        )}
-
         {/* Embedded video */}
         {selectedVideo && (
           <div className="zen-music-player">

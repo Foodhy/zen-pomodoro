@@ -1501,41 +1501,6 @@ body::before {
   align-items: center;
 }
 
-.zen-music-now-playing {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.625rem;
-  background: hsl(var(--primary) / 0.08);
-  border: 1px solid hsl(var(--primary) / 0.2);
-  border-radius: calc(var(--radius) - 2px);
-  overflow: hidden;
-}
-
-.zen-music-now-playing-dot {
-  flex-shrink: 0;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  background: hsl(var(--primary));
-  animation: zen-music-pulse 1.6s ease-in-out infinite;
-}
-
-@keyframes zen-music-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.75); }
-}
-
-.zen-music-now-playing-title {
-  flex: 1;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: hsl(var(--foreground));
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .zen-music-chips {
   display: flex;
   flex-wrap: wrap;
