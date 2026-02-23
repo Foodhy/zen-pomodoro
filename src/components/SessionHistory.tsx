@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
-import { FileDown, FileText, Calendar } from 'lucide-react';
+import { FileDown, FileText, Calendar, Upload } from 'lucide-react';
 import { format } from 'date-fns';
-import ImportExportButtons from './ImportExportButtons';
 
 const SessionHistory = () => {
   const { sessions, exportSessionsToMarkdown, exportSessionsToJson, importSessionsFromJsonFile } = useApp();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   
   // Group sessions by date
@@ -32,26 +32,50 @@ const SessionHistory = () => {
 
   return (
     <Card className="w-full bg-background">
-      <CardHeader className="pb-2 pt-4">
+      <CardHeader className="pb-2 pt-3 px-3">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-xl">Session History</CardTitle>
-          <div className="flex items-center gap-2">
-            <ImportExportButtons
-              onExport={exportSessionsToJson}
-              onImport={importSessionsFromJsonFile}
-              buttonSize="sm"
-              exportLabel="Export JSON"
-              importLabel="Import JSON"
-            />
+          <CardTitle className="text-base">Session History</CardTitle>
+          <div className="flex items-center gap-1">
             <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={exportSessionsToMarkdown}
-              className="flex items-center gap-1"
+              variant="ghost" 
+              size="icon"
+              className="h-7 w-7"
+              onClick={exportSessionsToJson}
+              title="Export JSON"
             >
-              <FileText className="h-4 w-4" />
-              Export MD
+              <FileDown className="h-3.5 w-3.5" />
             </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => fileInputRef.current?.click()}
+              title="Import JSON"
+            >
+              <Upload className="h-3.5 w-3.5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="h-7 w-7"
+              onClick={exportSessionsToMarkdown}
+              title="Export Markdown"
+            >
+              <FileText className="h-3.5 w-3.5" />
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={async (e) => {
+                const files = e.target.files;
+                if (files?.[0]) {
+                  await importSessionsFromJsonFile(files[0]);
+                  e.target.value = '';
+                }
+              }}
+              accept=".json"
+              className="hidden"
+            />
           </div>
         </div>
       </CardHeader>
