@@ -31,7 +31,7 @@ const SessionHistory = () => {
   };
 
   return (
-    <Card className="w-full bg-background">
+    <Card className="w-full bg-backgrounds">
       <CardHeader className="pb-2 pt-3 px-3">
         <div className="flex justify-between items-center">
           <CardTitle className="text-base">Session History</CardTitle>

@@ -94,11 +94,6 @@ const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
     id: 'yt-default-6',
     title: '🎵 THE BEST GYM PHONK 2025',
     url: 'https://www.youtube.com/watch?v=zM1H3NkMYv4'
-  },
-  {
-    id: 'yt-default-7',
-    title: '🎵 Lofi POV',
-    url: 'https://www.youtube.com/watch?v=uFlzUaisbig'
   }
 ];
 

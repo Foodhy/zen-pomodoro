@@ -113,7 +113,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-sm font-medium opacity-70">{t("notes.title", settings.language)}</h2>
+        <h2 className="text-sm font-medium opacity-70 pl-2">{t("notes.title", settings.language)}</h2>
         <NotesImportExport />
       </div>
 
@@ -170,7 +170,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
         </Button>
       </form>
 
-      <div className="flex gap-2 mb-3">
+      <div className="flex gap-2 mb-3 pl-2">
         <Input
           type="text"
           placeholder={t("notes.search", settings.language)}

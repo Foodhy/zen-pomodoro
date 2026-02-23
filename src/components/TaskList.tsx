@@ -124,7 +124,7 @@ export const TaskList: React.FC<TaskListProps> = ({ collapsed = false }) => {
   const completedTasks = sortTasks(tasks.filter((task) => task.completed));
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col p-2">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-medium">{t("tasks.title", settings.language)}</h2>
 
