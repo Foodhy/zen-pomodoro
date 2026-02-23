@@ -400,7 +400,25 @@ const translations: Translations = {
   "notes.addFirstNote": {
     en: "Add your first note to start planning",
     es: "Agrega tu primera nota para comenzar a planificar",
-  }
+  },
+
+  // Music
+  "music.deleteConfirm.title": {
+    en: "Remove track?",
+    es: "¿Eliminar pista?",
+  },
+  "music.deleteConfirm.message": {
+    en: "Are you sure you want to remove this track from your list?",
+    es: "¿Estás seguro de que quieres eliminar esta pista de tu lista?",
+  },
+  "music.deleteConfirm.cancel": {
+    en: "Cancel",
+    es: "Cancelar",
+  },
+  "music.deleteConfirm.confirm": {
+    en: "Remove",
+    es: "Eliminar",
+  },
 };
 
 export const t = (key: string, language: string): string => {

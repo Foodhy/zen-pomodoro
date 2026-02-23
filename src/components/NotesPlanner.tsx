@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { Note, NoteCategory } from "../models/types";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,7 +15,8 @@ import {
   Puzzle, 
   Calendar, 
   Clipboard,
-  Plus
+  Plus,
+  ChevronUp
 } from "lucide-react";
 import NotesImportExport from "./NotesImportExport";
 import { t } from "../services/translationService";
@@ -25,13 +26,14 @@ interface NotesPlannerProps {
 }
 
 const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
-  const { notes, saveNote, deleteNote, activeProfile, settings, exportNotesToMarkdown } = useApp();
+  const { notes, saveNote, deleteNote, activeProfile, settings } = useApp();
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
   const [newNoteCategory, setNewNoteCategory] = useState<NoteCategory>(NoteCategory.TECHNICAL);
   const [newNoteTags, setNewNoteTags] = useState("");
   const [filter, setFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   const handleAddNote = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,11 +54,8 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
       setNewNoteTitle("");
       setNewNoteContent("");
       setNewNoteTags("");
+      setShowForm(false);
     }
-  };
-
-  const handleExportNotes = () => {
-    exportNotesToMarkdown();
   };
 
   const handleDeleteNote = (id: string) => {
@@ -111,66 +110,94 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-sm font-medium opacity-70 pl-2">{t("notes.title", settings.language)}</h2>
-        <NotesImportExport />
+    <div className="h-full flex flex-col p-2">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-lg font-medium">{t("notes.title", settings.language)}</h2>
+        <div className="flex items-center gap-1">
+          <NotesImportExport />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => setShowForm(v => !v)}
+            aria-label={showForm ? "Hide add note form" : "Add note"}
+          >
+            {showForm ? <ChevronUp className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          </Button>
+        </div>
       </div>
 
-      <form onSubmit={handleAddNote} className="space-y-2 mb-3 p-2.5 border border-border/30 rounded-md">
-        <Input
-          type="text"
-          placeholder={t("notes.titlePlaceholder", settings.language)}
-          value={newNoteTitle}
-          onChange={(e) => setNewNoteTitle(e.target.value)}
-          className="text-sm"
-        />
-        
-        <Textarea
-          placeholder={t("notes.contentPlaceholder", settings.language)}
-          value={newNoteContent}
-          onChange={(e) => setNewNoteContent(e.target.value)}
-          className="min-h-[70px] text-sm font-mono"
-        />
-        
-        <div className="flex gap-2">
-          <Select 
-            value={newNoteCategory} 
-            onValueChange={(value) => setNewNoteCategory(value as NoteCategory)}
-          >
-            <SelectTrigger className="text-xs flex-1">
-              <SelectValue placeholder={t("notes.category", settings.language)} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={NoteCategory.TECHNICAL}>{t("notes.category.technical", settings.language)}</SelectItem>
-              <SelectItem value={NoteCategory.PLANNING}>{t("notes.category.planning", settings.language)}</SelectItem>
-              <SelectItem value={NoteCategory.CODE}>{t("notes.category.code", settings.language)}</SelectItem>
-              <SelectItem value={NoteCategory.IDEAS}>{t("notes.category.ideas", settings.language)}</SelectItem>
-              <SelectItem value={NoteCategory.OTHER}>{t("notes.category.other", settings.language)}</SelectItem>
-            </SelectContent>
-          </Select>
-          
+      {/* Collapsible add form */}
+      {showForm && (
+        <form onSubmit={handleAddNote} className="space-y-2 mb-3">
           <Input
             type="text"
-            placeholder={t("notes.tags", settings.language)}
-            value={newNoteTags}
-            onChange={(e) => setNewNoteTags(e.target.value)}
-            className="text-xs flex-1"
+            placeholder={t("notes.titlePlaceholder", settings.language)}
+            value={newNoteTitle}
+            onChange={(e) => setNewNoteTitle(e.target.value)}
+            className="text-sm"
+            autoFocus
           />
-        </div>
-        
-        <Button
-          type="submit"
-          size="sm"
-          className="w-full"
-          disabled={!newNoteTitle.trim() || !newNoteContent.trim()}
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          {t("notes.add", settings.language)}
-        </Button>
-      </form>
 
-      <div className="flex gap-2 mb-3 px-2">
+          <Textarea
+            placeholder={t("notes.contentPlaceholder", settings.language)}
+            value={newNoteContent}
+            onChange={(e) => setNewNoteContent(e.target.value)}
+            className="min-h-[70px] text-sm font-mono"
+          />
+
+          <div className="flex gap-2">
+            <Select
+              value={newNoteCategory}
+              onValueChange={(value) => setNewNoteCategory(value as NoteCategory)}
+            >
+              <SelectTrigger className="text-xs flex-1">
+                <SelectValue placeholder={t("notes.category", settings.language)} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NoteCategory.TECHNICAL}>{t("notes.category.technical", settings.language)}</SelectItem>
+                <SelectItem value={NoteCategory.PLANNING}>{t("notes.category.planning", settings.language)}</SelectItem>
+                <SelectItem value={NoteCategory.CODE}>{t("notes.category.code", settings.language)}</SelectItem>
+                <SelectItem value={NoteCategory.IDEAS}>{t("notes.category.ideas", settings.language)}</SelectItem>
+                <SelectItem value={NoteCategory.OTHER}>{t("notes.category.other", settings.language)}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Input
+              type="text"
+              placeholder={t("notes.tags", settings.language)}
+              value={newNoteTags}
+              onChange={(e) => setNewNoteTags(e.target.value)}
+              className="text-xs flex-1"
+            />
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="flex-1"
+              onClick={() => setShowForm(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              size="sm"
+              className="flex-1"
+              disabled={!newNoteTitle.trim()}
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              {t("notes.add", settings.language)}
+            </Button>
+          </div>
+        </form>
+      )}
+
+      {/* Search + filter */}
+      <div className="flex gap-2 mb-3">
         <Input
           type="text"
           placeholder={t("notes.search", settings.language)}
@@ -178,12 +205,9 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="text-sm"
         />
-        
-        <Select 
-          value={filter} 
-          onValueChange={setFilter}
-        >
-          <SelectTrigger className="text-xs w-[150px]">
+
+        <Select value={filter} onValueChange={setFilter}>
+          <SelectTrigger className="text-xs w-[130px]">
             <SelectValue placeholder={t("notes.filter", settings.language)} />
           </SelectTrigger>
           <SelectContent>
@@ -197,62 +221,60 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
         </Select>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      {/* Notes list */}
+      <div className="flex-1 overflow-y-auto pb-8">
         {filteredNotes.length === 0 ? (
           <div className="text-center py-8 opacity-60">
             <p className="text-sm">{t("notes.noNotes", settings.language)}</p>
             <p className="text-xs mt-1">{t("notes.addToStart", settings.language)}</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-2">
             {filteredNotes.map((note) => (
-              <div 
-                key={note.id} 
-                className="miro-card p-3 rounded-lg border border-border/30 shadow-sm hover:shadow-md transition-shadow"
+              <div
+                key={note.id}
+                className="p-3 rounded-lg border border-border/30 hover:border-border/60 transition-colors"
               >
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="font-medium text-sm">{note.title}</h3>
-                    <div className="flex items-center gap-1 text-xs opacity-70 mt-1">
-                      <Calendar className="h-3 w-3" />
-                      <span>{new Date(note.createdAt).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-1">
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${getCategoryColorClass(note.category)}`}>
-                      {getCategoryIcon(note.category)}
-                      <span className="ml-1">
+                <div className="flex justify-between items-start mb-1.5">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-sm truncate">{note.title}</h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs ${getCategoryColorClass(note.category)}`}>
+                        {getCategoryIcon(note.category)}
                         {t(`notes.category.${note.category}`, settings.language)}
                       </span>
-                    </span>
-                    
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6"
-                      onClick={() => handleDeleteNote(note.id)}
-                    >
-                      <Trash className="h-3.5 w-3.5" />
-                    </Button>
+                      <span className="text-xs opacity-50 flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(note.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 shrink-0 ml-1 opacity-40 hover:opacity-100"
+                    onClick={() => handleDeleteNote(note.id)}
+                  >
+                    <Trash className="h-3.5 w-3.5" />
+                  </Button>
                 </div>
-                
+
                 {note.category === NoteCategory.CODE ? (
-                  <pre className="bg-secondary/30 p-2 rounded-md text-xs font-mono overflow-x-auto whitespace-pre-wrap">
+                  <pre className="bg-secondary/30 p-2 rounded-md text-xs font-mono overflow-x-auto whitespace-pre-wrap mt-1.5">
                     {note.content}
                   </pre>
                 ) : (
-                  <p className="text-sm whitespace-pre-wrap">
+                  <p className="text-sm whitespace-pre-wrap text-foreground/80 mt-1.5">
                     {note.content}
                   </p>
                 )}
-                
+
                 {note.tags && note.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
                     {note.tags.map((tag, index) => (
-                      <span 
-                        key={index} 
+                      <span
+                        key={index}
                         className="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary/50 text-xs"
                       >
                         <Tag className="h-3 w-3 mr-1" />

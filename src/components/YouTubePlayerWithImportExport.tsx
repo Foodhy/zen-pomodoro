@@ -3,17 +3,21 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
-import { Plus, X, Pencil, Music } from 'lucide-react';
+import { Plus, X, Pencil, Music, Trash2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import ImportExportButtons from './ImportExportButtons';
+import { t } from '../services/translationService';
 
 const YouTubePlayerWithImportExport = () => {
-  const { videos, saveVideo, deleteVideo, exportVideosToJson, importVideosFromJsonFile } = useApp();
+  const { videos, saveVideo, deleteVideo, exportVideosToJson, importVideosFromJsonFile, settings } = useApp();
+  const lang = settings.language;
   const [videoUrl, setVideoUrl] = useState('');
   const [videoTitle, setVideoTitle] = useState('');
   const [videoId, setVideoId] = useState('');
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(videos[0] || null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
 
   const handleAddVideo = () => {
     if (videoUrl && videoTitle) {
@@ -81,6 +85,26 @@ const YouTubePlayerWithImportExport = () => {
         </div>
       </div>
 
+        {/* Now playing bar */}
+        {selectedVideo && (
+          <div className="zen-music-now-playing">
+            <span className="zen-music-now-playing-dot" />
+            <span className="zen-music-now-playing-title">{selectedVideo.title}</span>
+          </div>
+        )}
+
+        {/* Embedded video */}
+        {selectedVideo && (
+          <div className="zen-music-player">
+            <iframe
+              src={getEmbedUrl(selectedVideo.url)}
+              title={selectedVideo.title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
       {/* Video chips */}
       <div className="zen-music-chips">
         {videos.map((video) => (
@@ -94,37 +118,26 @@ const YouTubePlayerWithImportExport = () => {
             >
               {video.title}
             </button>
-            <button
-              className="zen-music-chip-action"
-              onClick={() => handleEditVideo(video)}
-              title="Edit"
-            >
-              <Pencil className="h-3 w-3" />
-            </button>
-            <button
-              className="zen-music-chip-action zen-music-chip-delete"
-              onClick={() => deleteVideo(video.id)}
-              title="Remove"
-            >
-              <X className="h-3 w-3" />
-            </button>
+            <div className="zen-music-chip-actions">
+              <button
+                className="zen-music-chip-action"
+                onClick={() => handleEditVideo(video)}
+                title="Edit"
+              >
+                <Pencil className="h-3 w-3" />
+              </button>
+              <button
+                className="zen-music-chip-action zen-music-chip-delete"
+                onClick={() => setDeleteConfirmId(video.id)}
+                title={t('music.deleteConfirm.confirm', lang)}
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Embedded video */}
-      {selectedVideo && (
-        <div className="zen-music-player">
-          <iframe
-            className="w-full h-full rounded-lg"
-            src={getEmbedUrl(selectedVideo.url)}
-            title={selectedVideo.title}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      )}
 
       {/* Empty state */}
       {videos.length === 0 && (
@@ -143,7 +156,39 @@ const YouTubePlayerWithImportExport = () => {
         </div>
       )}
 
-      {/* Dialog */}
+      {/* Delete confirmation dialog */}
+      <Dialog open={!!deleteConfirmId} onOpenChange={(open) => { if (!open) setDeleteConfirmId(null); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Trash2 className="h-4 w-4 text-destructive" />
+              {t('music.deleteConfirm.title', lang)}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground py-2">
+            {t('music.deleteConfirm.message', lang)}
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              {t('music.deleteConfirm.cancel', lang)}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteConfirmId) {
+                  if (selectedVideo?.id === deleteConfirmId) setSelectedVideo(videos.find(v => v.id !== deleteConfirmId) || null);
+                  deleteVideo(deleteConfirmId);
+                }
+                setDeleteConfirmId(null);
+              }}
+            >
+              {t('music.deleteConfirm.confirm', lang)}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add / Edit dialog */}
       <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
         <DialogContent>
           <DialogHeader>
