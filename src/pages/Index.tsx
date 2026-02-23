@@ -208,47 +208,50 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Mini timer widget when not on Timer tab */}
-          {singleTab !== 'timer' && (
-            <div className="zen-mini-timer">
-              <div className="zen-mini-timer-info">
-                <span className="zen-mini-timer-phase">
-                  {timerPhase === 'work' ? 'Focus' : timerPhase === 'shortBreak' ? 'Break' : 'Long Break'}
-                </span>
-                <span className="zen-mini-timer-time">
-                  {`${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}
-                </span>
-              </div>
-              <div className="zen-mini-timer-controls">
-                <button onClick={resetTimer} className="zen-mini-btn" aria-label="Reset"><RotateCcw className="h-3.5 w-3.5" /></button>
-                {isTimerRunning ? (
-                  <button onClick={pauseTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Pause"><Pause className="h-4 w-4" /></button>
-                ) : (
-                  <button onClick={startTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Start"><Play className="h-4 w-4" /></button>
-                )}
-                <button onClick={skipToNextPhase} className="zen-mini-btn" aria-label="Skip"><SkipForward className="h-3.5 w-3.5" /></button>
-              </div>
-              <div className="zen-mini-timer-stats">
-                <span>{pomodoroCount} 🍅</span>
-                <span>{totalFocusMinutes}m</span>
-              </div>
-            </div>
-          )}
         </main>
       )}
 
-      {/* Stats row */}
-      <div className="zen-stats">
-        <div className="zen-stat-card">
-          <span className="zen-stat-label">Pomodoros</span>
-          <span className="zen-stat-value">{pomodoroCount}</span>
+      {/* Bottom bar: stats + mini timer (when applicable) */}
+      <div className="zen-bottom-bar">
+        <div className="zen-bottom-stats">
+          <div className="zen-stat-card">
+            <span className="zen-stat-label">Pomodoros</span>
+            <span className="zen-stat-value">{pomodoroCount}</span>
+          </div>
+          <div className="zen-stat-card">
+            <span className="zen-stat-label">Total Focus</span>
+            <span className="zen-stat-value">
+              {totalFocusMinutes} <span className="zen-stat-unit">min</span>
+            </span>
+          </div>
         </div>
-        <div className="zen-stat-card">
-          <span className="zen-stat-label">Total Focus</span>
-          <span className="zen-stat-value">
-            {totalFocusMinutes} <span className="zen-stat-unit">min</span>
-          </span>
-        </div>
+
+        {/* Mini timer: show when single mode & not on timer tab, OR split mode & left tab not timer */}
+        {((!isSplitView && singleTab !== 'timer') || (isSplitView && leftTab !== 'timer')) && (
+          <div className="zen-mini-timer-inline">
+            <div className="zen-mini-timer-info">
+              <span className="zen-mini-timer-phase">
+                {timerPhase === 'work' ? 'Focus' : timerPhase === 'shortBreak' ? 'Break' : 'Long Break'}
+              </span>
+              <span className="zen-mini-timer-time">
+                {`${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}
+              </span>
+            </div>
+            <div className="zen-mini-timer-controls">
+              <button onClick={resetTimer} className="zen-mini-btn" aria-label="Reset"><RotateCcw className="h-3.5 w-3.5" /></button>
+              {isTimerRunning ? (
+                <button onClick={pauseTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Pause"><Pause className="h-4 w-4" /></button>
+              ) : (
+                <button onClick={startTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Start"><Play className="h-4 w-4" /></button>
+              )}
+              <button onClick={skipToNextPhase} className="zen-mini-btn" aria-label="Skip"><SkipForward className="h-3.5 w-3.5" /></button>
+            </div>
+            <div className="zen-mini-timer-stats">
+              <span>{pomodoroCount} 🍅</span>
+              <span>{totalFocusMinutes}m</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
