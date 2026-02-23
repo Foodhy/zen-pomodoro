@@ -850,8 +850,10 @@ h6 {
 .zen-bottom-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .zen-bottom-stats {
