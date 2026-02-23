@@ -125,21 +125,21 @@ const Index = () => {
                 onClick={() => setLeftTab('timer')}
               >
                 <Timer className="h-3.5 w-3.5" />
-                Timer
+                <span className="zen-tab-label">Timer</span>
               </button>
               <button
                 className={`zen-tab ${leftTab === 'tasks' ? 'zen-tab-active' : ''}`}
                 onClick={() => setLeftTab('tasks')}
               >
                 <CheckSquare className="h-3.5 w-3.5" />
-                Tasks
+                <span className="zen-tab-label">Tasks</span>
               </button>
               <button
                 className={`zen-tab ${leftTab === 'notes' ? 'zen-tab-active' : ''}`}
                 onClick={() => setLeftTab('notes')}
               >
                 <FileText className="h-3.5 w-3.5" />
-                Notes
+                <span className="zen-tab-label">Notes</span>
               </button>
             </div>
             <div className={`zen-panel-body ${leftTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
@@ -157,14 +157,14 @@ const Index = () => {
                 onClick={() => setRightTab('history')}
               >
                 <History className="h-3.5 w-3.5" />
-                History
+                <span className="zen-tab-label">History</span>
               </button>
               <button
                 className={`zen-tab ${rightTab === 'music' ? 'zen-tab-active' : ''}`}
                 onClick={() => setRightTab('music')}
               >
                 <Music className="h-3.5 w-3.5" />
-                Music
+                <span className="zen-tab-label">Music</span>
               </button>
             </div>
             <div className="zen-panel-body">
@@ -180,23 +180,23 @@ const Index = () => {
             <div className="zen-tab-bar">
               <button className={`zen-tab ${singleTab === 'timer' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('timer')}>
                 <Timer className="h-3.5 w-3.5" />
-                Timer
+                <span className="zen-tab-label">Timer</span>
               </button>
               <button className={`zen-tab ${singleTab === 'tasks' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('tasks')}>
                 <CheckSquare className="h-3.5 w-3.5" />
-                Tasks
+                <span className="zen-tab-label">Tasks</span>
               </button>
               <button className={`zen-tab ${singleTab === 'notes' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('notes')}>
                 <FileText className="h-3.5 w-3.5" />
-                Notes
+                <span className="zen-tab-label">Notes</span>
               </button>
               <button className={`zen-tab ${singleTab === 'history' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('history')}>
                 <History className="h-3.5 w-3.5" />
-                History
+                <span className="zen-tab-label">History</span>
               </button>
               <button className={`zen-tab ${singleTab === 'music' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('music')}>
                 <Music className="h-3.5 w-3.5" />
-                Music
+                <span className="zen-tab-label">Music</span>
               </button>
             </div>
             <div className={`zen-panel-body ${singleTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
@@ -212,7 +212,7 @@ const Index = () => {
       )}
 
       {/* Bottom bar: stats + mini timer (when applicable) */}
-      <div className="zen-bottom-bar">
+      <div className={`zen-bottom-bar ${(!isSplitView && singleTab === 'timer') || (isSplitView && leftTab === 'timer') ? 'gap-0' : 'gap-[1rem]'}`}>
         <div className="zen-bottom-stats">
           <div className="zen-stat-card">
             <span className="zen-stat-label">Pomodoros</span>

@@ -170,7 +170,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
         </Button>
       </form>
 
-      <div className="flex gap-2 mb-3 pl-2">
+      <div className="flex gap-2 mb-3 px-2">
         <Input
           type="text"
           placeholder={t("notes.search", settings.language)}
