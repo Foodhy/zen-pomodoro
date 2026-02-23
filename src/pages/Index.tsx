@@ -7,7 +7,7 @@ import ProfileSelector from '../components/ProfileSelector';
 import SettingsDrawer from '../components/SettingsDrawer';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/button';
-import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music } from 'lucide-react';
+import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music, Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImportExport';
 import SessionHistory from '../components/SessionHistory';
 
@@ -16,7 +16,7 @@ type LeftTab = 'timer' | 'tasks' | 'notes';
 type RightTab = 'history' | 'music';
 
 const Index = () => {
-  const { settings, isFullscreen, setIsFullscreen, isFocusMode, pomodoroCount, sessions, timeLeft, isTimerRunning, timerPhase } = useApp();
+  const { settings, isFullscreen, setIsFullscreen, isFocusMode, pomodoroCount, sessions, timeLeft, isTimerRunning, timerPhase, startTimer, pauseTimer, resetTimer, skipToNextPhase } = useApp();
   const [leftTab, setLeftTab] = useState<LeftTab>('timer');
   const [rightTab, setRightTab] = useState<RightTab>('history');
   const [hasMounted, setHasMounted] = useState(false);
@@ -142,7 +142,7 @@ const Index = () => {
                 Notes
               </button>
             </div>
-            <div className="zen-panel-body">
+            <div className={`zen-panel-body ${leftTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
               {leftTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
               {leftTab === 'tasks' && <TaskList />}
               {leftTab === 'notes' && <NotesPlanner />}
@@ -199,7 +199,7 @@ const Index = () => {
                 Music
               </button>
             </div>
-            <div className="zen-panel-body">
+            <div className={`zen-panel-body ${singleTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
               {singleTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
               {singleTab === 'tasks' && <TaskList />}
               {singleTab === 'notes' && <NotesPlanner />}
@@ -207,6 +207,33 @@ const Index = () => {
               {singleTab === 'music' && <YouTubePlayerWithImportExport />}
             </div>
           </div>
+
+          {/* Mini timer widget when not on Timer tab */}
+          {singleTab !== 'timer' && (
+            <div className="zen-mini-timer">
+              <div className="zen-mini-timer-info">
+                <span className="zen-mini-timer-phase">
+                  {timerPhase === 'work' ? 'Focus' : timerPhase === 'shortBreak' ? 'Break' : 'Long Break'}
+                </span>
+                <span className="zen-mini-timer-time">
+                  {`${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}
+                </span>
+              </div>
+              <div className="zen-mini-timer-controls">
+                <button onClick={resetTimer} className="zen-mini-btn" aria-label="Reset"><RotateCcw className="h-3.5 w-3.5" /></button>
+                {isTimerRunning ? (
+                  <button onClick={pauseTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Pause"><Pause className="h-4 w-4" /></button>
+                ) : (
+                  <button onClick={startTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Start"><Play className="h-4 w-4" /></button>
+                )}
+                <button onClick={skipToNextPhase} className="zen-mini-btn" aria-label="Skip"><SkipForward className="h-3.5 w-3.5" /></button>
+              </div>
+              <div className="zen-mini-timer-stats">
+                <span>{pomodoroCount} 🍅</span>
+                <span>{totalFocusMinutes}m</span>
+              </div>
+            </div>
+          )}
         </main>
       )}
 
