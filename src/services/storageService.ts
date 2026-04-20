@@ -82,6 +82,11 @@ const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
   },
   {
     id: 'yt-default-4',
+    title: '🎹 relaxing piano radio - calm music to focus to',
+    url: 'https://www.youtube.com/watch?v=N0snMcR6aaA'
+  },
+  {
+    id: 'yt-default-5b',
     title: '🎵 3 A.M Coding Session - Chillstep Beats',
     url: 'https://www.youtube.com/watch?v=Yd7vDterctQ'
   },
