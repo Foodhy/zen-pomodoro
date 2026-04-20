@@ -117,7 +117,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [timerPhase, setTimerPhase] = useState<TimerPhase>('work');
   const [pomodoroCount, setPomodoroCount] = useState<number>(0);
   const [currentSession, setCurrentSession] = useState<PomodoroSession | null>(null);
-  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   // Load data on mount

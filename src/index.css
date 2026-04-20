@@ -520,11 +520,11 @@ body {
   min-height: 100vh;
 }
 
-@media (max-width: 768px) {
-  html, body, #root {
-    height: 100dvh;
-    overflow: hidden;
-  }
+html, body, #root {
+  height: 100vh;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
 }
 
 h1,
@@ -544,12 +544,14 @@ h6 {
 .zen-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100svh;
+  height: 100vh;
+  height: 100svh;
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: max(1.25rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
-  gap: 1rem;
+  padding: max(1rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+  gap: 0.75rem;
+  overflow: hidden;
 }
 
 @media (max-width: 640px) {
@@ -1491,6 +1493,8 @@ body::before {
 .zen-music-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
   gap: 0.75rem;
   padding: 1rem;
   height: 100%;
