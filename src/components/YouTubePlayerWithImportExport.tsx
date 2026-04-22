@@ -63,7 +63,7 @@ const YouTubePlayerWithImportExport = () => {
       <div className="zen-music-header">
         <div className="flex items-center gap-1.5">
           <Music className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Music & Ambience</span>
+          <span className="text-sm font-medium text-foreground">{t('music.title', lang)}</span>
         </div>
         <div className="flex items-center gap-1">
           <ImportExportButtons
@@ -72,13 +72,16 @@ const YouTubePlayerWithImportExport = () => {
             buttonSize="sm"
             exportLabel=""
             importLabel=""
+            exportTitle={t('music.exportJson', lang)}
+            importTitle={t('music.importJson', lang)}
           />
           <Button
             variant="ghost"
             size="icon"
             className="h-7 w-7"
             onClick={() => { setVideoId(''); setVideoTitle(''); setVideoUrl(''); setShowVideoDialog(true); }}
-            title="Add video"
+            title={t('music.addVideo', lang)}
+            aria-label={t('music.addVideo', lang)}
           >
             <Plus className="h-3.5 w-3.5" />
           </Button>
@@ -114,7 +117,8 @@ const YouTubePlayerWithImportExport = () => {
               <button
                 className="zen-music-chip-action"
                 onClick={() => handleEditVideo(video)}
-                title="Edit"
+                title={t('music.edit', lang)}
+                aria-label={t('music.edit', lang)}
               >
                 <Pencil className="h-3 w-3" />
               </button>
@@ -122,6 +126,7 @@ const YouTubePlayerWithImportExport = () => {
                 className="zen-music-chip-action zen-music-chip-delete"
                 onClick={() => setDeleteConfirmId(video.id)}
                 title={t('music.deleteConfirm.confirm', lang)}
+                aria-label={t('music.deleteConfirm.confirm', lang)}
               >
                 <X className="h-3 w-3" />
               </button>
@@ -135,7 +140,7 @@ const YouTubePlayerWithImportExport = () => {
       {videos.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
           <Music className="h-8 w-8 mb-3 opacity-40" />
-          <p className="text-sm">No videos yet</p>
+          <p className="text-sm">{t('music.empty', lang)}</p>
           <Button
             variant="outline"
             size="sm"
@@ -143,7 +148,7 @@ const YouTubePlayerWithImportExport = () => {
             onClick={() => setShowVideoDialog(true)}
           >
             <Plus className="h-3.5 w-3.5 mr-1.5" />
-            Add your first video
+            {t('music.addFirst', lang)}
           </Button>
         </div>
       )}
@@ -184,20 +189,20 @@ const YouTubePlayerWithImportExport = () => {
       <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{videoId ? 'Edit Video' : 'Add Video'}</DialogTitle>
+            <DialogTitle>{videoId ? t('music.editVideo', lang) : t('music.addVideo', lang)}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <label htmlFor="title" className="text-sm font-medium">Title</label>
+              <label htmlFor="title" className="text-sm font-medium">{t('music.title.field', lang)}</label>
               <Input
                 id="title"
                 value={videoTitle}
                 onChange={(e) => setVideoTitle(e.target.value)}
-                placeholder="e.g. Lofi Hip Hop Radio"
+                placeholder={t('music.title.placeholder', lang)}
               />
             </div>
             <div className="grid gap-2">
-              <label htmlFor="url" className="text-sm font-medium">YouTube URL</label>
+              <label htmlFor="url" className="text-sm font-medium">{t('music.url.field', lang)}</label>
               <Input
                 id="url"
                 value={videoUrl}
@@ -207,8 +212,8 @@ const YouTubePlayerWithImportExport = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowVideoDialog(false)}>Cancel</Button>
-            <Button onClick={handleAddVideo}>{videoId ? 'Update' : 'Add'}</Button>
+            <Button variant="outline" onClick={() => setShowVideoDialog(false)}>{t('music.cancel', lang)}</Button>
+            <Button onClick={handleAddVideo}>{videoId ? t('music.update', lang) : t('music.add', lang)}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
