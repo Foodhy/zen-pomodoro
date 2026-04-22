@@ -84,7 +84,7 @@ export type ThemeOption =
   'miro-style';
 
 // Language options
-export type LanguageOption = 'en' | 'es';
+export type LanguageOption = 'en' | 'es' | 'fr' | 'nl';
 
 // YouTube Video type
 export interface YouTubeVideo {

@@ -22,7 +22,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   theme: 'purple-space',
   notificationsEnabled: true,
   soundEnabled: true,
-  splitView: true,
+  splitView: false,
   language: 'en',
   keyboardShortcutsEnabled: true,
   focusModeEnabled: false
