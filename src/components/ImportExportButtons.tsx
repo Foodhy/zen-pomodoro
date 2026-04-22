@@ -9,6 +9,8 @@ interface ImportExportButtonsProps {
   buttonSize?: 'default' | 'sm';
   exportLabel?: string;
   importLabel?: string;
+  exportTitle?: string;
+  importTitle?: string;
   hidden?: boolean;
 }
 
@@ -18,6 +20,8 @@ const ImportExportButtons: React.FC<ImportExportButtonsProps> = ({
   buttonSize = 'default',
   exportLabel = 'Export',
   importLabel = 'Import',
+  exportTitle,
+  importTitle,
   hidden = false
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,20 +49,24 @@ const ImportExportButtons: React.FC<ImportExportButtonsProps> = ({
 
   return (
     <div className="flex items-center gap-2">
-      <Button 
-        variant="outline" 
-        size={buttonSize} 
+      <Button
+        variant="outline"
+        size={buttonSize}
         onClick={onExport}
         className="flex items-center gap-1"
+        title={exportTitle ?? exportLabel}
+        aria-label={exportTitle ?? exportLabel}
       >
         <Download className="h-4 w-4" />
         {exportLabel}
       </Button>
-      <Button 
-        variant="outline" 
-        size={buttonSize} 
+      <Button
+        variant="outline"
+        size={buttonSize}
         onClick={handleImportClick}
         className="flex items-center gap-1"
+        title={importTitle ?? importLabel}
+        aria-label={importTitle ?? importLabel}
       >
         <Upload className="h-4 w-4" />
         {importLabel}

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { t } from '../../services/translationService';
 
 interface TimerDisplayProps {
   currentPhase: 'work' | 'shortBreak' | 'longBreak';
@@ -8,10 +9,10 @@ interface TimerDisplayProps {
   theme: string;
 }
 
-const PHASE_LABELS: Record<string, string> = {
-  work: 'Focus',
-  shortBreak: 'Short Break',
-  longBreak: 'Long Break',
+const PHASE_KEYS: Record<string, string> = {
+  work: 'timer.phase.focus',
+  shortBreak: 'timer.shortBreak',
+  longBreak: 'timer.longBreak',
 };
 
 export const TimerDisplay: React.FC<TimerDisplayProps> = ({ 
@@ -19,6 +20,9 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({
   timeLeft,
   theme
 }) => {
+  const { settings } = useApp();
+  const lang = settings.language;
+
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -34,7 +38,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({
   return (
     <div className="flex flex-col items-center gap-1 mb-5">
       <p className={`text-sm font-medium tracking-widest uppercase opacity-60 ${theme === 'nes-retro' ? 'font-pixelated text-xs' : ''}`}>
-        {PHASE_LABELS[currentPhase]}
+        {t(PHASE_KEYS[currentPhase], lang)}
       </p>
       <div className={getTimerClass()}>{formatTime(timeLeft)}</div>
     </div>

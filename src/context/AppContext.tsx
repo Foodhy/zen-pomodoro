@@ -216,6 +216,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [timeLeft, isTimerRunning]);
 
+  // Keep notification service in sync with the active language
+  useEffect(() => {
+    notificationService.setLanguage(settings.language);
+  }, [settings.language]);
+
   // Apply theme when settings change
   useEffect(() => {
     // Apply theme to document

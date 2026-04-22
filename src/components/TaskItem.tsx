@@ -19,6 +19,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { t } from "../services/translationService";
 
 interface TaskItemProps {
   task: Task;
@@ -173,12 +174,12 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             onValueChange={(value) => setEditPriority(value as TaskPriority)}
           >
             <SelectTrigger className="w-24 h-8 text-xs">
-              <SelectValue placeholder="Priority" />
+              <SelectValue placeholder={t('tasks.priority', settings.language)} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
-              <SelectItem value={TaskPriority.MEDIUM}>Medium</SelectItem>
-              <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
+              <SelectItem value={TaskPriority.HIGH}>{t('tasks.priority.high', settings.language)}</SelectItem>
+              <SelectItem value={TaskPriority.MEDIUM}>{t('tasks.priority.medium', settings.language)}</SelectItem>
+              <SelectItem value={TaskPriority.LOW}>{t('tasks.priority.low', settings.language)}</SelectItem>
             </SelectContent>
           </Select>
           <Button 
@@ -186,6 +187,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             variant="ghost" 
             className="h-7 w-7" 
             onClick={handleSaveEdit}
+            aria-label={t('tasks.aria.save', settings.language)}
           >
             <Check className="h-4 w-4" />
           </Button>
@@ -217,13 +219,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
         
         {!isEditing && (
           <>
-            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleEdit}>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleEdit} aria-label={t('tasks.aria.edit', settings.language)}>
               <Edit className="h-4 w-4" />
             </Button>
             
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-7 w-7">
+                <Button variant="ghost" size="icon" className="h-7 w-7" aria-label={t('tasks.aria.calendar', settings.language)}>
                   <Calendar className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
@@ -240,7 +242,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             
             <Popover open={isTimePickerOpen} onOpenChange={setIsTimePickerOpen}>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-7 w-7">
+                <Button variant="ghost" size="icon" className="h-7 w-7" aria-label={t('tasks.aria.time', settings.language)}>
                   <Clock className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
@@ -252,7 +254,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               </PopoverContent>
             </Popover>
             
-            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleDelete}>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleDelete} aria-label={t('tasks.aria.delete', settings.language)}>
               <Trash2 className="h-4 w-4" />
             </Button>
           </>

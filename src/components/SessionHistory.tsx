@@ -15,25 +15,27 @@ import {
   CalendarDays,
 } from 'lucide-react';
 import { format, isToday, isYesterday } from 'date-fns';
+import { enUS, es, fr, nl } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { t, tf } from '../services/translationService';
 
 const TYPE_META = {
   work: {
-    label: 'Focus',
+    labelKey: 'history.type.focus',
     Icon: Brain,
     dot: 'bg-primary',
     text: 'text-primary',
     bg: 'bg-primary/10',
   },
   shortBreak: {
-    label: 'Short Break',
+    labelKey: 'history.type.shortBreak',
     Icon: Coffee,
     dot: 'bg-emerald-400',
     text: 'text-emerald-400',
     bg: 'bg-emerald-400/10',
   },
   longBreak: {
-    label: 'Long Break',
+    labelKey: 'history.type.longBreak',
     Icon: Moon,
     dot: 'bg-sky-400',
     text: 'text-sky-400',
@@ -41,21 +43,29 @@ const TYPE_META = {
   },
 } as const;
 
-const formatDateLabel = (date: Date) => {
-  if (isToday(date)) return 'Today';
-  if (isYesterday(date)) return 'Yesterday';
-  return format(date, 'EEEE, MMM d');
-};
+const LOCALES = { en: enUS, es, fr, nl } as const;
+
+const getLocale = (lang: string) =>
+  LOCALES[lang as keyof typeof LOCALES] ?? enUS;
 
 const SessionHistory = () => {
   const {
     sessions,
+    settings,
     exportSessionsToMarkdown,
     exportSessionsToJson,
     importSessionsFromJsonFile,
   } = useApp();
+  const lang = settings.language;
+  const locale = getLocale(lang);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [openDates, setOpenDates] = useState<Set<string>>(new Set());
+
+  const formatDateLabel = (date: Date) => {
+    if (isToday(date)) return t('history.day.today', lang);
+    if (isYesterday(date)) return t('history.day.yesterday', lang);
+    return format(date, 'EEEE, MMM d', { locale });
+  };
 
   const { sessionsByDate, sortedDates, totals } = useMemo(() => {
     const byDate = sessions.reduce<Record<string, typeof sessions>>((acc, s) => {
@@ -104,7 +114,7 @@ const SessionHistory = () => {
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <CardTitle className="text-base font-semibold tracking-tight">
-              Session History
+              {t('history.title', lang)}
             </CardTitle>
           </div>
           <div className="flex items-center gap-0.5">
@@ -113,7 +123,8 @@ const SessionHistory = () => {
               size="icon"
               className="h-7 w-7 text-muted-foreground hover:text-foreground"
               onClick={exportSessionsToJson}
-              title="Export JSON"
+              title={t('history.exportJson', lang)}
+              aria-label={t('history.exportJson', lang)}
             >
               <FileDown className="h-3.5 w-3.5" />
             </Button>
@@ -122,7 +133,8 @@ const SessionHistory = () => {
               size="icon"
               className="h-7 w-7 text-muted-foreground hover:text-foreground"
               onClick={() => fileInputRef.current?.click()}
-              title="Import JSON"
+              title={t('history.importJson', lang)}
+              aria-label={t('history.importJson', lang)}
             >
               <Upload className="h-3.5 w-3.5" />
             </Button>
@@ -131,7 +143,8 @@ const SessionHistory = () => {
               size="icon"
               className="h-7 w-7 text-muted-foreground hover:text-foreground"
               onClick={exportSessionsToMarkdown}
-              title="Export Markdown"
+              title={t('history.exportMarkdown', lang)}
+              aria-label={t('history.exportMarkdown', lang)}
             >
               <FileText className="h-3.5 w-3.5" />
             </Button>
@@ -156,17 +169,17 @@ const SessionHistory = () => {
           <div className="grid grid-cols-3 gap-2 mt-3">
             <StatPill
               icon={<Flame className="h-3.5 w-3.5" />}
-              label="Focus sessions"
+              label={t('history.stats.focusSessions', lang)}
               value={totals.focusCount.toString()}
             />
             <StatPill
               icon={<Clock className="h-3.5 w-3.5" />}
-              label="Total focus"
+              label={t('history.stats.totalFocus', lang)}
               value={`${totals.focusMin}m`}
             />
             <StatPill
               icon={<CalendarDays className="h-3.5 w-3.5" />}
-              label="Active days"
+              label={t('history.stats.activeDays', lang)}
               value={totals.days.toString()}
             />
           </div>
@@ -208,13 +221,13 @@ const SessionHistory = () => {
                           {formatDateLabel(new Date(date))}
                         </span>
                         <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                          {format(new Date(date), 'MMM d, yyyy')}
+                          {format(new Date(date), 'MMM d, yyyy', { locale })}
                         </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                        {dayFocus} focus
+                        {tf('history.day.focusBadge', lang, { count: dayFocus })}
                       </span>
                       <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                         {dayMin}m
@@ -262,14 +275,14 @@ const SessionHistory = () => {
                                       )}
                                     />
                                     <span className="text-sm font-medium">
-                                      {meta.label}
+                                      {t(meta.labelKey, lang)}
                                     </span>
                                     <span className="text-xs text-muted-foreground">
                                       · {min} min
                                     </span>
                                   </div>
                                   <span className="text-xs text-muted-foreground tabular-nums shrink-0">
-                                    {format(new Date(session.startTime), 'p')}
+                                    {format(new Date(session.startTime), 'p', { locale })}
                                   </span>
                                 </div>
                                 {session.notes && (
@@ -288,7 +301,7 @@ const SessionHistory = () => {
             })}
           </div>
         ) : (
-          <EmptyState />
+          <EmptyState lang={lang} />
         )}
       </CardContent>
     </Card>
@@ -313,14 +326,14 @@ const StatPill = ({
   </div>
 );
 
-const EmptyState = () => (
+const EmptyState = ({ lang }: { lang: string }) => (
   <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
     <div className="h-12 w-12 rounded-full bg-muted/40 flex items-center justify-center mb-3">
       <Clock className="h-5 w-5 text-muted-foreground" />
     </div>
-    <p className="text-sm font-medium">No sessions yet</p>
+    <p className="text-sm font-medium">{t('history.empty.title', lang)}</p>
     <p className="text-xs text-muted-foreground mt-1 max-w-[260px]">
-      Start a Pomodoro to begin tracking your focus history.
+      {t('history.empty.subtitle', lang)}
     </p>
   </div>
 );

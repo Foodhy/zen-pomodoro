@@ -47,6 +47,23 @@ const translations: Translations = {
   "settings.toggleFocusMode": { en: "Toggle Focus Mode", es: "Alternar Modo Concentración", fr: "Basculer le mode focus", nl: "Focusmodus schakelen" },
   "settings.toggleSettings": { en: "Toggle Settings", es: "Alternar Configuración", fr: "Basculer les paramètres", nl: "Instellingen schakelen" },
 
+  // Header / common UI
+  "header.changeLanguage": { en: "Change language", es: "Cambiar idioma", fr: "Changer de langue", nl: "Taal wijzigen" },
+  "header.toggleFullscreen": { en: "Toggle fullscreen", es: "Alternar pantalla completa", fr: "Basculer le plein écran", nl: "Volledig scherm schakelen" },
+  "header.openSettings": { en: "Open settings", es: "Abrir configuración", fr: "Ouvrir les paramètres", nl: "Instellingen openen" },
+
+  // Tabs
+  "tabs.timer": { en: "Timer", es: "Temporizador", fr: "Minuteur", nl: "Timer" },
+  "tabs.tasks": { en: "Tasks", es: "Tareas", fr: "Tâches", nl: "Taken" },
+  "tabs.notes": { en: "Notes", es: "Notas", fr: "Notes", nl: "Notities" },
+  "tabs.history": { en: "History", es: "Historial", fr: "Historique", nl: "Geschiedenis" },
+  "tabs.music": { en: "Music", es: "Música", fr: "Musique", nl: "Muziek" },
+
+  // Bottom bar / stats
+  "stats.pomodoros": { en: "Pomodoros", es: "Pomodoros", fr: "Pomodoros", nl: "Pomodoros" },
+  "stats.totalFocus": { en: "Total Focus", es: "Concentración total", fr: "Focus total", nl: "Totale focus" },
+  "stats.minShort": { en: "min", es: "min", fr: "min", nl: "min" },
+
   // Timer
   "timer.work": { en: "Work", es: "Trabajo", fr: "Travail", nl: "Werk" },
   "timer.shortBreak": { en: "Short Break", es: "Descanso Corto", fr: "Petite pause", nl: "Korte pauze" },
@@ -55,6 +72,16 @@ const translations: Translations = {
   "timer.pause": { en: "Pause", es: "Pausar", fr: "Pause", nl: "Pauze" },
   "timer.reset": { en: "Reset", es: "Reiniciar", fr: "Réinitialiser", nl: "Reset" },
   "timer.skip": { en: "Skip", es: "Saltar", fr: "Passer", nl: "Overslaan" },
+  "timer.phase.focus": { en: "Focus", es: "Concentración", fr: "Concentration", nl: "Focus" },
+  "timer.phase.break": { en: "Break", es: "Descanso", fr: "Pause", nl: "Pauze" },
+  "timer.phase.longBreak": { en: "Long Break", es: "Descanso Largo", fr: "Longue pause", nl: "Lange pauze" },
+  "timer.paused": { en: "paused", es: "pausado", fr: "en pause", nl: "gepauzeerd" },
+  "timer.aria.reset": { en: "Reset timer", es: "Reiniciar temporizador", fr: "Réinitialiser le minuteur", nl: "Timer resetten" },
+  "timer.aria.pause": { en: "Pause timer", es: "Pausar temporizador", fr: "Mettre en pause", nl: "Timer pauzeren" },
+  "timer.aria.start": { en: "Start timer", es: "Iniciar temporizador", fr: "Démarrer le minuteur", nl: "Timer starten" },
+  "timer.aria.skip": { en: "Skip phase", es: "Saltar fase", fr: "Passer la phase", nl: "Fase overslaan" },
+  "timer.pomodoroToday.one": { en: "{count} pomodoro today", es: "{count} pomodoro hoy", fr: "{count} pomodoro aujourd'hui", nl: "{count} pomodoro vandaag" },
+  "timer.pomodoroToday.other": { en: "{count} pomodoros today", es: "{count} pomodoros hoy", fr: "{count} pomodoros aujourd'hui", nl: "{count} pomodoros vandaag" },
 
   // Tasks
   "tasks.title": { en: "Tasks", es: "Tareas", fr: "Tâches", nl: "Taken" },
@@ -72,6 +99,11 @@ const translations: Translations = {
   "tasks.noTasks": { en: "No tasks yet", es: "Aún no hay tareas", fr: "Aucune tâche", nl: "Nog geen taken" },
   "tasks.addToStart": { en: "Add a task to get started", es: "Añade una tarea para comenzar", fr: "Ajoutez une tâche pour commencer", nl: "Voeg een taak toe om te beginnen" },
   "tasks.completed": { en: "Completed", es: "Completadas", fr: "Terminées", nl: "Voltooid" },
+  "tasks.aria.edit": { en: "Edit task", es: "Editar tarea", fr: "Modifier la tâche", nl: "Taak bewerken" },
+  "tasks.aria.delete": { en: "Delete task", es: "Eliminar tarea", fr: "Supprimer la tâche", nl: "Taak verwijderen" },
+  "tasks.aria.calendar": { en: "Set reminder date", es: "Fecha de recordatorio", fr: "Date de rappel", nl: "Herinneringsdatum" },
+  "tasks.aria.time": { en: "Set reminder time", es: "Hora de recordatorio", fr: "Heure de rappel", nl: "Herinneringstijd" },
+  "tasks.aria.save": { en: "Save changes", es: "Guardar cambios", fr: "Enregistrer", nl: "Opslaan" },
 
   // Theme names
   "theme.purpleSpace": { en: "Purple Space", es: "Espacio Púrpura", fr: "Espace Violet", nl: "Paarse Ruimte" },
@@ -104,6 +136,7 @@ const translations: Translations = {
   "notes.category.other": { en: "Other", es: "Otro", fr: "Autre", nl: "Overig" },
   "notes.tags": { en: "Tags (comma separated)", es: "Etiquetas (separadas por comas)", fr: "Tags (séparés par virgule)", nl: "Tags (komma-gescheiden)" },
   "notes.add": { en: "Add Note", es: "Añadir Nota", fr: "Ajouter une note", nl: "Notitie toevoegen" },
+  "notes.cancel": { en: "Cancel", es: "Cancelar", fr: "Annuler", nl: "Annuleren" },
   "notes.save": { en: "Save", es: "Guardar", fr: "Enregistrer", nl: "Opslaan" },
   "notes.update": { en: "Update", es: "Actualizar", fr: "Mettre à jour", nl: "Bijwerken" },
   "notes.editNote": { en: "Edit Note", es: "Editar Nota", fr: "Modifier la note", nl: "Notitie bewerken" },
@@ -115,13 +148,86 @@ const translations: Translations = {
   "notes.noNotes": { en: "No notes yet", es: "Aún no hay notas", fr: "Aucune note", nl: "Nog geen notities" },
   "notes.addToStart": { en: "Add a note to get started", es: "Añade una nota para comenzar", fr: "Ajoutez une note pour commencer", nl: "Voeg een notitie toe om te beginnen" },
   "notes.addFirstNote": { en: "Add your first note to start planning", es: "Agrega tu primera nota para comenzar a planificar", fr: "Ajoutez votre première note pour planifier", nl: "Voeg je eerste notitie toe om te plannen" },
+  "notes.aria.show": { en: "Add note", es: "Añadir nota", fr: "Ajouter une note", nl: "Notitie toevoegen" },
+  "notes.aria.hide": { en: "Hide add note form", es: "Ocultar formulario", fr: "Masquer le formulaire", nl: "Formulier verbergen" },
+  "notes.exportJson": { en: "Export JSON", es: "Exportar JSON", fr: "Exporter JSON", nl: "JSON exporteren" },
+  "notes.importJson": { en: "Import JSON", es: "Importar JSON", fr: "Importer JSON", nl: "JSON importeren" },
+  "notes.exportMarkdown": { en: "Export Markdown", es: "Exportar Markdown", fr: "Exporter Markdown", nl: "Markdown exporteren" },
 
   // Music
+  "music.title": { en: "Music & Ambience", es: "Música y Ambiente", fr: "Musique & Ambiance", nl: "Muziek & sfeer" },
+  "music.addVideo": { en: "Add video", es: "Añadir video", fr: "Ajouter une vidéo", nl: "Video toevoegen" },
+  "music.edit": { en: "Edit", es: "Editar", fr: "Modifier", nl: "Bewerken" },
+  "music.editVideo": { en: "Edit Video", es: "Editar Video", fr: "Modifier la vidéo", nl: "Video bewerken" },
+  "music.title.field": { en: "Title", es: "Título", fr: "Titre", nl: "Titel" },
+  "music.url.field": { en: "YouTube URL", es: "URL de YouTube", fr: "URL YouTube", nl: "YouTube-URL" },
+  "music.title.placeholder": { en: "e.g. Lofi Hip Hop Radio", es: "ej. Radio Lofi Hip Hop", fr: "ex. Radio Lofi Hip Hop", nl: "bv. Lofi Hip Hop Radio" },
+  "music.cancel": { en: "Cancel", es: "Cancelar", fr: "Annuler", nl: "Annuleren" },
+  "music.add": { en: "Add", es: "Añadir", fr: "Ajouter", nl: "Toevoegen" },
+  "music.update": { en: "Update", es: "Actualizar", fr: "Mettre à jour", nl: "Bijwerken" },
+  "music.empty": { en: "No videos yet", es: "Aún no hay videos", fr: "Aucune vidéo", nl: "Nog geen video's" },
+  "music.addFirst": { en: "Add your first video", es: "Añade tu primer video", fr: "Ajoutez votre première vidéo", nl: "Voeg je eerste video toe" },
+  "music.exportJson": { en: "Export videos", es: "Exportar videos", fr: "Exporter les vidéos", nl: "Video's exporteren" },
+  "music.importJson": { en: "Import videos", es: "Importar videos", fr: "Importer des vidéos", nl: "Video's importeren" },
   "music.deleteConfirm.title": { en: "Remove track?", es: "¿Eliminar pista?", fr: "Supprimer la piste ?", nl: "Track verwijderen?" },
   "music.deleteConfirm.message": { en: "Are you sure you want to remove this track from your list?", es: "¿Estás seguro de que quieres eliminar esta pista de tu lista?", fr: "Voulez-vous vraiment supprimer cette piste ?", nl: "Weet je zeker dat je deze track wilt verwijderen?" },
   "music.deleteConfirm.cancel": { en: "Cancel", es: "Cancelar", fr: "Annuler", nl: "Annuleren" },
   "music.deleteConfirm.confirm": { en: "Remove", es: "Eliminar", fr: "Supprimer", nl: "Verwijderen" },
+
+  // History
+  "history.title": { en: "Session History", es: "Historial de sesiones", fr: "Historique des sessions", nl: "Sessiegeschiedenis" },
+  "history.exportJson": { en: "Export JSON", es: "Exportar JSON", fr: "Exporter JSON", nl: "JSON exporteren" },
+  "history.importJson": { en: "Import JSON", es: "Importar JSON", fr: "Importer JSON", nl: "JSON importeren" },
+  "history.exportMarkdown": { en: "Export Markdown", es: "Exportar Markdown", fr: "Exporter Markdown", nl: "Markdown exporteren" },
+  "history.stats.focusSessions": { en: "Focus sessions", es: "Sesiones de focus", fr: "Sessions de focus", nl: "Focussessies" },
+  "history.stats.totalFocus": { en: "Total focus", es: "Focus total", fr: "Focus total", nl: "Totale focus" },
+  "history.stats.activeDays": { en: "Active days", es: "Días activos", fr: "Jours actifs", nl: "Actieve dagen" },
+  "history.day.today": { en: "Today", es: "Hoy", fr: "Aujourd'hui", nl: "Vandaag" },
+  "history.day.yesterday": { en: "Yesterday", es: "Ayer", fr: "Hier", nl: "Gisteren" },
+  "history.day.focusBadge": { en: "{count} focus", es: "{count} focus", fr: "{count} focus", nl: "{count} focus" },
+  "history.type.focus": { en: "Focus", es: "Concentración", fr: "Concentration", nl: "Focus" },
+  "history.type.shortBreak": { en: "Short Break", es: "Descanso corto", fr: "Petite pause", nl: "Korte pauze" },
+  "history.type.longBreak": { en: "Long Break", es: "Descanso largo", fr: "Longue pause", nl: "Lange pauze" },
+  "history.empty.title": { en: "No sessions yet", es: "Aún no hay sesiones", fr: "Aucune session", nl: "Nog geen sessies" },
+  "history.empty.subtitle": { en: "Start a Pomodoro to begin tracking your focus history.", es: "Inicia un Pomodoro para empezar a registrar tu historial.", fr: "Démarrez un Pomodoro pour suivre votre historique.", nl: "Start een Pomodoro om je focusgeschiedenis bij te houden." },
+
+  // Profiles
+  "profile.fallback": { en: "Profile", es: "Perfil", fr: "Profil", nl: "Profiel" },
+  "profile.create.title": { en: "Create New Profile", es: "Crear nuevo perfil", fr: "Créer un nouveau profil", nl: "Nieuw profiel maken" },
+  "profile.create.description": { en: "Create a new profile with custom Pomodoro settings.", es: "Crea un nuevo perfil con tus ajustes de Pomodoro.", fr: "Créez un profil avec vos réglages Pomodoro.", nl: "Maak een nieuw profiel met je Pomodoro-instellingen." },
+  "profile.edit.title": { en: "Edit Profile", es: "Editar perfil", fr: "Modifier le profil", nl: "Profiel bewerken" },
+  "profile.edit.description": { en: "Update your profile settings.", es: "Actualiza los ajustes del perfil.", fr: "Mettez à jour vos paramètres.", nl: "Werk je profielinstellingen bij." },
+  "profile.delete.title": { en: "Delete Profile", es: "Eliminar perfil", fr: "Supprimer le profil", nl: "Profiel verwijderen" },
+  "profile.delete.description": { en: "Are you sure you want to delete this profile? This will also delete all associated tasks and history.", es: "¿Seguro que quieres eliminar este perfil? Se borrarán todas las tareas e historial asociados.", fr: "Voulez-vous vraiment supprimer ce profil ? Toutes les tâches et l'historique associés seront également supprimés.", nl: "Weet je zeker dat je dit profiel wilt verwijderen? Alle taken en geschiedenis worden ook verwijderd." },
+  "profile.name": { en: "Profile Name", es: "Nombre del perfil", fr: "Nom du profil", nl: "Profielnaam" },
+  "profile.namePlaceholder": { en: "e.g., Coding, Reading", es: "p. ej. Programar, Leer", fr: "ex. Coder, Lire", nl: "bv. Coderen, Lezen" },
+  "profile.workDuration": { en: "Work Duration (min)", es: "Duración de trabajo (min)", fr: "Durée de travail (min)", nl: "Werkduur (min)" },
+  "profile.shortBreak": { en: "Short Break (min)", es: "Descanso corto (min)", fr: "Petite pause (min)", nl: "Korte pauze (min)" },
+  "profile.longBreak": { en: "Long Break (min)", es: "Descanso largo (min)", fr: "Longue pause (min)", nl: "Lange pauze (min)" },
+  "profile.longBreakAfter": { en: "Long Break After", es: "Descanso largo cada", fr: "Longue pause après", nl: "Lange pauze na" },
+  "profile.cancel": { en: "Cancel", es: "Cancelar", fr: "Annuler", nl: "Annuleren" },
+  "profile.create": { en: "Create Profile", es: "Crear perfil", fr: "Créer le profil", nl: "Profiel maken" },
+  "profile.save": { en: "Save Changes", es: "Guardar cambios", fr: "Enregistrer", nl: "Opslaan" },
+  "profile.delete": { en: "Delete", es: "Eliminar", fr: "Supprimer", nl: "Verwijderen" },
+
+  // Notifications
+  "notif.work.completed.title": { en: "Work session completed!", es: "¡Sesión de trabajo completada!", fr: "Session de travail terminée !", nl: "Werksessie voltooid!" },
+  "notif.work.completed.body": { en: "Time for a break. Stand up and stretch a bit.", es: "Es hora de un descanso. Levántate y estírate un poco.", fr: "C'est l'heure d'une pause. Levez-vous et étirez-vous.", nl: "Tijd voor een pauze. Sta op en rek je even uit." },
+  "notif.shortBreak.completed.title": { en: "Break time is over!", es: "¡Se acabó el descanso!", fr: "La pause est terminée !", nl: "De pauze is voorbij!" },
+  "notif.shortBreak.completed.body": { en: "Ready to get back to work?", es: "¿Listo para volver al trabajo?", fr: "Prêt à reprendre le travail ?", nl: "Klaar om weer aan de slag te gaan?" },
+  "notif.longBreak.completed.title": { en: "Long break completed!", es: "¡Descanso largo completado!", fr: "Longue pause terminée !", nl: "Lange pauze voltooid!" },
+  "notif.longBreak.completed.body": { en: "Ready for a new productive session?", es: "¿Listo para una nueva sesión productiva?", fr: "Prêt pour une nouvelle session productive ?", nl: "Klaar voor een nieuwe productieve sessie?" },
+  "notif.work.started.title": { en: "Work phase started", es: "Fase de trabajo iniciada", fr: "Phase de travail démarrée", nl: "Werkfase gestart" },
+  "notif.work.started.body": { en: "Focus on your task. You can do it!", es: "Concéntrate en tu tarea. ¡Tú puedes!", fr: "Concentrez-vous sur votre tâche. Vous pouvez le faire !", nl: "Concentreer je op je taak. Je kunt het!" },
+  "notif.shortBreak.started.title": { en: "Short break started", es: "Descanso corto iniciado", fr: "Petite pause démarrée", nl: "Korte pauze gestart" },
+  "notif.shortBreak.started.body": { en: "Take a moment to relax.", es: "Tómate un momento para relajarte.", fr: "Prenez un moment pour vous détendre.", nl: "Neem even de tijd om te ontspannen." },
+  "notif.longBreak.started.title": { en: "Long break started", es: "Descanso largo iniciado", fr: "Longue pause démarrée", nl: "Lange pauze gestart" },
+  "notif.longBreak.started.body": { en: "Time for an extended break. Rest well!", es: "Tiempo para un descanso largo. ¡Descansa bien!", fr: "Place à une longue pause. Reposez-vous bien !", nl: "Tijd voor een lange pauze. Rust goed uit!" },
+  "notif.task.reminder.title": { en: "Task Reminder", es: "Recordatorio de tarea", fr: "Rappel de tâche", nl: "Taakherinnering" },
+  "notif.task.reminder.body": { en: "It's time for: {task}", es: "Es hora de: {task}", fr: "C'est l'heure de : {task}", nl: "Tijd voor: {task}" },
 };
+
+export type Lang = 'en' | 'es' | 'fr' | 'nl';
 
 export const t = (key: string, language: string): string => {
   if (!translations[key]) {
@@ -129,5 +235,29 @@ export const t = (key: string, language: string): string => {
     return key;
   }
 
-  return translations[key][language as 'en' | 'es' | 'fr' | 'nl'] || translations[key].en;
+  return translations[key][language as Lang] || translations[key].en;
+};
+
+/** Translate with simple {placeholder} interpolation. */
+export const tf = (
+  key: string,
+  language: string,
+  vars: Record<string, string | number> = {}
+): string => {
+  let value = t(key, language);
+  for (const [name, val] of Object.entries(vars)) {
+    value = value.replace(new RegExp(`\\{${name}\\}`, 'g'), String(val));
+  }
+  return value;
+};
+
+/** Pluralized translation. Picks `${key}.one` for count===1, otherwise `${key}.other`. */
+export const tn = (
+  key: string,
+  language: string,
+  count: number,
+  vars: Record<string, string | number> = {}
+): string => {
+  const suffix = count === 1 ? 'one' : 'other';
+  return tf(`${key}.${suffix}`, language, { count, ...vars });
 };

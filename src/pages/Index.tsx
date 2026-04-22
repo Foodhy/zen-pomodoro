@@ -12,6 +12,7 @@ import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImport
 import SessionHistory from '../components/SessionHistory';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { LanguageOption } from '../models/types';
+import { t } from '../services/translationService';
 
 
 type LeftTab = 'timer' | 'tasks' | 'notes';
@@ -35,12 +36,17 @@ const Index = () => {
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const phaseLabel = timerPhase === 'work' ? 'Focus' : timerPhase === 'shortBreak' ? 'Break' : 'Long Break';
+    const phaseLabel =
+      timerPhase === 'work'
+        ? t('timer.phase.focus', settings.language)
+        : timerPhase === 'shortBreak'
+        ? t('timer.phase.break', settings.language)
+        : t('timer.phase.longBreak', settings.language);
 
     if (isTimerRunning) {
       document.title = `${formatTime(timeLeft)} — ${phaseLabel} | Zen Pomodoro`;
     } else if (timeLeft > 0) {
-      document.title = `${formatTime(timeLeft)} (paused) | Zen Pomodoro`;
+      document.title = `${formatTime(timeLeft)} (${t('timer.paused', settings.language)}) | Zen Pomodoro`;
     } else {
       document.title = 'Zen Pomodoro';
     }
@@ -48,7 +54,7 @@ const Index = () => {
     return () => {
       document.title = 'Zen Pomodoro';
     };
-  }, [timeLeft, isTimerRunning, timerPhase]);
+  }, [timeLeft, isTimerRunning, timerPhase, settings.language]);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -96,7 +102,7 @@ const Index = () => {
           <Select value={settings.language} onValueChange={(v) => setLanguage(v as LanguageOption)}>
             <SelectTrigger
               className="h-8 w-[72px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
-              aria-label="Change language"
+              aria-label={t('header.changeLanguage', settings.language)}
             >
               <SelectValue />
             </SelectTrigger>
@@ -112,7 +118,7 @@ const Index = () => {
             size="icon"
             onClick={toggleFullscreen}
             className="zen-icon-btn"
-            aria-label="Toggle fullscreen"
+            aria-label={t('header.toggleFullscreen', settings.language)}
           >
             {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
           </Button>
@@ -121,7 +127,7 @@ const Index = () => {
             size="icon"
             onClick={() => setSettingsOpen(true)}
             className="zen-icon-btn"
-            aria-label="Open settings"
+            aria-label={t('header.openSettings', settings.language)}
           >
             <Settings className="h-4 w-4" />
           </Button>
@@ -141,21 +147,21 @@ const Index = () => {
                 onClick={() => setLeftTab('timer')}
               >
                 <Timer className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Timer</span>
+                <span className="zen-tab-label">{t('tabs.timer', settings.language)}</span>
               </button>
               <button
                 className={`zen-tab ${leftTab === 'tasks' ? 'zen-tab-active' : ''}`}
                 onClick={() => setLeftTab('tasks')}
               >
                 <CheckSquare className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Tasks</span>
+                <span className="zen-tab-label">{t('tabs.tasks', settings.language)}</span>
               </button>
               <button
                 className={`zen-tab ${leftTab === 'notes' ? 'zen-tab-active' : ''}`}
                 onClick={() => setLeftTab('notes')}
               >
                 <FileText className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Notes</span>
+                <span className="zen-tab-label">{t('tabs.notes', settings.language)}</span>
               </button>
             </div>
             <div className={`zen-panel-body ${leftTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
@@ -173,14 +179,14 @@ const Index = () => {
                 onClick={() => setRightTab('history')}
               >
                 <History className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">History</span>
+                <span className="zen-tab-label">{t('tabs.history', settings.language)}</span>
               </button>
               <button
                 className={`zen-tab ${rightTab === 'music' ? 'zen-tab-active' : ''}`}
                 onClick={() => setRightTab('music')}
               >
                 <Music className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Music</span>
+                <span className="zen-tab-label">{t('tabs.music', settings.language)}</span>
               </button>
             </div>
             <div className="zen-panel-body">
@@ -196,23 +202,23 @@ const Index = () => {
             <div className="zen-tab-bar">
               <button className={`zen-tab ${singleTab === 'timer' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('timer')}>
                 <Timer className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Timer</span>
+                <span className="zen-tab-label">{t('tabs.timer', settings.language)}</span>
               </button>
               <button className={`zen-tab ${singleTab === 'tasks' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('tasks')}>
                 <CheckSquare className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Tasks</span>
+                <span className="zen-tab-label">{t('tabs.tasks', settings.language)}</span>
               </button>
               <button className={`zen-tab ${singleTab === 'notes' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('notes')}>
                 <FileText className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Notes</span>
+                <span className="zen-tab-label">{t('tabs.notes', settings.language)}</span>
               </button>
               <button className={`zen-tab ${singleTab === 'history' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('history')}>
                 <History className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">History</span>
+                <span className="zen-tab-label">{t('tabs.history', settings.language)}</span>
               </button>
               <button className={`zen-tab ${singleTab === 'music' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('music')}>
                 <Music className="h-3.5 w-3.5" />
-                <span className="zen-tab-label">Music</span>
+                <span className="zen-tab-label">{t('tabs.music', settings.language)}</span>
               </button>
             </div>
             <div className={`zen-panel-body ${singleTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
@@ -231,13 +237,13 @@ const Index = () => {
       <div className={`zen-bottom-bar ${(!isSplitView && singleTab === 'timer') || (isSplitView && leftTab === 'timer') ? 'gap-0' : 'gap-[1rem]'}`}>
         <div className="zen-bottom-stats">
           <div className="zen-stat-card">
-            <span className="zen-stat-label">Pomodoros</span>
+            <span className="zen-stat-label">{t('stats.pomodoros', settings.language)}</span>
             <span className="zen-stat-value">{pomodoroCount}</span>
           </div>
           <div className="zen-stat-card">
-            <span className="zen-stat-label">Total Focus</span>
+            <span className="zen-stat-label">{t('stats.totalFocus', settings.language)}</span>
             <span className="zen-stat-value">
-              {totalFocusMinutes} <span className="zen-stat-unit">min</span>
+              {totalFocusMinutes} <span className="zen-stat-unit">{t('stats.minShort', settings.language)}</span>
             </span>
           </div>
         </div>
@@ -247,20 +253,24 @@ const Index = () => {
           <div className="zen-mini-timer-inline">
             <div className="zen-mini-timer-info">
               <span className="zen-mini-timer-phase">
-                {timerPhase === 'work' ? 'Focus' : timerPhase === 'shortBreak' ? 'Break' : 'Long Break'}
+                {timerPhase === 'work'
+                  ? t('timer.phase.focus', settings.language)
+                  : timerPhase === 'shortBreak'
+                  ? t('timer.phase.break', settings.language)
+                  : t('timer.phase.longBreak', settings.language)}
               </span>
               <span className="zen-mini-timer-time">
                 {`${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}
               </span>
             </div>
             <div className="zen-mini-timer-controls">
-              <button onClick={resetTimer} className="zen-mini-btn" aria-label="Reset"><RotateCcw className="h-3.5 w-3.5" /></button>
+              <button onClick={resetTimer} className="zen-mini-btn" aria-label={t('timer.aria.reset', settings.language)}><RotateCcw className="h-3.5 w-3.5" /></button>
               {isTimerRunning ? (
-                <button onClick={pauseTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Pause"><Pause className="h-4 w-4" /></button>
+                <button onClick={pauseTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label={t('timer.aria.pause', settings.language)}><Pause className="h-4 w-4" /></button>
               ) : (
-                <button onClick={startTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label="Start"><Play className="h-4 w-4" /></button>
+                <button onClick={startTimer} className="zen-mini-btn zen-mini-btn-primary" aria-label={t('timer.aria.start', settings.language)}><Play className="h-4 w-4" /></button>
               )}
-              <button onClick={skipToNextPhase} className="zen-mini-btn" aria-label="Skip"><SkipForward className="h-3.5 w-3.5" /></button>
+              <button onClick={skipToNextPhase} className="zen-mini-btn" aria-label={t('timer.aria.skip', settings.language)}><SkipForward className="h-3.5 w-3.5" /></button>
             </div>
             <div className="zen-mini-timer-stats">
               <span>{pomodoroCount} 🍅</span>
