@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { useApp } from '../../context/AppContext';
+import { tn } from '../../services/translationService';
 
 interface PomodoroCountProps {
   count: number;
@@ -7,6 +9,7 @@ interface PomodoroCountProps {
 }
 
 export const PomodoroCount: React.FC<PomodoroCountProps> = ({ count, theme }) => {
+  const { settings } = useApp();
   // Show dots representing pomodoros in current long-break cycle (up to 4)
   const dots = Array.from({ length: 4 }, (_, i) => i < (count % 4 || (count > 0 && count % 4 === 0 ? 4 : 0)));
 
@@ -25,7 +28,7 @@ export const PomodoroCount: React.FC<PomodoroCountProps> = ({ count, theme }) =>
         ))}
       </div>
       <p className={`text-xs opacity-40 ${theme === 'nes-retro' ? 'font-pixelated' : ''}`}>
-        {count} {count === 1 ? 'pomodoro' : 'pomodoros'} today
+        {tn('timer.pomodoroToday', settings.language, count)}
       </p>
     </div>
   );

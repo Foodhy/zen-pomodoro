@@ -1,11 +1,13 @@
 
 import { toast } from "@/components/ui/use-toast";
 import { Task } from "../models/types";
+import { t, tf } from "./translationService";
 
 export class NotificationService {
   private static instance: NotificationService;
   private permission: NotificationPermission = 'default';
   private notificationSound: HTMLAudioElement | null = null;
+  private language: string = 'en';
 
   private constructor() {
     // Initialize notification permission status
@@ -26,6 +28,11 @@ export class NotificationService {
       NotificationService.instance = new NotificationService();
     }
     return NotificationService.instance;
+  }
+
+  /** Set the active UI language so notifications match the user's locale. */
+  public setLanguage(language: string): void {
+    this.language = language;
   }
 
   public async requestPermission(): Promise<boolean> {
@@ -103,43 +110,46 @@ export class NotificationService {
   }
 
   public async notifyPomodoroCompleted(type: 'work' | 'shortBreak' | 'longBreak'): Promise<void> {
+    const lang = this.language;
     let title = '';
     let body = '';
 
     if (type === 'work') {
-      title = 'Work session completed!';
-      body = 'Time for a break. Stand up and stretch a bit.';
+      title = t('notif.work.completed.title', lang);
+      body = t('notif.work.completed.body', lang);
     } else if (type === 'shortBreak') {
-      title = 'Break time is over!';
-      body = 'Ready to get back to work?';
+      title = t('notif.shortBreak.completed.title', lang);
+      body = t('notif.shortBreak.completed.body', lang);
     } else {
-      title = 'Long break completed!';
-      body = 'Ready for a new productive session?';
+      title = t('notif.longBreak.completed.title', lang);
+      body = t('notif.longBreak.completed.body', lang);
     }
 
     await this.showNotification(title, { body });
   }
 
   public async notifyTaskReminder(taskTitle: string): Promise<void> {
-    const title = 'Task Reminder';
-    const body = `It's time for: ${taskTitle}`;
+    const lang = this.language;
+    const title = t('notif.task.reminder.title', lang);
+    const body = tf('notif.task.reminder.body', lang, { task: taskTitle });
 
     await this.showNotification(title, { body });
   }
 
   public async notifyPhaseStarted(type: 'work' | 'shortBreak' | 'longBreak'): Promise<void> {
+    const lang = this.language;
     let title = '';
     let body = '';
 
     if (type === 'work') {
-      title = 'Work phase started';
-      body = 'Focus on your task. You can do it!';
+      title = t('notif.work.started.title', lang);
+      body = t('notif.work.started.body', lang);
     } else if (type === 'shortBreak') {
-      title = 'Short break started';
-      body = 'Take a moment to relax.';
+      title = t('notif.shortBreak.started.title', lang);
+      body = t('notif.shortBreak.started.body', lang);
     } else {
-      title = 'Long break started';
-      body = 'Time for an extended break. Rest well!';
+      title = t('notif.longBreak.started.title', lang);
+      body = t('notif.longBreak.started.body', lang);
     }
 
     await this.showNotification(title, { body });
