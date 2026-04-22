@@ -10,13 +10,15 @@ import { Button } from '../components/ui/button';
 import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music, Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImportExport';
 import SessionHistory from '../components/SessionHistory';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { LanguageOption } from '../models/types';
 
 
 type LeftTab = 'timer' | 'tasks' | 'notes';
 type RightTab = 'history' | 'music';
 
 const Index = () => {
-  const { settings, isFullscreen, setIsFullscreen, isFocusMode, pomodoroCount, sessions, timeLeft, isTimerRunning, timerPhase, startTimer, pauseTimer, resetTimer, skipToNextPhase } = useApp();
+  const { settings, setLanguage, isFullscreen, setIsFullscreen, isFocusMode, pomodoroCount, sessions, timeLeft, isTimerRunning, timerPhase, startTimer, pauseTimer, resetTimer, skipToNextPhase } = useApp();
   const [leftTab, setLeftTab] = useState<LeftTab>('timer');
   const [rightTab, setRightTab] = useState<RightTab>('history');
   const [hasMounted, setHasMounted] = useState(false);
@@ -91,6 +93,20 @@ const Index = () => {
           <ProfileSelector />
         </div>
         <div className="zen-header-right">
+          <Select value={settings.language} onValueChange={(v) => setLanguage(v as LanguageOption)}>
+            <SelectTrigger
+              className="h-8 w-[72px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
+              aria-label="Change language"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end" className="min-w-[150px]">
+              <SelectItem value="en">🇬🇧 EN</SelectItem>
+              <SelectItem value="es">🇪🇸 ES</SelectItem>
+              <SelectItem value="fr">🇫🇷 FR</SelectItem>
+              <SelectItem value="nl">🇳🇱 NL</SelectItem>
+            </SelectContent>
+          </Select>
           <Button
             variant="ghost"
             size="icon"
