@@ -10,6 +10,8 @@ import { Button } from '../components/ui/button';
 import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music, Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImportExport';
 import SessionHistory from '../components/SessionHistory';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { LanguageOption } from '../models/types';
 
 
 type LeftTab = 'timer' | 'tasks' | 'notes';
