@@ -18,7 +18,7 @@ type LeftTab = 'timer' | 'tasks' | 'notes';
 type RightTab = 'history' | 'music';
 
 const Index = () => {
-  const { settings, isFullscreen, setIsFullscreen, isFocusMode, pomodoroCount, sessions, timeLeft, isTimerRunning, timerPhase, startTimer, pauseTimer, resetTimer, skipToNextPhase } = useApp();
+  const { settings, setLanguage, isFullscreen, setIsFullscreen, isFocusMode, pomodoroCount, sessions, timeLeft, isTimerRunning, timerPhase, startTimer, pauseTimer, resetTimer, skipToNextPhase } = useApp();
   const [leftTab, setLeftTab] = useState<LeftTab>('timer');
   const [rightTab, setRightTab] = useState<RightTab>('history');
   const [hasMounted, setHasMounted] = useState(false);
