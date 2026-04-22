@@ -93,6 +93,20 @@ const Index = () => {
           <ProfileSelector />
         </div>
         <div className="zen-header-right">
+          <Select value={settings.language} onValueChange={(v) => setLanguage(v as LanguageOption)}>
+            <SelectTrigger
+              className="h-8 w-[72px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
+              aria-label="Change language"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end" className="min-w-[150px]">
+              <SelectItem value="en">🇬🇧 EN</SelectItem>
+              <SelectItem value="es">🇪🇸 ES</SelectItem>
+              <SelectItem value="fr">🇫🇷 FR</SelectItem>
+              <SelectItem value="nl">🇳🇱 NL</SelectItem>
+            </SelectContent>
+          </Select>
           <Button
             variant="ghost"
             size="icon"
