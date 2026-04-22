@@ -21,9 +21,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ChevronDown, Plus, Edit, Trash2 } from 'lucide-react';
+import { t } from '../services/translationService';
 
 export const ProfileSelector: React.FC = () => {
-  const { profiles, activeProfile, setActiveProfile, saveProfile, deleteProfile } = useApp();
+  const { profiles, activeProfile, setActiveProfile, saveProfile, deleteProfile, settings } = useApp();
+  const lang = settings.language;
   
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -135,7 +137,7 @@ export const ProfileSelector: React.FC = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="flex items-center gap-1.5 h-8 px-2.5 text-xs max-w-[140px] sm:max-w-none">
-            <span className="truncate">{activeProfile?.name || 'Profile'}</span>
+            <span className="truncate">{activeProfile?.name || t('profile.fallback', lang)}</span>
             <ChevronDown className="h-3.5 w-3.5 flex-shrink-0" />
           </Button>
         </DropdownMenuTrigger>
@@ -187,27 +189,27 @@ export const ProfileSelector: React.FC = () => {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create New Profile</DialogTitle>
+            <DialogTitle>{t('profile.create.title', lang)}</DialogTitle>
             <DialogDescription>
-              Create a new profile with custom Pomodoro settings.
+              {t('profile.create.description', lang)}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="name">Profile Name</Label>
+              <Label htmlFor="name">{t('profile.name', lang)}</Label>
               <Input
                 id="name"
                 name="name"
                 value={profileForm.name}
                 onChange={handleChangeInput}
-                placeholder="e.g., Coding, Reading"
+                placeholder={t('profile.namePlaceholder', lang)}
               />
             </div>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="workDuration">Work Duration (min)</Label>
+                <Label htmlFor="workDuration">{t('profile.workDuration', lang)}</Label>
                 <Input
                   id="workDuration"
                   name="workDuration"
@@ -219,7 +221,7 @@ export const ProfileSelector: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="shortBreakDuration">Short Break (min)</Label>
+                <Label htmlFor="shortBreakDuration">{t('profile.shortBreak', lang)}</Label>
                 <Input
                   id="shortBreakDuration"
                   name="shortBreakDuration"
@@ -231,7 +233,7 @@ export const ProfileSelector: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="longBreakDuration">Long Break (min)</Label>
+                <Label htmlFor="longBreakDuration">{t('profile.longBreak', lang)}</Label>
                 <Input
                   id="longBreakDuration"
                   name="longBreakDuration"
@@ -243,7 +245,7 @@ export const ProfileSelector: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="longBreakInterval">Long Break After</Label>
+                <Label htmlFor="longBreakInterval">{t('profile.longBreakAfter', lang)}</Label>
                 <Input
                   id="longBreakInterval"
                   name="longBreakInterval"
@@ -257,8 +259,8 @@ export const ProfileSelector: React.FC = () => {
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateOpen(false)}>Cancel</Button>
-            <Button onClick={handleCreateProfile}>Create Profile</Button>
+            <Button variant="outline" onClick={() => setIsCreateOpen(false)}>{t('profile.cancel', lang)}</Button>
+            <Button onClick={handleCreateProfile}>{t('profile.create', lang)}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -266,15 +268,15 @@ export const ProfileSelector: React.FC = () => {
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogTitle>{t('profile.edit.title', lang)}</DialogTitle>
             <DialogDescription>
-              Update your profile settings.
+              {t('profile.edit.description', lang)}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="edit-name">Profile Name</Label>
+              <Label htmlFor="edit-name">{t('profile.name', lang)}</Label>
               <Input
                 id="edit-name"
                 name="name"
@@ -285,7 +287,7 @@ export const ProfileSelector: React.FC = () => {
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-workDuration">Work Duration (min)</Label>
+                <Label htmlFor="edit-workDuration">{t('profile.workDuration', lang)}</Label>
                 <Input
                   id="edit-workDuration"
                   name="workDuration"
@@ -297,7 +299,7 @@ export const ProfileSelector: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="edit-shortBreakDuration">Short Break (min)</Label>
+                <Label htmlFor="edit-shortBreakDuration">{t('profile.shortBreak', lang)}</Label>
                 <Input
                   id="edit-shortBreakDuration"
                   name="shortBreakDuration"
@@ -309,7 +311,7 @@ export const ProfileSelector: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="edit-longBreakDuration">Long Break (min)</Label>
+                <Label htmlFor="edit-longBreakDuration">{t('profile.longBreak', lang)}</Label>
                 <Input
                   id="edit-longBreakDuration"
                   name="longBreakDuration"
@@ -321,7 +323,7 @@ export const ProfileSelector: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="edit-longBreakInterval">Long Break After</Label>
+                <Label htmlFor="edit-longBreakInterval">{t('profile.longBreakAfter', lang)}</Label>
                 <Input
                   id="edit-longBreakInterval"
                   name="longBreakInterval"
@@ -335,8 +337,8 @@ export const ProfileSelector: React.FC = () => {
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditOpen(false)}>Cancel</Button>
-            <Button onClick={handleUpdateProfile}>Save Changes</Button>
+            <Button variant="outline" onClick={() => setIsEditOpen(false)}>{t('profile.cancel', lang)}</Button>
+            <Button onClick={handleUpdateProfile}>{t('profile.save', lang)}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -344,9 +346,9 @@ export const ProfileSelector: React.FC = () => {
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Profile</DialogTitle>
+            <DialogTitle>{t('profile.delete.title', lang)}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this profile? This will also delete all associated tasks and history.
+              {t('profile.delete.description', lang)}
             </DialogDescription>
           </DialogHeader>
           
@@ -355,8 +357,8 @@ export const ProfileSelector: React.FC = () => {
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDeleteProfile}>Delete</Button>
+            <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>{t('profile.cancel', lang)}</Button>
+            <Button variant="destructive" onClick={handleDeleteProfile}>{t('profile.delete', lang)}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
