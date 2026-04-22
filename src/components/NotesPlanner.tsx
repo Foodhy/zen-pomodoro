@@ -121,7 +121,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
             size="sm"
             className="h-8 w-8 p-0"
             onClick={() => setShowForm(v => !v)}
-            aria-label={showForm ? "Hide add note form" : "Add note"}
+            aria-label={showForm ? t('notes.aria.hide', settings.language) : t('notes.aria.show', settings.language)}
           >
             {showForm ? <ChevronUp className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
           </Button>
@@ -181,7 +181,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
               className="flex-1"
               onClick={() => setShowForm(false)}
             >
-              Cancel
+              {t('notes.cancel', settings.language)}
             </Button>
             <Button
               type="submit"
