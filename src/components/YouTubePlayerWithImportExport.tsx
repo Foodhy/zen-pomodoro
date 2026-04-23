@@ -45,7 +45,10 @@ const YouTubePlayerWithImportExport = () => {
     setShowVideoDialog(true);
   };
 
-  const isSoundCloudUrl = (url: string) => /(?:soundcloud\.com|snd\.sc)\//i.test(url);
+  const isSoundCloudUrl = (url: string) => /^(https?:\/\/)?(www\.)?(soundcloud\.com|snd\.sc|on\.soundcloud\.com)\//i.test(url.trim());
+
+  // Detects SoundCloud playlists / sets (use a taller, "visual" player)
+  const isSoundCloudPlaylist = (url: string) => /soundcloud\.com\/[^/]+\/sets\//i.test(url);
 
   const extractVideoId = (url: string) => {
     if (!url) return '';
@@ -54,17 +57,31 @@ const YouTubePlayerWithImportExport = () => {
     return (match && match[2].length === 11) ? match[2] : '';
   };
 
+  // Normalise SoundCloud URLs: strip query/hash so the embed reliably resolves
+  const normaliseSoundCloudUrl = (url: string) => {
+    try {
+      const u = new URL(url.trim());
+      // Keep only protocol + host + pathname
+      return `${u.protocol}//${u.host}${u.pathname}`;
+    } catch {
+      return url.trim();
+    }
+  };
+
   const getEmbedUrl = (url: string) => {
+    if (!url) return '';
     if (isSoundCloudUrl(url)) {
+      const cleanUrl = normaliseSoundCloudUrl(url);
+      const visual = isSoundCloudPlaylist(cleanUrl) ? 'true' : 'false';
       const params = new URLSearchParams({
-        url,
+        url: cleanUrl,
         auto_play: 'true',
         hide_related: 'true',
         show_comments: 'false',
         show_user: 'true',
         show_reposts: 'false',
         show_teaser: 'false',
-        visual: 'true',
+        visual,
         color: 'ff5500',
       });
       return `https://w.soundcloud.com/player/?${params.toString()}`;
@@ -74,6 +91,15 @@ const YouTubePlayerWithImportExport = () => {
   };
 
   const isSoundCloudSelected = selectedVideo ? isSoundCloudUrl(selectedVideo.url) : false;
+  const isSoundCloudVisual = selectedVideo ? isSoundCloudPlaylist(selectedVideo.url) : false;
+
+  // Validate URL on add: must be a valid YouTube or SoundCloud link
+  const isValidMediaUrl = (url: string) => {
+    if (!url) return false;
+    if (isSoundCloudUrl(url)) return true;
+    return extractVideoId(url).length === 11;
+  };
+  const urlError = videoUrl.length > 0 && !isValidMediaUrl(videoUrl);
 
   return (
     <div className="zen-music-container">
