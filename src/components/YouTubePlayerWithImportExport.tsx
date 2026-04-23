@@ -106,9 +106,12 @@ const YouTubePlayerWithImportExport = () => {
         </div>
       </div>
 
-        {/* Embedded video */}
+        {/* Embedded player (YouTube or SoundCloud) */}
         {selectedVideo && (
-          <div className="zen-music-player">
+          <div
+            className="zen-music-player"
+            style={isSoundCloudSelected ? { aspectRatio: 'auto', height: 166 } : undefined}
+          >
             <iframe
               src={getEmbedUrl(selectedVideo.url)}
               title={selectedVideo.title}
