@@ -50,6 +50,15 @@ const YouTubePlayerWithImportExport = () => {
   // Detects SoundCloud playlists / sets (use a taller, "visual" player)
   const isSoundCloudPlaylist = (url: string) => /soundcloud\.com\/[^/]+\/sets\//i.test(url);
 
+  // Spotify: tracks, albums, playlists, episodes, shows, artists
+  const isSpotifyUrl = (url: string) =>
+    /^(https?:\/\/)?(open\.)?spotify\.com\/(intl-[a-z]{2}\/)?(track|album|playlist|episode|show|artist)\/[A-Za-z0-9]+/i.test(url.trim()) ||
+    /^spotify:(track|album|playlist|episode|show|artist):[A-Za-z0-9]+/i.test(url.trim());
+
+  // Spotify "tall" embed for collections (album/playlist/show/artist)
+  const isSpotifyCollection = (url: string) =>
+    /(spotify\.com\/(intl-[a-z]{2}\/)?(album|playlist|show|artist)\/)|(^spotify:(album|playlist|show|artist):)/i.test(url.trim());
+
   const extractVideoId = (url: string) => {
     if (!url) return '';
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -68,8 +77,27 @@ const YouTubePlayerWithImportExport = () => {
     }
   };
 
+  // Convert any Spotify URL/URI into the canonical embed URL
+  const getSpotifyEmbedUrl = (url: string) => {
+    const trimmed = url.trim();
+    // spotify:type:id
+    const uriMatch = trimmed.match(/^spotify:(track|album|playlist|episode|show|artist):([A-Za-z0-9]+)/i);
+    if (uriMatch) {
+      return `https://open.spotify.com/embed/${uriMatch[1].toLowerCase()}/${uriMatch[2]}?utm_source=generator`;
+    }
+    // open.spotify.com/[intl-xx/]type/id
+    const webMatch = trimmed.match(/spotify\.com\/(?:intl-[a-z]{2}\/)?(track|album|playlist|episode|show|artist)\/([A-Za-z0-9]+)/i);
+    if (webMatch) {
+      return `https://open.spotify.com/embed/${webMatch[1].toLowerCase()}/${webMatch[2]}?utm_source=generator`;
+    }
+    return '';
+  };
+
   const getEmbedUrl = (url: string) => {
     if (!url) return '';
+    if (isSpotifyUrl(url)) {
+      return getSpotifyEmbedUrl(url);
+    }
     if (isSoundCloudUrl(url)) {
       const cleanUrl = normaliseSoundCloudUrl(url);
       const visual = isSoundCloudPlaylist(cleanUrl) ? 'true' : 'false';
@@ -92,10 +120,13 @@ const YouTubePlayerWithImportExport = () => {
 
   const isSoundCloudSelected = selectedVideo ? isSoundCloudUrl(selectedVideo.url) : false;
   const isSoundCloudVisual = selectedVideo ? isSoundCloudPlaylist(selectedVideo.url) : false;
+  const isSpotifySelected = selectedVideo ? isSpotifyUrl(selectedVideo.url) : false;
+  const isSpotifyTallSelected = selectedVideo ? isSpotifyCollection(selectedVideo.url) : false;
 
-  // Validate URL on add: must be a valid YouTube or SoundCloud link
+  // Validate URL on add: must be a valid YouTube, SoundCloud or Spotify link
   const isValidMediaUrl = (url: string) => {
     if (!url) return false;
+    if (isSpotifyUrl(url)) return getSpotifyEmbedUrl(url).length > 0;
     if (isSoundCloudUrl(url)) return true;
     return extractVideoId(url).length === 11;
   };
@@ -132,12 +163,14 @@ const YouTubePlayerWithImportExport = () => {
         </div>
       </div>
 
-        {/* Embedded player (YouTube or SoundCloud) */}
+        {/* Embedded player (YouTube, SoundCloud or Spotify) */}
         {selectedVideo && (
           <div
             className="zen-music-player"
             style={
-              isSoundCloudSelected
+              isSpotifySelected
+                ? { aspectRatio: 'auto', height: isSpotifyTallSelected ? 380 : 152 }
+                : isSoundCloudSelected
                 ? { aspectRatio: 'auto', height: isSoundCloudVisual ? 360 : 166 }
                 : undefined
             }
@@ -260,16 +293,16 @@ const YouTubePlayerWithImportExport = () => {
                 id="url"
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="https://youtube.com/... or https://soundcloud.com/..."
+                placeholder="https://youtube.com/... · soundcloud.com/... · open.spotify.com/..."
                 aria-invalid={urlError}
               />
               {urlError ? (
                 <p className="text-xs text-destructive">
-                  Invalid URL. Use a YouTube video or a SoundCloud track / playlist link.
+                  Invalid URL. Use a YouTube video, SoundCloud track/playlist, or Spotify track/album/playlist link.
                 </p>
               ) : (
                 <p className="text-xs text-muted-foreground">
-                  YouTube & SoundCloud (tracks or playlists) supported.
+                  YouTube, SoundCloud & Spotify (tracks, albums or playlists) supported.
                 </p>
               )}
             </div>
