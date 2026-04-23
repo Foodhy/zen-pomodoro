@@ -45,6 +45,8 @@ const YouTubePlayerWithImportExport = () => {
     setShowVideoDialog(true);
   };
 
+  const isSoundCloudUrl = (url: string) => /(?:soundcloud\.com|snd\.sc)\//i.test(url);
+
   const extractVideoId = (url: string) => {
     if (!url) return '';
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -53,9 +55,25 @@ const YouTubePlayerWithImportExport = () => {
   };
 
   const getEmbedUrl = (url: string) => {
+    if (isSoundCloudUrl(url)) {
+      const params = new URLSearchParams({
+        url,
+        auto_play: 'true',
+        hide_related: 'true',
+        show_comments: 'false',
+        show_user: 'true',
+        show_reposts: 'false',
+        show_teaser: 'false',
+        visual: 'true',
+        color: 'ff5500',
+      });
+      return `https://w.soundcloud.com/player/?${params.toString()}`;
+    }
     const id = extractVideoId(url);
     return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : '';
   };
+
+  const isSoundCloudSelected = selectedVideo ? isSoundCloudUrl(selectedVideo.url) : false;
 
   return (
     <div className="zen-music-container">
@@ -88,9 +106,12 @@ const YouTubePlayerWithImportExport = () => {
         </div>
       </div>
 
-        {/* Embedded video */}
+        {/* Embedded player (YouTube or SoundCloud) */}
         {selectedVideo && (
-          <div className="zen-music-player">
+          <div
+            className="zen-music-player"
+            style={isSoundCloudSelected ? { aspectRatio: 'auto', height: 166 } : undefined}
+          >
             <iframe
               src={getEmbedUrl(selectedVideo.url)}
               title={selectedVideo.title}
@@ -207,8 +228,11 @@ const YouTubePlayerWithImportExport = () => {
                 id="url"
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="https://www.youtube.com/watch?v=..."
+                placeholder="https://youtube.com/... or https://soundcloud.com/..."
               />
+              <p className="text-xs text-muted-foreground">
+                YouTube & SoundCloud (tracks or playlists) supported.
+              </p>
             </div>
           </div>
           <DialogFooter>
