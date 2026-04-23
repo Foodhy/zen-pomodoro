@@ -228,8 +228,11 @@ const YouTubePlayerWithImportExport = () => {
                 id="url"
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="https://www.youtube.com/watch?v=..."
+                placeholder="https://youtube.com/... or https://soundcloud.com/..."
               />
+              <p className="text-xs text-muted-foreground">
+                YouTube & SoundCloud (tracks or playlists) supported.
+              </p>
             </div>
           </div>
           <DialogFooter>
