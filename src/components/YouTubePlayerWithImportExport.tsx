@@ -293,16 +293,16 @@ const YouTubePlayerWithImportExport = () => {
                 id="url"
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
-                placeholder="https://youtube.com/... or https://soundcloud.com/..."
+                placeholder="https://youtube.com/... · soundcloud.com/... · open.spotify.com/..."
                 aria-invalid={urlError}
               />
               {urlError ? (
                 <p className="text-xs text-destructive">
-                  Invalid URL. Use a YouTube video or a SoundCloud track / playlist link.
+                  Invalid URL. Use a YouTube video, SoundCloud track/playlist, or Spotify track/album/playlist link.
                 </p>
               ) : (
                 <p className="text-xs text-muted-foreground">
-                  YouTube & SoundCloud (tracks or playlists) supported.
+                  YouTube, SoundCloud & Spotify (tracks, albums or playlists) supported.
                 </p>
               )}
             </div>
