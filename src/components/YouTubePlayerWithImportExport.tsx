@@ -136,12 +136,18 @@ const YouTubePlayerWithImportExport = () => {
         {selectedVideo && (
           <div
             className="zen-music-player"
-            style={isSoundCloudSelected ? { aspectRatio: 'auto', height: 166 } : undefined}
+            style={
+              isSoundCloudSelected
+                ? { aspectRatio: 'auto', height: isSoundCloudVisual ? 360 : 166 }
+                : undefined
+            }
           >
             <iframe
+              key={selectedVideo.id}
               src={getEmbedUrl(selectedVideo.url)}
               title={selectedVideo.title}
               frameBorder="0"
+              scrolling="no"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
