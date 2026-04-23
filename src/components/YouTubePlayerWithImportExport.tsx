@@ -261,15 +261,27 @@ const YouTubePlayerWithImportExport = () => {
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
                 placeholder="https://youtube.com/... or https://soundcloud.com/..."
+                aria-invalid={urlError}
               />
-              <p className="text-xs text-muted-foreground">
-                YouTube & SoundCloud (tracks or playlists) supported.
-              </p>
+              {urlError ? (
+                <p className="text-xs text-destructive">
+                  Invalid URL. Use a YouTube video or a SoundCloud track / playlist link.
+                </p>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  YouTube & SoundCloud (tracks or playlists) supported.
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowVideoDialog(false)}>{t('music.cancel', lang)}</Button>
-            <Button onClick={handleAddVideo}>{videoId ? t('music.update', lang) : t('music.add', lang)}</Button>
+            <Button
+              onClick={handleAddVideo}
+              disabled={!videoTitle.trim() || !isValidMediaUrl(videoUrl)}
+            >
+              {videoId ? t('music.update', lang) : t('music.add', lang)}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
