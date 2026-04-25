@@ -41,7 +41,10 @@ import {
   Import,
   FileUp,
   X,
+  RotateCcw,
+  History as HistoryIcon,
 } from "lucide-react";
+import ChangelogDialog from "./ChangelogDialog";
 import notificationService from "../services/notificationService";
 import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
 import { t } from "../services/translationService";
