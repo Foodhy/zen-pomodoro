@@ -359,15 +359,6 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                       onCheckedChange={handleKeyboardShortcutsToggle}
                     />
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full flex items-center gap-2"
-                    onClick={() => setShowShortcutsDialog(true)}
-                  >
-                    <Keyboard className="h-4 w-4" />
-                    <span className="hidden sm:inline">{t("settings.viewShortcuts", settings.language)}</span>
-                  </Button>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
