@@ -81,6 +81,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoUrl, setNewVideoUrl] = useState("");
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
+  const [showChangelogDialog, setShowChangelogDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
