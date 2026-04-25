@@ -849,6 +849,13 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Changelog dialog */}
+        <ChangelogDialog
+          open={showChangelogDialog}
+          onOpenChange={setShowChangelogDialog}
+          language={settings.language}
+        />
       </DrawerContent>
     </Drawer>
   );
