@@ -347,6 +347,12 @@ const YouTubePlayerWithImportExport = () => {
                   YouTube, SoundCloud & Spotify (tracks, albums or playlists) supported.
                 </p>
               )}
+              {isSpotifyUrl(videoUrl) && (
+                <div className="mt-2 flex items-start gap-2 rounded-md border border-green-500/30 bg-green-500/10 p-2 text-xs text-green-700 dark:text-green-300">
+                  <Disc3 className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                  <span>{t('music.spotify.note', lang)}</span>
+                </div>
+              )}
             </div>
           </div>
           <DialogFooter>
