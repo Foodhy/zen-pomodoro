@@ -41,7 +41,10 @@ import {
   Import,
   FileUp,
   X,
+  RotateCcw,
+  History as HistoryIcon,
 } from "lucide-react";
+import ChangelogDialog from "./ChangelogDialog";
 import notificationService from "../services/notificationService";
 import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
 import { t } from "../services/translationService";
@@ -78,6 +81,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoUrl, setNewVideoUrl] = useState("");
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
+  const [showChangelogDialog, setShowChangelogDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
@@ -355,23 +359,40 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                       onCheckedChange={handleKeyboardShortcutsToggle}
                     />
                   </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full flex items-center gap-2"
+                    className="w-full flex items-center justify-center gap-2"
                     onClick={() => setShowShortcutsDialog(true)}
+                    title={t("settings.viewShortcuts", settings.language)}
                   >
-                    <Keyboard className="h-4 w-4" />
-                    {t("settings.viewShortcuts", settings.language)}
+                    <Keyboard className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline truncate">{t("settings.viewShortcuts", settings.language)}</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={() => setShowChangelogDialog(true)}
+                    title={t("settings.viewChangelog", settings.language)}
+                  >
+                    <HistoryIcon className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline truncate">{t("settings.viewChangelog", settings.language)}</span>
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={handleResetAllData}
+                    title={t("settings.resetStorage", settings.language)}
+                  >
+                    <RotateCcw className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline truncate">{t("settings.resetStorage", settings.language)}</span>
                   </Button>
                 </div>
-
-                <Button
-                  onClick={handleResetAllData}
-                  className="w-full"
-                >
-                  {t("settings.resetStorage", settings.language)}
-                </Button>
               </div>
             </TabsContent>
 
@@ -828,6 +849,13 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Changelog dialog */}
+        <ChangelogDialog
+          open={showChangelogDialog}
+          onOpenChange={setShowChangelogDialog}
+          language={settings.language}
+        />
       </DrawerContent>
     </Drawer>
   );
