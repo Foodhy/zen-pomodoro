@@ -132,6 +132,30 @@ const YouTubePlayerWithImportExport = () => {
   };
   const urlError = videoUrl.length > 0 && !isValidMediaUrl(videoUrl);
 
+  // Classify each video by its source platform
+  const getPlatform = (url: string): 'youtube' | 'soundcloud' | 'spotify' | 'other' => {
+    if (isSpotifyUrl(url)) return 'spotify';
+    if (isSoundCloudUrl(url)) return 'soundcloud';
+    if (extractVideoId(url)) return 'youtube';
+    return 'other';
+  };
+
+  const groupedVideos = useMemo(() => {
+    const groups: Record<'youtube' | 'soundcloud' | 'spotify' | 'other', typeof videos> = {
+      youtube: [], soundcloud: [], spotify: [], other: [],
+    };
+    videos.forEach((v) => groups[getPlatform(v.url)].push(v));
+    return groups;
+  }, [videos]);
+
+  const platformMeta: Record<'youtube' | 'soundcloud' | 'spotify' | 'other', { label: string; Icon: React.ComponentType<{ className?: string }>; color: string }> = {
+    youtube:    { label: t('music.group.youtube', lang),    Icon: Youtube, color: 'text-red-500' },
+    soundcloud: { label: t('music.group.soundcloud', lang), Icon: Cloud,   color: 'text-orange-500' },
+    spotify:    { label: t('music.group.spotify', lang),    Icon: Disc3,   color: 'text-green-500' },
+    other:      { label: t('music.group.other', lang),      Icon: Music,   color: 'text-muted-foreground' },
+  };
+
+
   return (
     <div className="zen-music-container">
       {/* Header row */}
