@@ -99,6 +99,58 @@ const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
     id: 'yt-default-6',
     title: '🎵 THE BEST GYM PHONK 2025',
     url: 'https://www.youtube.com/watch?v=zM1H3NkMYv4'
+  },
+  // SoundCloud defaults
+  {
+    id: 'sc-default-1',
+    title: '☁️ 4 A.M Study Session 📚 - lofi hip hop/chill beats',
+    url: 'https://soundcloud.com/lofi_girl/4-am-studysession'
+  },
+  {
+    id: 'sc-default-2',
+    title: '☁️ Phonk',
+    url: 'https://soundcloud.com/lander-gonzalo-ramirez-rojas/sets/phonk'
+  },
+  {
+    id: 'sc-default-3',
+    title: '☁️ Chill/Relaxing Pokémon music (Gen 4 & 5)',
+    url: 'https://soundcloud.com/qinoxis-95450564/sets/chill-relaxing-pokemon-music'
+  },
+  {
+    id: 'sc-default-4',
+    title: '☁️ Relax and Chill',
+    url: 'https://soundcloud.com/gregory-innovo/sets/relax-and-chill'
+  },
+  {
+    id: 'sc-default-5',
+    title: "☁️ WESTLIBERTY'S - Immersion",
+    url: 'https://soundcloud.com/wuh4n/westlibertys-immersion'
+  },
+  // Spotify defaults
+  {
+    id: 'sp-default-1',
+    title: '🟢 The Start up, investment and more',
+    url: 'https://open.spotify.com/playlist/5PqMbsx7V1y1YfjZfTlDku'
+  },
+  {
+    id: 'sp-default-2',
+    title: '🟢 Learning to code',
+    url: 'https://open.spotify.com/album/1tR9wqOiY6bgJNloyNpAIi'
+  },
+  {
+    id: 'sp-default-3',
+    title: '🟢 Dark Ambient - music to escape/dream to',
+    url: 'https://open.spotify.com/playlist/07lYUEyTkWP3NqIa7Kzyqx'
+  },
+  {
+    id: 'sp-default-4',
+    title: '🟢 Synthwave - beats to chill/game to',
+    url: 'https://open.spotify.com/playlist/1YIe34rcmLjCYpY9wJoM2p'
+  },
+  {
+    id: 'sp-default-5',
+    title: '🟢 Goth (Slowed + Reverb)',
+    url: 'https://open.spotify.com/album/7FcVJdKdyryXNniCPg75fi'
   }
 ];
 
