@@ -173,6 +173,10 @@ const translations: Translations = {
   "music.deleteConfirm.message": { en: "Are you sure you want to remove this track from your list?", es: "¿Estás seguro de que quieres eliminar esta pista de tu lista?", fr: "Voulez-vous vraiment supprimer cette piste ?", nl: "Weet je zeker dat je deze track wilt verwijderen?" },
   "music.deleteConfirm.cancel": { en: "Cancel", es: "Cancelar", fr: "Annuler", nl: "Annuleren" },
   "music.deleteConfirm.confirm": { en: "Remove", es: "Eliminar", fr: "Supprimer", nl: "Verwijderen" },
+  "music.group.youtube": { en: "YouTube", es: "YouTube", fr: "YouTube", nl: "YouTube" },
+  "music.group.soundcloud": { en: "SoundCloud", es: "SoundCloud", fr: "SoundCloud", nl: "SoundCloud" },
+  "music.group.spotify": { en: "Spotify", es: "Spotify", fr: "Spotify", nl: "Spotify" },
+  "music.group.other": { en: "Other", es: "Otros", fr: "Autres", nl: "Overig" },
 
   // History
   "history.title": { en: "Session History", es: "Historial de sesiones", fr: "Historique des sessions", nl: "Sessiegeschiedenis" },
