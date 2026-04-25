@@ -210,39 +210,57 @@ const YouTubePlayerWithImportExport = () => {
             />
           </div>
         )}
-      {/* Video chips */}
-      <div className="zen-music-chips">
-        {videos.map((video) => (
-          <div
-            key={video.id}
-            className={`zen-music-chip ${selectedVideo?.id === video.id ? 'zen-music-chip-active' : ''}`}
-          >
-            <button
-              className="zen-music-chip-label"
-              onClick={() => handleVideoSelect(video.url)}
-            >
-              {video.title}
-            </button>
-            <div className="zen-music-chip-actions">
-              <button
-                className="zen-music-chip-action"
-                onClick={() => handleEditVideo(video)}
-                title={t('music.edit', lang)}
-                aria-label={t('music.edit', lang)}
-              >
-                <Pencil className="h-3 w-3" />
-              </button>
-              <button
-                className="zen-music-chip-action zen-music-chip-delete"
-                onClick={() => setDeleteConfirmId(video.id)}
-                title={t('music.deleteConfirm.confirm', lang)}
-                aria-label={t('music.deleteConfirm.confirm', lang)}
-              >
-                <X className="h-3 w-3" />
-              </button>
+      {/* Video chips grouped by platform */}
+      <div className="zen-music-groups flex flex-col gap-3 mt-2">
+        {(['youtube', 'soundcloud', 'spotify', 'other'] as const).map((key) => {
+          const items = groupedVideos[key];
+          if (items.length === 0) return null;
+          const { label, Icon, color } = platformMeta[key];
+          return (
+            <div key={key} className="zen-music-group">
+              <div className="flex items-center gap-1.5 mb-1.5 px-0.5">
+                <Icon className={`h-3.5 w-3.5 ${color}`} />
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  {label}
+                </span>
+                <span className="text-[11px] text-muted-foreground/60">({items.length})</span>
+              </div>
+              <div className="zen-music-chips">
+                {items.map((video) => (
+                  <div
+                    key={video.id}
+                    className={`zen-music-chip ${selectedVideo?.id === video.id ? 'zen-music-chip-active' : ''}`}
+                  >
+                    <button
+                      className="zen-music-chip-label"
+                      onClick={() => handleVideoSelect(video.url)}
+                    >
+                      {video.title}
+                    </button>
+                    <div className="zen-music-chip-actions">
+                      <button
+                        className="zen-music-chip-action"
+                        onClick={() => handleEditVideo(video)}
+                        title={t('music.edit', lang)}
+                        aria-label={t('music.edit', lang)}
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </button>
+                      <button
+                        className="zen-music-chip-action zen-music-chip-delete"
+                        onClick={() => setDeleteConfirmId(video.id)}
+                        title={t('music.deleteConfirm.confirm', lang)}
+                        aria-label={t('music.deleteConfirm.confirm', lang)}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
 
