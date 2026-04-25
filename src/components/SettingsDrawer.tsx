@@ -366,16 +366,42 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                     onClick={() => setShowShortcutsDialog(true)}
                   >
                     <Keyboard className="h-4 w-4" />
-                    {t("settings.viewShortcuts", settings.language)}
+                    <span className="hidden sm:inline">{t("settings.viewShortcuts", settings.language)}</span>
                   </Button>
                 </div>
 
-                <Button
-                  onClick={handleResetAllData}
-                  className="w-full"
-                >
-                  {t("settings.resetStorage", settings.language)}
-                </Button>
+                <div className="grid grid-cols-3 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={() => setShowShortcutsDialog(true)}
+                    title={t("settings.viewShortcuts", settings.language)}
+                  >
+                    <Keyboard className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline truncate">{t("settings.viewShortcuts", settings.language)}</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={() => setShowChangelogDialog(true)}
+                    title={t("settings.viewChangelog", settings.language)}
+                  >
+                    <HistoryIcon className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline truncate">{t("settings.viewChangelog", settings.language)}</span>
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={handleResetAllData}
+                    title={t("settings.resetStorage", settings.language)}
+                  >
+                    <RotateCcw className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline truncate">{t("settings.resetStorage", settings.language)}</span>
+                  </Button>
+                </div>
               </div>
             </TabsContent>
 
