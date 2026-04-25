@@ -177,6 +177,12 @@ const translations: Translations = {
   "music.group.soundcloud": { en: "SoundCloud", es: "SoundCloud", fr: "SoundCloud", nl: "SoundCloud" },
   "music.group.spotify": { en: "Spotify", es: "Spotify", fr: "Spotify", nl: "Spotify" },
   "music.group.other": { en: "Other", es: "Otros", fr: "Autres", nl: "Overig" },
+  "music.spotify.note": {
+    en: "Note: To listen to full Spotify tracks, you need to be signed in to Spotify in this browser. Otherwise only a 30-second preview will play.",
+    es: "Nota: Para escuchar las canciones completas de Spotify, necesitas tener la sesión iniciada en Spotify en este navegador. De lo contrario solo sonará una vista previa de 30 segundos.",
+    fr: "Remarque : Pour écouter les morceaux Spotify en entier, vous devez être connecté à Spotify dans ce navigateur. Sinon, seul un aperçu de 30 secondes sera lu.",
+    nl: "Let op: om volledige Spotify-tracks te beluisteren, moet je in deze browser bij Spotify zijn aangemeld. Anders speelt alleen een voorbeeld van 30 seconden."
+  },
 
   // History
   "history.title": { en: "Session History", es: "Historial de sesiones", fr: "Historique des sessions", nl: "Sessiegeschiedenis" },
