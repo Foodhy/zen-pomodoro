@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
-import { Plus, X, Pencil, Music, Trash2 } from 'lucide-react';
+import { Plus, X, Pencil, Music, Trash2, Youtube, Cloud, Disc3 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import ImportExportButtons from './ImportExportButtons';
 import { t } from '../services/translationService';
