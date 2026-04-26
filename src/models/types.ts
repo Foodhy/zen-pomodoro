@@ -66,22 +66,26 @@ export interface PomodoroSession {
 }
 
 // Theme types
-export type ThemeOption = 
-  'purple-space' | 
-  'dark-blue' | 
-  'dark-mode' | 
-  'nes-retro' | 
-  'netflix' | 
-  'isomorphic' | 
+export type ThemeOption =
+  'purple-space' |
+  'dark-blue' |
+  'dark-mode' |
+  'nes-retro' |
+  'netflix' |
+  'isomorphic' |
   'minimalist' |
-  'skeuomorphism' | 
-  'flat-design' | 
-  'bauhaus' | 
-  'neumorphism' | 
-  'glassmorphism' | 
-  'motion' | 
+  'skeuomorphism' |
+  'flat-design' |
+  'bauhaus' |
+  'neumorphism' |
+  'glassmorphism' |
+  'motion' |
   'illustration' |
-  'miro-style';
+  'miro-style' |
+  'meteor-shower' |
+  'particle-network' |
+  'flicker-matrix' |
+  'retro-wave';
 
 // Language options
 export type LanguageOption = 'en' | 'es' | 'fr' | 'nl';

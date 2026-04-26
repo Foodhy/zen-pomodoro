@@ -472,6 +472,138 @@
   --radius: 1rem;
 }
 
+/* Meteor Shower Theme — deep space with shooting stars */
+.theme-meteor-shower {
+  --background: 230 50% 4%;
+  --foreground: 220 30% 96%;
+
+  --card: 230 45% 8%;
+  --card-foreground: 220 30% 96%;
+
+  --popover: 230 45% 7%;
+  --popover-foreground: 220 30% 96%;
+
+  --primary: 250 90% 70%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 230 35% 14%;
+  --secondary-foreground: 220 30% 90%;
+
+  --muted: 230 35% 12%;
+  --muted-foreground: 220 20% 65%;
+
+  --accent: 270 90% 70%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 80% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 230 30% 16%;
+  --input: 230 30% 16%;
+  --ring: 250 90% 70%;
+
+  --radius: 0.75rem;
+}
+
+/* Particle Network Theme — interactive indigo particles */
+.theme-particle-network {
+  --background: 224 40% 5%;
+  --foreground: 210 30% 96%;
+
+  --card: 224 35% 9%;
+  --card-foreground: 210 30% 96%;
+
+  --popover: 224 35% 8%;
+  --popover-foreground: 210 30% 96%;
+
+  --primary: 239 84% 67%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 224 30% 15%;
+  --secondary-foreground: 210 30% 90%;
+
+  --muted: 224 30% 13%;
+  --muted-foreground: 210 20% 65%;
+
+  --accent: 217 91% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 80% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 224 25% 17%;
+  --input: 224 25% 17%;
+  --ring: 239 84% 67%;
+
+  --radius: 0.75rem;
+}
+
+/* Flicker Matrix Theme — emerald flickering grid */
+.theme-flicker-matrix {
+  --background: 160 40% 4%;
+  --foreground: 150 30% 95%;
+
+  --card: 160 35% 8%;
+  --card-foreground: 150 30% 95%;
+
+  --popover: 160 35% 7%;
+  --popover-foreground: 150 30% 95%;
+
+  --primary: 152 76% 50%;
+  --primary-foreground: 0 0% 5%;
+
+  --secondary: 160 30% 14%;
+  --secondary-foreground: 150 30% 90%;
+
+  --muted: 160 30% 12%;
+  --muted-foreground: 150 20% 65%;
+
+  --accent: 142 71% 55%;
+  --accent-foreground: 0 0% 5%;
+
+  --destructive: 0 80% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 160 25% 16%;
+  --input: 160 25% 16%;
+  --ring: 152 76% 50%;
+
+  --radius: 0.5rem;
+}
+
+/* Retro Wave Theme — synthwave perspective grid */
+.theme-retro-wave {
+  --background: 280 60% 6%;
+  --foreground: 320 40% 96%;
+
+  --card: 280 50% 10%;
+  --card-foreground: 320 40% 96%;
+
+  --popover: 280 50% 9%;
+  --popover-foreground: 320 40% 96%;
+
+  --primary: 326 100% 65%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 280 40% 16%;
+  --secondary-foreground: 320 40% 90%;
+
+  --muted: 280 40% 14%;
+  --muted-foreground: 320 25% 70%;
+
+  --accent: 270 95% 70%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 80% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 280 35% 18%;
+  --input: 280 35% 18%;
+  --ring: 326 100% 65%;
+
+  --radius: 0.5rem;
+}
+
 /* Miro Style Theme */
 .theme-miro-style {
   --background: 0 0% 98%;
@@ -1314,6 +1446,14 @@ h6 {
   -webkit-backdrop-filter: blur(10px);
 }
 
+/* Hide default starfield for themes that ship their own animated background */
+.theme-meteor-shower body::before,
+.theme-particle-network body::before,
+.theme-flicker-matrix body::before,
+.theme-retro-wave body::before {
+  display: none;
+}
+
 /* Zen starfield background */
 body::before {
   content: '';
@@ -1542,24 +1682,30 @@ body::before {
 .zen-music-chip {
   display: flex;
   align-items: center;
-  background: hsl(var(--muted));
-  border: 1px solid hsl(var(--border));
+  background: hsl(var(--muted) / 0.5);
+  border: 1px solid hsl(var(--border) / 0.6);
   border-radius: 999px;
   overflow: hidden;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
 .zen-music-chip:hover {
-  border-color: hsl(var(--primary) / 0.3);
+  background: hsl(var(--muted));
+  border-color: hsl(var(--primary) / 0.4);
+  transform: translateY(-1px);
 }
 
 .zen-music-chip-active {
-  background: hsl(var(--primary) / 0.1);
-  border-color: hsl(var(--primary) / 0.35);
+  background: hsl(var(--primary) / 0.12);
+  border-color: hsl(var(--primary) / 0.5);
+}
+
+.zen-music-chip-active:hover {
+  background: hsl(var(--primary) / 0.16);
 }
 
 .zen-music-chip-label {
-  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
+  padding: 0.3rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 500;
   color: hsl(var(--foreground));
@@ -1582,9 +1728,20 @@ body::before {
   color: hsl(var(--primary));
 }
 
+/* Actions hidden by default; revealed on chip hover for a minimalist look */
 .zen-music-chip-actions {
   display: flex;
   align-items: center;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width 0.2s ease, opacity 0.15s ease;
+}
+
+.zen-music-chip:hover .zen-music-chip-actions,
+.zen-music-chip:focus-within .zen-music-chip-actions {
+  max-width: 4rem;
+  opacity: 1;
 }
 
 .zen-music-chip-action {
@@ -1598,7 +1755,8 @@ body::before {
   color: hsl(var(--muted-foreground));
   cursor: pointer;
   flex-shrink: 0;
-  transition: color 0.15s;
+  transition: color 0.15s, background 0.15s;
+  border-radius: 999px;
 }
 
 .zen-music-chip-action:last-child {
@@ -1607,10 +1765,20 @@ body::before {
 
 .zen-music-chip-action:hover {
   color: hsl(var(--foreground));
+  background: hsl(var(--foreground) / 0.08);
 }
 
 .zen-music-chip-delete:hover {
   color: hsl(var(--destructive));
+  background: hsl(var(--destructive) / 0.1);
+}
+
+/* Touch devices: keep actions visible since there is no hover */
+@media (hover: none) {
+  .zen-music-chip-actions {
+    max-width: 4rem;
+    opacity: 1;
+  }
 }
 
 .zen-music-player {

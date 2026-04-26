@@ -30,7 +30,7 @@ const translations: Translations = {
   "settings.resetStorage": { en: "Reset all data", es: "Restablecer todos los datos", fr: "Réinitialiser toutes les données", nl: "Alle gegevens resetten" },
   "settings.viewChangelog": { en: "View changelog", es: "Ver changelog", fr: "Voir le changelog", nl: "Bekijk changelog" },
   "settings.changelogTitle": { en: "Changelog", es: "Changelog", fr: "Changelog", nl: "Changelog" },
-  "settings.changelogDescription": { en: "All changes to the app (English only)", es: "Todos los cambios de la app (solo en inglés)", fr: "Toutes les modifications de l'app (anglais uniquement)", nl: "Alle wijzigingen aan de app (alleen Engels)" },
+  "settings.changelogDescription": { en: "All changes to the app", es: "Todos los cambios de la app (solo en inglés)", fr: "Toutes les modifications de l'app (anglais uniquement)", nl: "Alle wijzigingen aan de app (alleen Engels)" },
   "settings.newThemes": { en: "New Themes", es: "Nuevos Temas", fr: "Nouveaux Thèmes", nl: "Nieuwe thema's" },
   "settings.youtubeVideos": { en: "YouTube Videos", es: "Videos de YouTube", fr: "Vidéos YouTube", nl: "YouTube-video's" },
   "settings.add": { en: "Add", es: "Añadir", fr: "Ajouter", nl: "Toevoegen" },
@@ -124,6 +124,10 @@ const translations: Translations = {
   "theme.motion": { en: "Motion", es: "Movimiento", fr: "Mouvement", nl: "Beweging" },
   "theme.illustration": { en: "Illustration", es: "Ilustración", fr: "Illustration", nl: "Illustratie" },
   "theme.miroStyle": { en: "Miro Style", es: "Estilo Miro", fr: "Style Miro", nl: "Miro-stijl" },
+  "theme.meteorShower": { en: "Meteor Shower", es: "Lluvia de Meteoros", fr: "Pluie de Météores", nl: "Meteorenregen" },
+  "theme.particleNetwork": { en: "Particle Network", es: "Red de Partículas", fr: "Réseau de Particules", nl: "Deeltjesnetwerk" },
+  "theme.flickerMatrix": { en: "Flicker Matrix", es: "Matriz Parpadeante", fr: "Matrice Vacillante", nl: "Flikkerend Raster" },
+  "theme.retroWave": { en: "Retro Wave", es: "Onda Retro", fr: "Vague Rétro", nl: "Retrogolf" },
 
   // Notes
   "notes.title": { en: "Notes & Planning", es: "Notas & Planificación", fr: "Notes & Planification", nl: "Notities & Planning" },

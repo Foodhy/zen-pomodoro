@@ -1,5 +1,6 @@
 
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { ThemeOption, PomodoroSession, YouTubeVideo, LanguageOption, KeyboardShortcuts, Note, NoteCategory } from "../models/types";
 import { format } from "date-fns";
@@ -44,7 +45,6 @@ import {
   RotateCcw,
   History as HistoryIcon,
 } from "lucide-react";
-import ChangelogDialog from "./ChangelogDialog";
 import notificationService from "../services/notificationService";
 import { DEFAULT_SHORTCUTS } from "../services/keyboardService";
 import { t } from "../services/translationService";
@@ -59,6 +59,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   open,
   onOpenChange,
 }) => {
+  const navigate = useNavigate();
   const {
     settings,
     saveSettings,
@@ -81,7 +82,6 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoUrl, setNewVideoUrl] = useState("");
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
-  const [showChangelogDialog, setShowChangelogDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
@@ -294,7 +294,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   <RadioGroup
                     value={settings.language}
                     onValueChange={handleLanguageChange}
-                    className="space-y-2"
+                    className="flex flex-wrap gap-3"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="en" id="lang-en" />
@@ -376,7 +376,10 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                     variant="outline"
                     size="sm"
                     className="w-full flex items-center justify-center gap-2"
-                    onClick={() => setShowChangelogDialog(true)}
+                    onClick={() => {
+                      onOpenChange(false);
+                      navigate("/changelog");
+                    }}
                     title={t("settings.viewChangelog", settings.language)}
                   >
                     <HistoryIcon className="h-4 w-4 shrink-0" />
@@ -403,76 +406,45 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                   <RadioGroup
                     value={settings.theme}
                     onValueChange={handleThemeChange}
-                    className="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-x-4"
+                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2"
                   >
-                    {/* Original themes */}
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="purple-space" id="theme-purple" />
-                      <Label htmlFor="theme-purple">{t("theme.purpleSpace", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="dark-blue" id="theme-blue" />
-                      <Label htmlFor="theme-blue">{t("theme.darkBlue", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="dark-mode" id="theme-dark" />
-                      <Label htmlFor="theme-dark">{t("theme.darkMode", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="nes-retro" id="theme-nes" />
-                      <Label htmlFor="theme-nes">{t("theme.nesRetro", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="netflix" id="theme-netflix" />
-                      <Label htmlFor="theme-netflix">{t("theme.netflix", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="isomorphic" id="theme-isomorphic" />
-                      <Label htmlFor="theme-isomorphic">{t("theme.isomorphic", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="minimalist" id="theme-minimalist" />
-                      <Label htmlFor="theme-minimalist">{t("theme.minimalist", settings.language)}</Label>
-                    </div>
-
-                    {/* New themes */}
-                    <div className="col-span-1 md:col-span-2 pt-2 border-t border-border/30">
-                      <div className="text-xs font-medium text-muted-foreground mb-2">
-                        {t("settings.newThemes", settings.language)}
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="skeuomorphism" id="theme-skeuomorphism" />
-                      <Label htmlFor="theme-skeuomorphism">{t("theme.skeuomorphism", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="flat-design" id="theme-flat-design" />
-                      <Label htmlFor="theme-flat-design">{t("theme.flatDesign", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="bauhaus" id="theme-bauhaus" />
-                      <Label htmlFor="theme-bauhaus">{t("theme.bauhaus", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="neumorphism" id="theme-neumorphism" />
-                      <Label htmlFor="theme-neumorphism">{t("theme.neumorphism", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="glassmorphism" id="theme-glassmorphism" />
-                      <Label htmlFor="theme-glassmorphism">{t("theme.glassmorphism", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="motion" id="theme-motion" />
-                      <Label htmlFor="theme-motion">{t("theme.motion", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="illustration" id="theme-illustration" />
-                      <Label htmlFor="theme-illustration">{t("theme.illustration", settings.language)}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="miro-style" id="theme-miro" />
-                      <Label htmlFor="theme-miro">{t("theme.miroStyle", settings.language)}</Label>
-                    </div>
+                    {[
+                      { value: "purple-space", id: "theme-purple", label: t("theme.purpleSpace", settings.language) },
+                      { value: "dark-blue", id: "theme-blue", label: t("theme.darkBlue", settings.language) },
+                      { value: "dark-mode", id: "theme-dark", label: t("theme.darkMode", settings.language) },
+                      { value: "nes-retro", id: "theme-nes", label: t("theme.nesRetro", settings.language) },
+                      { value: "netflix", id: "theme-netflix", label: t("theme.netflix", settings.language) },
+                      { value: "isomorphic", id: "theme-isomorphic", label: t("theme.isomorphic", settings.language) },
+                      { value: "minimalist", id: "theme-minimalist", label: t("theme.minimalist", settings.language) },
+                      { value: "skeuomorphism", id: "theme-skeuomorphism", label: t("theme.skeuomorphism", settings.language) },
+                      { value: "flat-design", id: "theme-flat-design", label: t("theme.flatDesign", settings.language) },
+                      { value: "bauhaus", id: "theme-bauhaus", label: t("theme.bauhaus", settings.language) },
+                      { value: "neumorphism", id: "theme-neumorphism", label: t("theme.neumorphism", settings.language) },
+                      { value: "glassmorphism", id: "theme-glassmorphism", label: t("theme.glassmorphism", settings.language) },
+                      { value: "motion", id: "theme-motion", label: t("theme.motion", settings.language) },
+                      { value: "illustration", id: "theme-illustration", label: t("theme.illustration", settings.language) },
+                      { value: "miro-style", id: "theme-miro", label: t("theme.miroStyle", settings.language) },
+                      { value: "meteor-shower", id: "theme-meteor-shower", label: t("theme.meteorShower", settings.language) },
+                      { value: "particle-network", id: "theme-particle-network", label: t("theme.particleNetwork", settings.language) },
+                      { value: "flicker-matrix", id: "theme-flicker-matrix", label: t("theme.flickerMatrix", settings.language) },
+                      { value: "retro-wave", id: "theme-retro-wave", label: t("theme.retroWave", settings.language) },
+                    ].map((option) => {
+                      const isActive = settings.theme === option.value;
+                      return (
+                        <Label
+                          key={option.value}
+                          htmlFor={option.id}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-md border cursor-pointer transition-colors text-sm ${
+                            isActive
+                              ? "border-primary bg-primary/10 text-foreground"
+                              : "border-border/40 hover:bg-muted/40 text-muted-foreground"
+                          }`}
+                        >
+                          <RadioGroupItem value={option.value} id={option.id} />
+                          <span className="truncate">{option.label}</span>
+                        </Label>
+                      );
+                    })}
                   </RadioGroup>
                 </div>
               </div>
@@ -850,12 +822,6 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
           </DialogContent>
         </Dialog>
 
-        {/* Changelog dialog */}
-        <ChangelogDialog
-          open={showChangelogDialog}
-          onOpenChange={setShowChangelogDialog}
-          language={settings.language}
-        />
       </DrawerContent>
     </Drawer>
   );

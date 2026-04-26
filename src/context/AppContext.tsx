@@ -239,7 +239,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       "theme-glassmorphism",
       "theme-motion",
       "theme-illustration",
-      "theme-miro-style"
+      "theme-miro-style",
+      "theme-meteor-shower",
+      "theme-particle-network",
+      "theme-flicker-matrix",
+      "theme-retro-wave"
     );
 
     document.documentElement.classList.add(`theme-${settings.theme}`);
