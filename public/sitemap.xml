@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/0.9">
   <url>
-    <loc>https://foodhy.com.co/</loc>
-    <lastmod>2026-04-20</lastmod>
+    <loc>https://zenpomodoro.app/</loc>
+    <lastmod>2026-04-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://foodhy.com.co/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://foodhy.com.co/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://foodhy.com.co/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://zenpomodoro.app/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://zenpomodoro.app/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://zenpomodoro.app/" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://zenpomodoro.app/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://zenpomodoro.app/" />
+    <image:image>
+      <image:loc>https://zenpomodoro.app/og-image.png</image:loc>
+      <image:title>Zen Pomodoro - Free Online Pomodoro Timer</image:title>
+      <image:caption>Minimalist Pomodoro timer with notes, tasks and focus music</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://zenpomodoro.app/#/changelog</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

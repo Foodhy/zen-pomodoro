@@ -1,4 +1,109 @@
+# Zen Pomodoro — robots.txt
+# Site: https://zenpomodoro.app/
+
+# Default policy: allow everything
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /*.json$
 
-Sitemap: https://foodhy.com.co/sitemap.xml
+# ---------- Search engines ----------
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# ---------- AI / LLM crawlers (GEO: Generative Engine Optimization) ----------
+# Allowing these lets Zen Pomodoro be cited by AI answer engines
+# (ChatGPT search, Claude, Perplexity, Gemini, Copilot, etc.)
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google AI (Gemini, Bard, Vertex)
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Common Crawl (used to train many LLMs)
+User-agent: CCBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# DuckDuckGo Assist
+User-agent: DuckAssistBot
+Allow: /
+
+# Diffbot (knowledge graph)
+User-agent: Diffbot
+Allow: /
+
+# ---------- Sitemaps ----------
+Sitemap: https://zenpomodoro.app/sitemap.xml
+
+# ---------- LLM index ----------
+# Markdown summary for LLMs: https://zenpomodoro.app/llms.txt

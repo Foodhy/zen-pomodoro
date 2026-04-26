@@ -1,0 +1,61 @@
+# Zen Pomodoro
+
+> Free, offline-first online Pomodoro timer with task planner, markdown notes, ambient focus music and session analytics. No signup, no ads, all data stored locally in the browser.
+
+Zen Pomodoro is a minimalist productivity web app focused on deep work, study sessions, and ADHD-friendly focus. It implements the classic Pomodoro Technique (25-minute focus blocks with 5-minute breaks, plus a longer 15–30 minute break after every 4 cycles) with fully customizable intervals, and pairs the timer with a task list, markdown notes and an ambient music player (YouTube, SoundCloud, Spotify embeds).
+
+## Key facts
+
+- **Price:** 100% free, no ads, no signup, no email required
+- **Privacy:** All data (tasks, notes, sessions, settings) stored locally in browser localStorage; no servers
+- **Offline:** Timer, tasks, notes and history work fully offline; only the optional music player needs internet
+- **Languages:** English, Spanish (es), French (fr), Dutch (nl)
+- **Platform:** Web (any modern browser, mobile + desktop). No install required.
+- **License:** Private
+- **URL:** https://zenpomodoro.app/
+
+## Features
+
+- Pomodoro timer with customizable focus / short break / long break durations
+- Multiple profiles (e.g. "Coding 50/10", "Study 25/5", "ADHD 15/3")
+- Task planner with priorities (high/medium/low) and reminder notifications
+- Markdown notes with categories (Technical, Planning, Code, Ideas, Other) and tags
+- Ambient focus music: paste any YouTube, SoundCloud or Spotify URL
+- Session history with daily / total focus time analytics
+- 19 visual themes including Purple Space, Dark Mode, Netflix, NES Retro, Glassmorphism, Neumorphism, Bauhaus, Meteor Shower, Particle Network, Flicker Matrix and Retro Wave (synthwave)
+- Keyboard shortcuts for all timer actions
+- Focus Mode (full-screen distraction-free)
+- Split view (timer + secondary panel) and single-panel modes
+- JSON import/export for tasks, notes, sessions and music library
+- Markdown export for notes and session history
+- Web push notifications for phase transitions and task reminders
+
+## How to use the Pomodoro Technique
+
+1. Pick **one** task. Add it to the task list.
+2. Press **Start**. Work without switching apps for 25 minutes.
+3. When the timer rings, take a **5-minute break**. Stand up, hydrate, look away from the screen.
+4. After **4 pomodoros**, take a longer **15–30 minute break**.
+5. Review your session history at the end of the day to see total focus time.
+
+## Recommended interval presets
+
+- **Classic:** 25 / 5 / 15
+- **Deep work / coding:** 50 / 10 / 30
+- **ADHD-friendly:** 15 / 3 / 15
+- **Study sprints:** 30 / 5 / 20
+
+## FAQ
+
+- **What is the Pomodoro Technique?** A time-management method by Francesco Cirillo (1980s). Work in focused 25-minute intervals separated by 5-minute breaks; after four, take a longer 15–30 minute break.
+- **Is Zen Pomodoro free?** Yes — no ads, no signup, no email.
+- **Does it work offline?** Yes, except for the optional music player.
+- **Is it good for ADHD?** Many ADHD users find shorter cycles (15–20 min) helpful because they lower the activation energy to start.
+- **How is Pomodoro different from time blocking?** Time blocking schedules tasks into calendar slots; Pomodoro structures the work itself. They combine well.
+- **What should I do during a break?** Stand, stretch, hydrate, look at something far away. Avoid social media and email.
+
+## Links
+
+- [Live app](https://zenpomodoro.app/)
+- [Changelog](https://zenpomodoro.app/#/changelog)
+- [Sitemap](https://zenpomodoro.app/sitemap.xml)
