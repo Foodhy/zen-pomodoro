@@ -7,7 +7,8 @@ import ProfileSelector from '../components/ProfileSelector';
 import SettingsDrawer from '../components/SettingsDrawer';
 import { useApp } from '../context/AppContext';
 import { Button } from '../components/ui/button';
-import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music, Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
+import { Maximize, Minimize, Settings, Timer, CheckSquare, FileText, History, Music, Play, Pause, RotateCcw, SkipForward, HelpCircle } from 'lucide-react';
+import { useOnboardingTour } from '../hooks/useOnboardingTour';
 import YouTubePlayerWithImportExport from '../components/YouTubePlayerWithImportExport';
 import SessionHistory from '../components/SessionHistory';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
@@ -27,6 +28,7 @@ const Index = () => {
   
   const isSplitView = settings.splitView;
   const [singleTab, setSingleTab] = useState<'timer' | 'notes' | 'tasks' | 'history' | 'music'>('timer');
+  const { startTour } = useOnboardingTour();
 
   // Update document title with timer countdown
   useEffect(() => {
@@ -95,12 +97,15 @@ const Index = () => {
       {/* Header */}
       <header className="zen-header">
         <div className="zen-header-left">
-          <h1 className="zen-brand">Zen Pomodoro</h1>
-          <ProfileSelector />
+          <h1 id="tour-brand" className="zen-brand">Zen Pomodoro</h1>
+          <div id="tour-profile" className="contents">
+            <ProfileSelector />
+          </div>
         </div>
         <div className="zen-header-right">
           <Select value={settings.language} onValueChange={(v) => setLanguage(v as LanguageOption)}>
             <SelectTrigger
+              id="tour-language"
               className="h-8 w-[72px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
               aria-label={t('header.changeLanguage', settings.language)}
             >
@@ -114,6 +119,17 @@ const Index = () => {
             </SelectContent>
           </Select>
           <Button
+            id="tour-help"
+            variant="ghost"
+            size="icon"
+            onClick={startTour}
+            className="zen-icon-btn"
+            aria-label="Show app tour"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </Button>
+          <Button
+            id="tour-fullscreen"
             variant="ghost"
             size="icon"
             onClick={toggleFullscreen}
@@ -123,6 +139,7 @@ const Index = () => {
             {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
           </Button>
           <Button
+            id="tour-settings"
             variant="ghost"
             size="icon"
             onClick={() => setSettingsOpen(true)}
@@ -141,7 +158,7 @@ const Index = () => {
         <main className="zen-main">
           {/* Left panel - Timer / Tasks / Notes (bigger) */}
           <div className="zen-card">
-            <div className="zen-tab-bar">
+            <div id="tour-tabs" className="zen-tab-bar">
               <button
                 className={`zen-tab ${leftTab === 'timer' ? 'zen-tab-active' : ''}`}
                 onClick={() => setLeftTab('timer')}
@@ -164,7 +181,7 @@ const Index = () => {
                 <span className="zen-tab-label">{t('tabs.notes', settings.language)}</span>
               </button>
             </div>
-            <div className={`zen-panel-body ${leftTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
+            <div id="tour-content" className={`zen-panel-body ${leftTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
               {leftTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
               {leftTab === 'tasks' && <TaskList />}
               {leftTab === 'notes' && <NotesPlanner />}
@@ -199,7 +216,7 @@ const Index = () => {
         /* Single panel mode */
         <main className="zen-main-single">
           <div className="zen-card zen-card-expanded">
-            <div className="zen-tab-bar">
+            <div id="tour-tabs" className="zen-tab-bar">
               <button className={`zen-tab ${singleTab === 'timer' ? 'zen-tab-active' : ''}`} onClick={() => setSingleTab('timer')}>
                 <Timer className="h-3.5 w-3.5" />
                 <span className="zen-tab-label">{t('tabs.timer', settings.language)}</span>
@@ -221,7 +238,7 @@ const Index = () => {
                 <span className="zen-tab-label">{t('tabs.music', settings.language)}</span>
               </button>
             </div>
-            <div className={`zen-panel-body ${singleTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
+            <div id="tour-content" className={`zen-panel-body ${singleTab === 'timer' ? 'zen-panel-body-centered' : ''}`}>
               {singleTab === 'timer' && <PomodoroTimer onToggleFullscreen={toggleFullscreen} />}
               {singleTab === 'tasks' && <TaskList />}
               {singleTab === 'notes' && <NotesPlanner />}
@@ -235,7 +252,7 @@ const Index = () => {
 
       {/* Bottom bar: stats + mini timer (when applicable) */}
       <div className={`zen-bottom-bar ${(!isSplitView && singleTab === 'timer') || (isSplitView && leftTab === 'timer') ? 'gap-0' : 'gap-[1rem]'}`}>
-        <div className="zen-bottom-stats">
+        <div id="tour-stats" className="zen-bottom-stats">
           <div className="zen-stat-card">
             <span className="zen-stat-label">{t('stats.pomodoros', settings.language)}</span>
             <span className="zen-stat-value">{pomodoroCount}</span>

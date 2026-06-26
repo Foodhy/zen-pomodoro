@@ -19,7 +19,7 @@ import {
 
 // Default settings
 const DEFAULT_SETTINGS: AppSettings = {
-  theme: 'purple-space',
+  theme: 'retro-wave',
   notificationsEnabled: true,
   soundEnabled: true,
   splitView: false,
