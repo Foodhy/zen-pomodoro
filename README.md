@@ -1,4 +1,8 @@
-# Welcome to your Lovable project
+# Zen Pomodoro
+
+![Zen Pomodoro — minimalist Pomodoro timer with tasks, notes, focus music & stats](./public/og-image.png)
+
+> A minimalist Pomodoro timer with tasks, notes, focus music & stats. Free, offline-first, no signup.
 
 ## Project info
 
