@@ -100,6 +100,11 @@ const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
     title: '🎵 THE BEST GYM PHONK 2025',
     url: 'https://www.youtube.com/watch?v=zM1H3NkMYv4'
   },
+  {
+    id: 'yt-default-claude',
+    title: '🎵 Claude FM - music for thinking and building',
+    url: 'https://www.youtube.com/watch?v=tRsQsTMvPNg'
+  },
   // SoundCloud defaults
   {
     id: 'sc-default-1',
