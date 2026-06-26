@@ -68,12 +68,12 @@ const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
   {
     id: 'yt-default-1',
     title: '🎵 lofi hip hop radio 📚 beats to relax/study to',
-    url: 'https://www.youtube.com/watch?v=jfKfPfyJRdk'
+    url: 'https://www.youtube.com/watch?v=X4VbdwhkE10'
   },
   {
     id: 'yt-default-2',
     title: '🎵 jazz lofi radio 🎷 beats to chill/study to',
-    url: 'https://www.youtube.com/watch?v=HuFYqnbVbzY'
+    url: 'https://www.youtube.com/watch?v=E2vONfzoyRI'
   },
   {
     id: 'yt-default-3',

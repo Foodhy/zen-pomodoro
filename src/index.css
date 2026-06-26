@@ -1680,6 +1680,7 @@ body::before {
 }
 
 .zen-music-chip {
+  position: relative;
   display: flex;
   align-items: center;
   background: hsl(var(--muted) / 0.5);
@@ -1728,20 +1729,28 @@ body::before {
   color: hsl(var(--primary));
 }
 
-/* Actions hidden by default; revealed on chip hover for a minimalist look */
+/* Actions hidden by default; revealed on chip hover for a minimalist look.
+   Absolutely positioned so revealing them never changes the chip's width,
+   which would otherwise cause the last chip in a wrapped row to oscillate
+   between rows on hover. */
 .zen-music-chip-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
-  max-width: 0;
+  padding-left: 0.75rem;
+  background: linear-gradient(to right, transparent, hsl(var(--muted)) 40%);
   opacity: 0;
-  overflow: hidden;
-  transition: max-width 0.2s ease, opacity 0.15s ease;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
 }
 
 .zen-music-chip:hover .zen-music-chip-actions,
 .zen-music-chip:focus-within .zen-music-chip-actions {
-  max-width: 4rem;
   opacity: 1;
+  pointer-events: auto;
 }
 
 .zen-music-chip-action {
@@ -1773,11 +1782,15 @@ body::before {
   background: hsl(var(--destructive) / 0.1);
 }
 
-/* Touch devices: keep actions visible since there is no hover */
+/* Touch devices: keep actions visible since there is no hover. Use static
+   flow layout so they sit beside the label instead of overlapping it. */
 @media (hover: none) {
   .zen-music-chip-actions {
-    max-width: 4rem;
+    position: static;
+    padding-left: 0.25rem;
+    background: none;
     opacity: 1;
+    pointer-events: auto;
   }
 }
 
