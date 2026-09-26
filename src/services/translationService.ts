@@ -179,6 +179,7 @@ const translations: Translations = {
   "music.title": { en: "Music & Ambience", es: "Música y Ambiente", fr: "Musique & Ambiance", nl: "Muziek & sfeer" },
   "music.addVideo": { en: "Add video", es: "Añadir video", fr: "Ajouter une vidéo", nl: "Video toevoegen" },
   "music.restore": { en: "Restore default music", es: "Restaurar música predeterminada", fr: "Restaurer la musique par défaut", nl: "Standaardmuziek herstellen" },
+  "music.library": { en: "Track list", es: "Lista de pistas", fr: "Liste des pistes", nl: "Nummerlijst" },
   "music.edit": { en: "Edit", es: "Editar", fr: "Modifier", nl: "Bewerken" },
   "music.editVideo": { en: "Edit Video", es: "Editar Video", fr: "Modifier la vidéo", nl: "Video bewerken" },
   "music.title.field": { en: "Title", es: "Título", fr: "Titre", nl: "Titel" },
