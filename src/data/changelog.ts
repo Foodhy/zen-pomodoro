@@ -8,7 +8,7 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: "1.1.0",
+    version: "1.7.0",
     date: "2026-09-26",
     type: "feature",
     title: "Layouts, music, notes, themes, and sounds",
@@ -20,6 +20,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       "Settings can auto-start the next phase. Off keeps the timer paused between phases.",
       "Added Blueprint, Graph Paper, Filament, Brutalist, and Kraft themes, plus Chime and Bell notification sounds.",
       "Added German and Korean.",
+      "Settings theme list scrolls inside the panel so every theme can be selected.",
     ],
   },
   {
@@ -95,6 +96,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
 ];
+
+export const APP_VERSION = CHANGELOG[0].version;
 
 export const typeColor: Record<ChangelogEntry["type"], string> = {
   feature: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",

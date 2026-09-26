@@ -14,6 +14,7 @@ import SessionHistory from '../components/SessionHistory';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { LanguageOption } from '../models/types';
 import { t } from '../services/translationService';
+import { APP_VERSION } from '../data/changelog';
 
 
 type LeftTab = 'timer' | 'tasks' | 'notes';
@@ -99,7 +100,7 @@ const Index = () => {
         <div className="zen-header-left">
           <h1 id="tour-brand" className="zen-brand">
             Zen Pomodoro
-            <span className="zen-version">v1.1.0</span>
+            <span className="zen-version">v{APP_VERSION}</span>
           </h1>
           <div id="tour-profile" className="flex items-center">
             <ProfileSelector />
