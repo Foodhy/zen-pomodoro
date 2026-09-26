@@ -988,8 +988,7 @@ h6 {
 
   .zen-music-player,
   .zen-music-player-video {
-    height: 168px;
-    min-height: 168px;
+    min-height: 140px;
   }
 }
 
@@ -999,8 +998,7 @@ h6 {
   }
 
   .zen-music-player-video {
-    height: 280px;
-    min-height: 280px;
+    min-height: 220px;
   }
 }
 
@@ -1812,7 +1810,8 @@ body::before {
   max-width: 100%;
   gap: 0.75rem;
   padding: 1rem;
-  height: 100%;
+  flex: 1 1 auto;
+  height: auto;
   min-height: 0;
   overflow: hidden;
   position: relative;
@@ -1877,11 +1876,13 @@ body::before {
   color: hsl(var(--primary));
 }
 
-.zen-music-player {
+.zen-music-player,
+.zen-music-player-fill,
+.zen-music-player-video {
   width: 100%;
-  flex: 0 0 auto;
-  height: 220px;
-  min-height: 220px;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 180px;
   max-height: none;
   aspect-ratio: auto;
 }
@@ -1892,18 +1893,13 @@ body::before {
   overflow: hidden;
 }
 
-.zen-music-player-fill {
-  flex: 1 1 auto;
-  height: auto;
-  min-height: 0;
-  max-height: none;
-}
-
 .zen-music-groups {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
+  max-height: 34%;
   overflow-y: auto;
 }
+
 
 .zen-music-header {
   display: flex;
@@ -2059,7 +2055,6 @@ body::before {
   overflow: hidden;
   background: #000;
   position: relative;
-  flex-shrink: 0;
 }
 
 .zen-music-player iframe {

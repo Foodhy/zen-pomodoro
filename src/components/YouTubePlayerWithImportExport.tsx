@@ -224,16 +224,7 @@ const YouTubePlayerWithImportExport = () => {
         {/* Embedded player (YouTube, SoundCloud or Spotify) */}
         {selectedVideo && (
           <div
-            className={`zen-music-player ${compactHeight ? 'zen-music-player-fill' : ''} ${isSpotifySelected || isSoundCloudSelected ? '' : 'zen-music-player-video'}`}
-            style={
-              compactHeight
-                ? undefined
-                : isSpotifySelected
-                ? { aspectRatio: 'auto', height: isSpotifyTallSelected ? 380 : 152 }
-                : isSoundCloudSelected
-                ? { aspectRatio: 'auto', height: isSoundCloudVisual ? 360 : 166 }
-                : undefined
-            }
+            className="zen-music-player zen-music-player-fill"
           >
             <iframe
               key={selectedVideo.id}
