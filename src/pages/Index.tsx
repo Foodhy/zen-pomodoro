@@ -97,7 +97,10 @@ const Index = () => {
       {/* Header */}
       <header className="zen-header">
         <div className="zen-header-left">
-          <h1 id="tour-brand" className="zen-brand">Zen Pomodoro</h1>
+          <h1 id="tour-brand" className="zen-brand">
+            Zen Pomodoro
+            <span className="zen-version">v1.1.0</span>
+          </h1>
           <div id="tour-profile" className="flex items-center">
             <ProfileSelector />
           </div>
