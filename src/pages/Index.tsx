@@ -14,6 +14,7 @@ import SessionHistory from '../components/SessionHistory';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { LanguageOption } from '../models/types';
 import { t } from '../services/translationService';
+import { APP_VERSION } from '../data/changelog';
 
 
 type LeftTab = 'timer' | 'tasks' | 'notes';
@@ -97,7 +98,10 @@ const Index = () => {
       {/* Header */}
       <header className="zen-header">
         <div className="zen-header-left">
-          <h1 id="tour-brand" className="zen-brand">Zen Pomodoro</h1>
+          <h1 id="tour-brand" className="zen-brand">
+            Zen Pomodoro
+            <span className="zen-version">v{APP_VERSION}</span>
+          </h1>
           <div id="tour-profile" className="flex items-center">
             <ProfileSelector />
           </div>
@@ -106,7 +110,7 @@ const Index = () => {
           <Select value={settings.language} onValueChange={(v) => setLanguage(v as LanguageOption)}>
             <SelectTrigger
               id="tour-language"
-              className="h-8 w-[72px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
+              className="h-8 w-[88px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
               aria-label={t('header.changeLanguage', settings.language)}
             >
               <SelectValue />
@@ -116,6 +120,8 @@ const Index = () => {
               <SelectItem value="es">🇪🇸 ES</SelectItem>
               <SelectItem value="fr">🇫🇷 FR</SelectItem>
               <SelectItem value="nl">🇳🇱 NL</SelectItem>
+              <SelectItem value="de">🇩🇪 DE</SelectItem>
+              <SelectItem value="ko">🇰🇷 KO</SelectItem>
             </SelectContent>
           </Select>
           <Button

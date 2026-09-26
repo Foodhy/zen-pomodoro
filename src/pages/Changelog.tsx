@@ -12,8 +12,6 @@ const Changelog: React.FC = () => {
   const navigate = useNavigate();
   const { settings } = useApp();
 
-  const allUpdates = CHANGELOG.flatMap((entry) => entry.details);
-
   return (
     <main className="relative z-10 flex min-h-screen items-center justify-center px-4 py-6 md:py-10">
       <section className="w-full max-w-3xl rounded-lg border bg-background p-6 shadow-lg">
@@ -34,22 +32,26 @@ const Changelog: React.FC = () => {
 
         <ScrollArea className="max-h-[70vh] pr-4">
           <div className="space-y-6">
-            <article className="border-l-2 border-border pl-4">
-              <div className="mb-1 flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold">v1.0.0</span>
-                <Badge
-                  variant="outline"
-                  className={`text-[10px] uppercase ${typeColor.feature}`}
-                >
-                  feature
-                </Badge>
-              </div>
-              <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-                {allUpdates.map((detail, index) => (
-                  <li key={`${detail}-${index}`}>{detail}</li>
-                ))}
-              </ul>
-            </article>
+            {CHANGELOG.map((entry) => (
+              <article key={`${entry.version}-${entry.date}`} className="border-l-2 border-border pl-4">
+                <div className="mb-1 flex flex-wrap items-center gap-2">
+                  <span className="text-sm font-semibold">v{entry.version}</span>
+                  <Badge
+                    variant="outline"
+                    className={`text-[10px] uppercase ${typeColor[entry.type]}`}
+                  >
+                    {entry.type}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground">{entry.date}</span>
+                </div>
+                <p className="mb-1 text-sm font-medium">{entry.title}</p>
+                <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  {entry.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
         </ScrollArea>
       </section>

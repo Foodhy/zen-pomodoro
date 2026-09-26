@@ -8,6 +8,22 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.7.0",
+    date: "2026-09-26",
+    type: "feature",
+    title: "Layouts, music, notes, themes, and sounds",
+    details: [
+      "Improved layouts for short and narrow screens, including 800×600, 1280×720, and 1366×768.",
+      "Music player fills the free height. On short screens the tracks move into a side list you can open to pick one.",
+      "Replaced unavailable livestream links. Restore default music updates the playlist without resetting the rest of your data.",
+      "Notes can be edited, reordered, and color-coded.",
+      "Settings can auto-start the next phase. Off keeps the timer paused between phases.",
+      "Added Blueprint, Graph Paper, Filament, Brutalist, and Kraft themes, plus Chime and Bell notification sounds.",
+      "Added German and Korean.",
+      "Settings theme list scrolls inside the panel so every theme can be selected.",
+    ],
+  },
+  {
     version: "1.6.0",
     date: "2026-04-25",
     type: "fix",
@@ -80,6 +96,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
 ];
+
+export const APP_VERSION = CHANGELOG[0].version;
 
 export const typeColor: Record<ChangelogEntry["type"], string> = {
   feature: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",

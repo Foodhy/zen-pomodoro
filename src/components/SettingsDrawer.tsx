@@ -264,21 +264,21 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="max-h-[85vh] p-4 bg-background border-t border-border">
+      <DrawerContent className="flex max-h-[90dvh] flex-col overflow-hidden p-4 bg-background border-t border-border">
         <DrawerClose className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none drawer-close-button">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DrawerClose>
         
-        <DrawerHeader className="mb-4 px-0">
+        <DrawerHeader className="mb-4 shrink-0 px-0">
           <DrawerTitle>{t("settings.title", settings.language)}</DrawerTitle>
           <DrawerDescription>
             {t("settings.customize", settings.language)}
           </DrawerDescription>
         </DrawerHeader>
 
-        <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 h-auto">
+        <Tabs defaultValue="app" className="flex min-h-0 w-full flex-1 flex-col">
+          <TabsList className="grid w-full shrink-0 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 h-auto">
             <TabsTrigger value="app">{t("settings.app", settings.language)}</TabsTrigger>
             <TabsTrigger value="themes">{t("settings.theme", settings.language)}</TabsTrigger>
             <TabsTrigger value="videos">{t("settings.videos", settings.language)}</TabsTrigger>
@@ -286,7 +286,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             <TabsTrigger value="notes">{t("notes.title", settings.language)}</TabsTrigger>
           </TabsList>
 
-          <div className="overflow-y-auto pr-2 max-h-[calc(85vh-8rem)]">
+          <div data-vaul-no-drag className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2">
             <TabsContent value="app" className="mt-0">
               <div className="space-y-6 bg-background p-4 rounded-lg">
                 <div className="space-y-4">
@@ -312,6 +312,14 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                       <RadioGroupItem value="nl" id="lang-nl" />
                       <Label htmlFor="lang-nl">🇳🇱 Nederlands</Label>
                     </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="de" id="lang-de" />
+                      <Label htmlFor="lang-de">🇩🇪 Deutsch</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="ko" id="lang-ko" />
+                      <Label htmlFor="lang-ko">🇰🇷 한국어</Label>
+                    </div>
                   </RadioGroup>
                 </div>
 
@@ -334,6 +342,35 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                         onCheckedChange={handleSoundToggle}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label>{t("settings.notificationSound", settings.language)}</Label>
+                      <RadioGroup
+                        value={settings.notificationSound || "classic"}
+                        onValueChange={(value) => saveSettings({ ...settings, notificationSound: value as "classic" | "chime" | "bell" })}
+                        className="flex flex-wrap gap-3"
+                      >
+                        {(["classic", "chime", "bell"] as const).map((sound) => (
+                          <div key={sound} className="flex items-center space-x-2">
+                            <RadioGroupItem value={sound} id={`sound-${sound}`} />
+                            <Label htmlFor={`sound-${sound}`}>{t(`settings.sound.${sound}`, settings.language)}</Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <Label htmlFor="auto-cycle">{t("settings.autoContinue", settings.language)}</Label>
+                      <p className="text-xs text-muted-foreground mt-1">{t("settings.autoContinueHelp", settings.language)}</p>
+                    </div>
+                    <Switch
+                      id="auto-cycle"
+                      checked={!!settings.autoContinueCycle}
+                      onCheckedChange={(checked) => saveSettings({ ...settings, autoContinueCycle: checked })}
+                    />
                   </div>
                 </div>
 
@@ -428,6 +465,11 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                       { value: "particle-network", id: "theme-particle-network", label: t("theme.particleNetwork", settings.language) },
                       { value: "flicker-matrix", id: "theme-flicker-matrix", label: t("theme.flickerMatrix", settings.language) },
                       { value: "retro-wave", id: "theme-retro-wave", label: t("theme.retroWave", settings.language) },
+                      { value: "blueprint", id: "theme-blueprint", label: t("theme.blueprint", settings.language) },
+                      { value: "graph-paper", id: "theme-graph-paper", label: t("theme.graphPaper", settings.language) },
+                      { value: "filament", id: "theme-filament", label: t("theme.filament", settings.language) },
+                      { value: "brutalist", id: "theme-brutalist", label: t("theme.brutalist", settings.language) },
+                      { value: "kraft", id: "theme-kraft", label: t("theme.kraft", settings.language) },
                     ].map((option) => {
                       const isActive = settings.theme === option.value;
                       return (

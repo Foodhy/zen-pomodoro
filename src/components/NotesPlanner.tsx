@@ -16,7 +16,9 @@ import {
   Calendar, 
   Clipboard,
   Plus,
-  ChevronUp
+  ChevronUp,
+  ChevronDown,
+  Pencil
 } from "lucide-react";
 import NotesImportExport from "./NotesImportExport";
 import { t } from "../services/translationService";
@@ -25,12 +27,16 @@ interface NotesPlannerProps {
   collapsed?: boolean;
 }
 
+const NOTE_COLORS = ["#3b82f6", "#22c55e", "#a855f7", "#eab308", "#f97316", "#ec4899", "#64748b"];
+
 const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
-  const { notes, saveNote, deleteNote, activeProfile, settings } = useApp();
+  const { notes, saveNote, deleteNote, moveNote, activeProfile, settings } = useApp();
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
   const [newNoteCategory, setNewNoteCategory] = useState<NoteCategory>(NoteCategory.TECHNICAL);
   const [newNoteTags, setNewNoteTags] = useState("");
+  const [newNoteColor, setNewNoteColor] = useState(NOTE_COLORS[0]);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -39,14 +45,17 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
     e.preventDefault();
 
     if (newNoteTitle.trim() && activeProfile) {
+      const existing = editingId ? notes.find((note) => note.id === editingId) : undefined;
       const newNote: Note = {
-        id: `note-${Date.now()}`,
+        id: editingId || `note-${Date.now()}`,
         profileId: activeProfile.id,
         title: newNoteTitle.trim(),
         content: newNoteContent.trim(),
         category: newNoteCategory,
         tags: newNoteTags.split(",").map(tag => tag.trim()).filter(tag => tag !== ""),
-        createdAt: new Date().toISOString(),
+        color: newNoteColor,
+        order: existing?.order ?? notes.length,
+        createdAt: existing?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
@@ -54,8 +63,20 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
       setNewNoteTitle("");
       setNewNoteContent("");
       setNewNoteTags("");
+      setNewNoteColor(NOTE_COLORS[0]);
+      setEditingId(null);
       setShowForm(false);
     }
+  };
+
+  const startEdit = (note: Note) => {
+    setEditingId(note.id);
+    setNewNoteTitle(note.title);
+    setNewNoteContent(note.content);
+    setNewNoteCategory(note.category);
+    setNewNoteTags((note.tags || []).join(", "));
+    setNewNoteColor(note.color || NOTE_COLORS[0]);
+    setShowForm(true);
   };
 
   const handleDeleteNote = (id: string) => {
@@ -67,7 +88,11 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
   }
 
   // Filter notes based on category and search query
-  const filteredNotes = notes.filter(note => {
+  const orderedNotes = [...notes].sort(
+    (a, b) => (a.order ?? 0) - (b.order ?? 0) || a.createdAt.localeCompare(b.createdAt)
+  );
+
+  const filteredNotes = orderedNotes.filter(note => {
     const matchesCategory = filter === "all" || note.category === filter;
     const matchesSearch = searchQuery === "" || 
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -172,6 +197,21 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
               className="text-xs flex-1"
             />
           </div>
+          <div className="flex items-center gap-2" role="group" aria-label={t("notes.color", settings.language)}>
+            {NOTE_COLORS.map((color) => (
+              <button
+                key={color}
+                type="button"
+                className="h-5 w-5 rounded-full border-2"
+                style={{
+                  backgroundColor: color,
+                  borderColor: newNoteColor === color ? "white" : "transparent",
+                }}
+                aria-label={color}
+                onClick={() => setNewNoteColor(color)}
+              />
+            ))}
+          </div>
 
           <div className="flex gap-2">
             <Button
@@ -190,7 +230,7 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
               disabled={!newNoteTitle.trim()}
             >
               <Plus className="h-4 w-4 mr-1" />
-              {t("notes.add", settings.language)}
+              {editingId ? t("notes.save", settings.language) : t("notes.add", settings.language)}
             </Button>
           </div>
         </form>
@@ -230,10 +270,11 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
           </div>
         ) : (
           <div className="space-y-2">
-            {filteredNotes.map((note) => (
+            {filteredNotes.map((note, index) => (
               <div
                 key={note.id}
                 className="p-3 rounded-lg border border-border/30 hover:border-border/60 transition-colors"
+                style={{ borderLeft: `4px solid ${note.color || "#64748b"}` }}
               >
                 <div className="flex justify-between items-start mb-1.5">
                   <div className="flex-1 min-w-0">
@@ -250,14 +291,20 @@ const NotesPlanner: React.FC<NotesPlannerProps> = ({ collapsed = false }) => {
                     </div>
                   </div>
 
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 shrink-0 ml-1 opacity-40 hover:opacity-100"
-                    onClick={() => handleDeleteNote(note.id)}
-                  >
-                    <Trash className="h-3.5 w-3.5" />
-                  </Button>
+                  <div className="flex shrink-0">
+                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-50 hover:opacity-100" disabled={index === 0} onClick={() => moveNote(note.id, "up")} aria-label={t("notes.moveUp", settings.language)}>
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-50 hover:opacity-100" disabled={index === filteredNotes.length - 1} onClick={() => moveNote(note.id, "down")} aria-label={t("notes.moveDown", settings.language)}>
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-50 hover:opacity-100" onClick={() => startEdit(note)} aria-label={t("notes.editNote", settings.language)}>
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-40 hover:opacity-100" onClick={() => handleDeleteNote(note.id)}>
+                      <Trash className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 </div>
 
                 {note.category === NoteCategory.CODE ? (

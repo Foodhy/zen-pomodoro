@@ -1,3 +1,5 @@
+import { deKo } from "./translationsDeKo";
+
 interface Translations {
   [key: string]: {
     en: string;
@@ -22,6 +24,12 @@ const translations: Translations = {
   "settings.notifications": { en: "Notifications", es: "Notificaciones", fr: "Notifications", nl: "Meldingen" },
   "settings.notificationsEnable": { en: "Enable notifications", es: "Activar notificaciones", fr: "Activer les notifications", nl: "Meldingen inschakelen" },
   "settings.soundEnable": { en: "Enable sound", es: "Activar sonido", fr: "Activer le son", nl: "Geluid inschakelen" },
+  "settings.notificationSound": { en: "Notification sound", es: "Sonido de aviso", fr: "Son de notification", nl: "Meldingsgeluid" },
+  "settings.sound.classic": { en: "Classic", es: "Clásico", fr: "Classique", nl: "Klassiek" },
+  "settings.sound.chime": { en: "Chime", es: "Campanilla", fr: "Carillon", nl: "Beltoon" },
+  "settings.sound.bell": { en: "Bell", es: "Campana", fr: "Cloche", nl: "Bel" },
+  "settings.autoContinue": { en: "Auto-start the next phase", es: "Iniciar sola la siguiente fase", fr: "Lancer la phase suivante", nl: "Volgende fase automatisch starten" },
+  "settings.autoContinueHelp": { en: "Off keeps the current behavior: the timer stops between focus and breaks. On continues the cycle automatically.", es: "Apagado mantiene el comportamiento actual: el temporizador se detiene entre foco y descansos. Encendido continúa el ciclo solo.", fr: "Désactivé conserve le comportement actuel : le minuteur s'arrête entre focus et pauses. Activé enchaîne le cycle.", nl: "Uit houdt het huidige gedrag: de timer stopt tussen focus en pauzes. Aan laat de cyclus vanzelf doorlopen." },
   "settings.display": { en: "Display", es: "Visualización", fr: "Affichage", nl: "Weergave" },
   "settings.splitViewMode": { en: "Split view mode", es: "Modo vista dividida", fr: "Mode vue divisée", nl: "Gesplitste weergave" },
   "settings.keyboard": { en: "Keyboard", es: "Teclado", fr: "Clavier", nl: "Toetsenbord" },
@@ -128,6 +136,11 @@ const translations: Translations = {
   "theme.particleNetwork": { en: "Particle Network", es: "Red de Partículas", fr: "Réseau de Particules", nl: "Deeltjesnetwerk" },
   "theme.flickerMatrix": { en: "Flicker Matrix", es: "Matriz Parpadeante", fr: "Matrice Vacillante", nl: "Flikkerend Raster" },
   "theme.retroWave": { en: "Retro Wave", es: "Onda Retro", fr: "Vague Rétro", nl: "Retrogolf" },
+  "theme.blueprint": { en: "Blueprint", es: "Plano", fr: "Bleu de plan", nl: "Blauwdruk" },
+  "theme.graphPaper": { en: "Graph Paper", es: "Papel milimetrado", fr: "Papier millimétré", nl: "Ruitjespapier" },
+  "theme.filament": { en: "Filament", es: "Filamento", fr: "Filament", nl: "Filament" },
+  "theme.brutalist": { en: "Brutalist", es: "Brutalista", fr: "Brutaliste", nl: "Brutalist" },
+  "theme.kraft": { en: "Kraft", es: "Kraft", fr: "Kraft", nl: "Kraft" },
 
   // Notes
   "notes.title": { en: "Notes & Planning", es: "Notas & Planificación", fr: "Notes & Planification", nl: "Notities & Planning" },
@@ -143,6 +156,9 @@ const translations: Translations = {
   "notes.category.other": { en: "Other", es: "Otro", fr: "Autre", nl: "Overig" },
   "notes.tags": { en: "Tags (comma separated)", es: "Etiquetas (separadas por comas)", fr: "Tags (séparés par virgule)", nl: "Tags (komma-gescheiden)" },
   "notes.add": { en: "Add Note", es: "Añadir Nota", fr: "Ajouter une note", nl: "Notitie toevoegen" },
+  "notes.color": { en: "Note color", es: "Color de la nota", fr: "Couleur de la note", nl: "Notitiekleur" },
+  "notes.moveUp": { en: "Move note up", es: "Subir nota", fr: "Monter la note", nl: "Notitie omhoog" },
+  "notes.moveDown": { en: "Move note down", es: "Bajar nota", fr: "Descendre la note", nl: "Notitie omlaag" },
   "notes.cancel": { en: "Cancel", es: "Cancelar", fr: "Annuler", nl: "Annuleren" },
   "notes.save": { en: "Save", es: "Guardar", fr: "Enregistrer", nl: "Opslaan" },
   "notes.update": { en: "Update", es: "Actualizar", fr: "Mettre à jour", nl: "Bijwerken" },
@@ -164,6 +180,8 @@ const translations: Translations = {
   // Music
   "music.title": { en: "Music & Ambience", es: "Música y Ambiente", fr: "Musique & Ambiance", nl: "Muziek & sfeer" },
   "music.addVideo": { en: "Add video", es: "Añadir video", fr: "Ajouter une vidéo", nl: "Video toevoegen" },
+  "music.restore": { en: "Restore default music", es: "Restaurar música predeterminada", fr: "Restaurer la musique par défaut", nl: "Standaardmuziek herstellen" },
+  "music.library": { en: "Track list", es: "Lista de pistas", fr: "Liste des pistes", nl: "Nummerlijst" },
   "music.edit": { en: "Edit", es: "Editar", fr: "Modifier", nl: "Bewerken" },
   "music.editVideo": { en: "Edit Video", es: "Editar Video", fr: "Modifier la vidéo", nl: "Video bewerken" },
   "music.title.field": { en: "Title", es: "Título", fr: "Titre", nl: "Titel" },
@@ -244,12 +262,16 @@ const translations: Translations = {
   "notif.task.reminder.body": { en: "It's time for: {task}", es: "Es hora de: {task}", fr: "C'est l'heure de : {task}", nl: "Tijd voor: {task}" },
 };
 
-export type Lang = 'en' | 'es' | 'fr' | 'nl';
+export type Lang = 'en' | 'es' | 'fr' | 'nl' | 'de' | 'ko';
 
 export const t = (key: string, language: string): string => {
   if (!translations[key]) {
     console.warn(`Missing translation for: ${key}`);
     return key;
+  }
+
+  if (language === "de" || language === "ko") {
+    return deKo[key]?.[language] || translations[key].en;
   }
 
   return translations[key][language as Lang] || translations[key].en;

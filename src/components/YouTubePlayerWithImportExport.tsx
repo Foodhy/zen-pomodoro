@@ -1,15 +1,15 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
-import { Plus, X, Pencil, Music, Trash2, Youtube, Cloud, Disc3 } from 'lucide-react';
+import { Plus, X, Pencil, Music, Trash2, Youtube, Cloud, Disc3, RotateCcw, ListMusic } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import ImportExportButtons from './ImportExportButtons';
 import { t } from '../services/translationService';
 
 const YouTubePlayerWithImportExport = () => {
-  const { videos, saveVideo, deleteVideo, exportVideosToJson, importVideosFromJsonFile, settings } = useApp();
+  const { videos, saveVideo, deleteVideo, exportVideosToJson, importVideosFromJsonFile, restoreDefaultMusic, settings } = useApp();
   const lang = settings.language;
   const [videoUrl, setVideoUrl] = useState('');
   const [videoTitle, setVideoTitle] = useState('');
@@ -17,6 +17,16 @@ const YouTubePlayerWithImportExport = () => {
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(videos[0] || null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [compactHeight, setCompactHeight] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-height: 860px)');
+    const apply = () => setCompactHeight(query.matches);
+    apply();
+    query.addEventListener('change', apply);
+    return () => query.removeEventListener('change', apply);
+  }, []);
 
 
   const handleAddVideo = () => {
@@ -36,6 +46,7 @@ const YouTubePlayerWithImportExport = () => {
   const handleVideoSelect = (url: string) => {
     const video = videos.find(v => v.url === url);
     if (video) setSelectedVideo(video);
+    if (compactHeight) setLibraryOpen(false);
   };
 
   const handleEditVideo = (video: any) => {
@@ -174,6 +185,29 @@ const YouTubePlayerWithImportExport = () => {
             exportTitle={t('music.exportJson', lang)}
             importTitle={t('music.importJson', lang)}
           />
+          {compactHeight && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`h-7 w-7 ${libraryOpen ? 'bg-primary/15 text-primary' : ''}`}
+              onClick={() => setLibraryOpen((open) => !open)}
+              title={t('music.library', lang)}
+              aria-label={t('music.library', lang)}
+              aria-expanded={libraryOpen}
+            >
+              <ListMusic className="h-3.5 w-3.5" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => restoreDefaultMusic()}
+            title={t('music.restore', lang)}
+            aria-label={t('music.restore', lang)}
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
@@ -190,14 +224,7 @@ const YouTubePlayerWithImportExport = () => {
         {/* Embedded player (YouTube, SoundCloud or Spotify) */}
         {selectedVideo && (
           <div
-            className="zen-music-player"
-            style={
-              isSpotifySelected
-                ? { aspectRatio: 'auto', height: isSpotifyTallSelected ? 380 : 152 }
-                : isSoundCloudSelected
-                ? { aspectRatio: 'auto', height: isSoundCloudVisual ? 360 : 166 }
-                : undefined
-            }
+            className="zen-music-player zen-music-player-fill"
           >
             <iframe
               key={selectedVideo.id}
@@ -210,8 +237,43 @@ const YouTubePlayerWithImportExport = () => {
             />
           </div>
         )}
-      {/* Video chips grouped by platform */}
-      <div className="zen-music-groups flex flex-col gap-3 mt-2">
+      {compactHeight && libraryOpen && (
+        <aside className="zen-music-drawer" aria-label={t('music.library', lang)}>
+          <div className="zen-music-drawer-head">
+            <span className="text-sm font-medium">{t('music.library', lang)}</span>
+            <button type="button" className="zen-music-chip-action" onClick={() => setLibraryOpen(false)} aria-label={t('notes.cancel', lang)}>
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          <div className="zen-music-drawer-body">
+            {(['youtube', 'soundcloud', 'spotify', 'other'] as const).map((key) => {
+              const items = groupedVideos[key];
+              if (items.length === 0) return null;
+              const { label, Icon, color } = platformMeta[key];
+              return (
+                <div key={key} className="mb-3">
+                  <div className="flex items-center gap-1.5 mb-1 px-1">
+                    <Icon className={`h-3.5 w-3.5 ${color}`} />
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
+                  </div>
+                  {items.map((video) => (
+                    <button
+                      key={video.id}
+                      type="button"
+                      className={`zen-music-drawer-item ${selectedVideo?.id === video.id ? 'zen-music-drawer-item-active' : ''}`}
+                      onClick={() => handleVideoSelect(video.url)}
+                    >
+                      {video.title}
+                    </button>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </aside>
+      )}
+      {/* Video chips grouped by platform. Hidden when the window is short. */}
+      <div className={`zen-music-groups flex flex-col gap-3 mt-2 ${compactHeight ? 'zen-music-groups-hidden' : ''}`}>
         {(['youtube', 'soundcloud', 'spotify', 'other'] as const).map((key) => {
           const items = groupedVideos[key];
           if (items.length === 0) return null;
