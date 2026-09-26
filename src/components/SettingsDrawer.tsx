@@ -264,21 +264,21 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="max-h-[85vh] p-4 bg-background border-t border-border">
+      <DrawerContent className="flex max-h-[90dvh] flex-col overflow-hidden p-4 bg-background border-t border-border">
         <DrawerClose className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none drawer-close-button">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DrawerClose>
         
-        <DrawerHeader className="mb-4 px-0">
+        <DrawerHeader className="mb-4 shrink-0 px-0">
           <DrawerTitle>{t("settings.title", settings.language)}</DrawerTitle>
           <DrawerDescription>
             {t("settings.customize", settings.language)}
           </DrawerDescription>
         </DrawerHeader>
 
-        <Tabs defaultValue="app" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 h-auto">
+        <Tabs defaultValue="app" className="flex min-h-0 w-full flex-1 flex-col">
+          <TabsList className="grid w-full shrink-0 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 h-auto">
             <TabsTrigger value="app">{t("settings.app", settings.language)}</TabsTrigger>
             <TabsTrigger value="themes">{t("settings.theme", settings.language)}</TabsTrigger>
             <TabsTrigger value="videos">{t("settings.videos", settings.language)}</TabsTrigger>
@@ -286,7 +286,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             <TabsTrigger value="notes">{t("notes.title", settings.language)}</TabsTrigger>
           </TabsList>
 
-          <div className="overflow-y-auto pr-2 max-h-[calc(85vh-8rem)]">
+          <div data-vaul-no-drag className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2">
             <TabsContent value="app" className="mt-0">
               <div className="space-y-6 bg-background p-4 rounded-lg">
                 <div className="space-y-4">
