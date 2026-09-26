@@ -109,7 +109,7 @@ const Index = () => {
           <Select value={settings.language} onValueChange={(v) => setLanguage(v as LanguageOption)}>
             <SelectTrigger
               id="tour-language"
-              className="h-8 w-[72px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
+              className="h-8 w-[88px] px-2 text-xs bg-transparent border-border/40 hover:bg-muted/40 focus:ring-0"
               aria-label={t('header.changeLanguage', settings.language)}
             >
               <SelectValue />
@@ -119,6 +119,8 @@ const Index = () => {
               <SelectItem value="es">🇪🇸 ES</SelectItem>
               <SelectItem value="fr">🇫🇷 FR</SelectItem>
               <SelectItem value="nl">🇳🇱 NL</SelectItem>
+              <SelectItem value="de">🇩🇪 DE</SelectItem>
+              <SelectItem value="ko">🇰🇷 KO</SelectItem>
             </SelectContent>
           </Select>
           <Button

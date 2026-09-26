@@ -97,7 +97,7 @@ export type ThemeOption =
 export type NotificationSound = 'classic' | 'chime' | 'bell';
 
 // Language options
-export type LanguageOption = 'en' | 'es' | 'fr' | 'nl';
+export type LanguageOption = 'en' | 'es' | 'fr' | 'nl' | 'de' | 'ko';
 
 // YouTube Video type
 export interface YouTubeVideo {

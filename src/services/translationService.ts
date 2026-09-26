@@ -1,3 +1,5 @@
+import { deKo } from "./translationsDeKo";
+
 interface Translations {
   [key: string]: {
     en: string;
@@ -260,12 +262,16 @@ const translations: Translations = {
   "notif.task.reminder.body": { en: "It's time for: {task}", es: "Es hora de: {task}", fr: "C'est l'heure de : {task}", nl: "Tijd voor: {task}" },
 };
 
-export type Lang = 'en' | 'es' | 'fr' | 'nl';
+export type Lang = 'en' | 'es' | 'fr' | 'nl' | 'de' | 'ko';
 
 export const t = (key: string, language: string): string => {
   if (!translations[key]) {
     console.warn(`Missing translation for: ${key}`);
     return key;
+  }
+
+  if (language === "de" || language === "ko") {
+    return deKo[key]?.[language] || translations[key].en;
   }
 
   return translations[key][language as Lang] || translations[key].en;

@@ -19,6 +19,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       "Notes can be edited, reordered, and color-coded.",
       "Settings can auto-start the next phase. Off keeps the timer paused between phases.",
       "Added Blueprint, Graph Paper, Filament, Brutalist, and Kraft themes, plus Chime and Bell notification sounds.",
+      "Added German and Korean.",
     ],
   },
   {

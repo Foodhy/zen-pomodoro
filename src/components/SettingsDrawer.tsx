@@ -312,6 +312,14 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                       <RadioGroupItem value="nl" id="lang-nl" />
                       <Label htmlFor="lang-nl">🇳🇱 Nederlands</Label>
                     </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="de" id="lang-de" />
+                      <Label htmlFor="lang-de">🇩🇪 Deutsch</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="ko" id="lang-ko" />
+                      <Label htmlFor="lang-ko">🇰🇷 한국어</Label>
+                    </div>
                   </RadioGroup>
                 </div>
 
