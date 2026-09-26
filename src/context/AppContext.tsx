@@ -16,6 +16,7 @@ import {
   LanguageOption,
   Note,
   NoteCategory,
+  NotificationSound,
 } from "../models/types";
 import * as storageService from "../services/storageService";
 import notificationService from "../services/notificationService";
@@ -56,6 +57,7 @@ interface AppContextType {
   notes: Note[];
   saveNote: (note: Note) => void;
   deleteNote: (id: string) => void;
+  moveNote: (id: string, direction: 'up' | 'down') => void;
   exportNotesToMarkdown: () => void;
   exportNotesToJson: () => void;
   importNotesFromJsonFile: (file: File) => Promise<void>;
@@ -73,6 +75,7 @@ interface AppContextType {
   deleteVideo: (id: string) => void;
   exportVideosToJson: () => void;
   importVideosFromJsonFile: (file: File) => Promise<void>;
+  restoreDefaultMusic: () => void;
 
   // UI States
   isFocusMode: boolean;
@@ -93,6 +96,14 @@ interface AppContextType {
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
+
+const SOUND_SRC: Record<NotificationSound, string> = {
+  classic: '/notification.mp3',
+  chime: '/notify-chime.mp3',
+  bell: '/notify-bell.mp3',
+};
+
+const soundSrcFor = (sound?: NotificationSound) => SOUND_SRC[sound || 'classic'] ?? SOUND_SRC.classic;
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -176,15 +187,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   
   // Setup audio for timer notifications
   useEffect(() => {
-    audioRef.current = new Audio('/notification.mp3');
+    const src = soundSrcFor(settings.notificationSound);
+    audioRef.current = new Audio(src);
     audioRef.current.volume = 0.7;
+    notificationService.setSound(src);
     
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
       }
     };
-  }, []);
+  }, [settings.notificationSound]);
   
   // Timer logic
   useEffect(() => {
@@ -212,7 +225,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   // Timer completion logic
   useEffect(() => {
     if (timeLeft === 0 && isTimerRunning) {
-      handleTimerComplete();
+      handleTimerComplete(true);
     }
   }, [timeLeft, isTimerRunning]);
 
@@ -243,7 +256,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       "theme-meteor-shower",
       "theme-particle-network",
       "theme-flicker-matrix",
-      "theme-retro-wave"
+      "theme-retro-wave",
+      "theme-blueprint",
+      "theme-graph-paper",
+      "theme-filament",
+      "theme-brutalist",
+      "theme-kraft"
     );
 
     document.documentElement.classList.add(`theme-${settings.theme}`);
@@ -265,7 +283,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   }, [tasks, settings.notificationsEnabled]);
 
   // Timer Functions
-  const handleTimerComplete = async () => {
+  const handleTimerComplete = async (fromExpiry = false) => {
     setIsTimerRunning(false);
     
     // Play sound if enabled
@@ -293,21 +311,36 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       setCurrentSession(null);
     }
     
-    // Determine next phase
+    let nextPhase: TimerPhase = 'work';
+    let nextSeconds = activeProfile?.workDuration ? activeProfile.workDuration * 60 : 25 * 60;
     if (timerPhase === 'work') {
       const newCount = pomodoroCount + 1;
       setPomodoroCount(newCount);
-      
       if (activeProfile && newCount % activeProfile.longBreakInterval === 0) {
-        setTimerPhase('longBreak');
-        setTimeLeft(activeProfile.longBreakDuration * 60);
+        nextPhase = 'longBreak';
+        nextSeconds = activeProfile.longBreakDuration * 60;
       } else {
-        setTimerPhase('shortBreak');
-        setTimeLeft(activeProfile?.shortBreakDuration ? activeProfile.shortBreakDuration * 60 : 5 * 60);
+        nextPhase = 'shortBreak';
+        nextSeconds = activeProfile?.shortBreakDuration ? activeProfile.shortBreakDuration * 60 : 5 * 60;
       }
-    } else {
-      setTimerPhase('work');
-      setTimeLeft(activeProfile?.workDuration ? activeProfile.workDuration * 60 : 25 * 60);
+    }
+    setTimerPhase(nextPhase);
+    setTimeLeft(nextSeconds);
+
+    if (fromExpiry && settings.autoContinueCycle) {
+      if (nextPhase === 'work' && activeProfile) {
+        const newSession: PomodoroSession = {
+          id: `session-${Date.now()}`,
+          profileId: activeProfile.id,
+          startTime: new Date().toISOString(),
+          duration: activeProfile.workDuration * 60,
+          type: 'work',
+          completed: false
+        };
+        setCurrentSession(newSession);
+        handleSaveSession(newSession);
+      }
+      window.setTimeout(() => setIsTimerRunning(true), 0);
     }
   };
   
@@ -515,6 +548,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const handleMoveNote = (id: string, direction: 'up' | 'down') => {
+    if (!activeProfile) return;
+    storageService.moveNote(id, direction, activeProfile.id);
+    setNotes(storageService.getNotesByProfile(activeProfile.id));
+  };
+
   const handleDeleteNote = (id: string) => {
     storageService.deleteNote(id);
     if (activeProfile) {
@@ -577,6 +616,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setVideos(storageService.getYouTubeVideos());
   };
 
+  const handleRestoreDefaultMusic = () => {
+    setVideos(storageService.restoreDefaultMusic());
+  };
+
   const handleExportVideosToJson = () => {
     storageService.exportVideosToJsonFile();
   };
@@ -614,6 +657,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     notes,
     saveNote: handleSaveNote,
     deleteNote: handleDeleteNote,
+    moveNote: handleMoveNote,
     exportNotesToMarkdown: handleExportNotesToMarkdown,
     exportNotesToJson: handleExportNotesToJson,
     importNotesFromJsonFile: handleImportNotesFromJsonFile,
@@ -629,6 +673,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     deleteVideo: handleDeleteVideo,
     exportVideosToJson: handleExportVideosToJson,
     importVideosFromJsonFile: handleImportVideosFromJsonFile,
+    restoreDefaultMusic: handleRestoreDefaultMusic,
 
     isFocusMode,
     isFullscreen,

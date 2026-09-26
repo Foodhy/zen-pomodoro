@@ -334,6 +334,35 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                         onCheckedChange={handleSoundToggle}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label>{t("settings.notificationSound", settings.language)}</Label>
+                      <RadioGroup
+                        value={settings.notificationSound || "classic"}
+                        onValueChange={(value) => saveSettings({ ...settings, notificationSound: value as "classic" | "chime" | "bell" })}
+                        className="flex flex-wrap gap-3"
+                      >
+                        {(["classic", "chime", "bell"] as const).map((sound) => (
+                          <div key={sound} className="flex items-center space-x-2">
+                            <RadioGroupItem value={sound} id={`sound-${sound}`} />
+                            <Label htmlFor={`sound-${sound}`}>{t(`settings.sound.${sound}`, settings.language)}</Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <Label htmlFor="auto-cycle">{t("settings.autoContinue", settings.language)}</Label>
+                      <p className="text-xs text-muted-foreground mt-1">{t("settings.autoContinueHelp", settings.language)}</p>
+                    </div>
+                    <Switch
+                      id="auto-cycle"
+                      checked={!!settings.autoContinueCycle}
+                      onCheckedChange={(checked) => saveSettings({ ...settings, autoContinueCycle: checked })}
+                    />
                   </div>
                 </div>
 
@@ -428,6 +457,11 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                       { value: "particle-network", id: "theme-particle-network", label: t("theme.particleNetwork", settings.language) },
                       { value: "flicker-matrix", id: "theme-flicker-matrix", label: t("theme.flickerMatrix", settings.language) },
                       { value: "retro-wave", id: "theme-retro-wave", label: t("theme.retroWave", settings.language) },
+                      { value: "blueprint", id: "theme-blueprint", label: t("theme.blueprint", settings.language) },
+                      { value: "graph-paper", id: "theme-graph-paper", label: t("theme.graphPaper", settings.language) },
+                      { value: "filament", id: "theme-filament", label: t("theme.filament", settings.language) },
+                      { value: "brutalist", id: "theme-brutalist", label: t("theme.brutalist", settings.language) },
+                      { value: "kraft", id: "theme-kraft", label: t("theme.kraft", settings.language) },
                     ].map((option) => {
                       const isActive = settings.theme === option.value;
                       return (

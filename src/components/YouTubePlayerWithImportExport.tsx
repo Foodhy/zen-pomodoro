@@ -3,13 +3,13 @@ import React, { useMemo, useState } from 'react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
-import { Plus, X, Pencil, Music, Trash2, Youtube, Cloud, Disc3 } from 'lucide-react';
+import { Plus, X, Pencil, Music, Trash2, Youtube, Cloud, Disc3, RotateCcw } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import ImportExportButtons from './ImportExportButtons';
 import { t } from '../services/translationService';
 
 const YouTubePlayerWithImportExport = () => {
-  const { videos, saveVideo, deleteVideo, exportVideosToJson, importVideosFromJsonFile, settings } = useApp();
+  const { videos, saveVideo, deleteVideo, exportVideosToJson, importVideosFromJsonFile, restoreDefaultMusic, settings } = useApp();
   const lang = settings.language;
   const [videoUrl, setVideoUrl] = useState('');
   const [videoTitle, setVideoTitle] = useState('');
@@ -178,6 +178,16 @@ const YouTubePlayerWithImportExport = () => {
             variant="ghost"
             size="icon"
             className="h-7 w-7"
+            onClick={() => restoreDefaultMusic()}
+            title={t('music.restore', lang)}
+            aria-label={t('music.restore', lang)}
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
             onClick={() => { setVideoId(''); setVideoTitle(''); setVideoUrl(''); setShowVideoDialog(true); }}
             title={t('music.addVideo', lang)}
             aria-label={t('music.addVideo', lang)}
@@ -190,7 +200,7 @@ const YouTubePlayerWithImportExport = () => {
         {/* Embedded player (YouTube, SoundCloud or Spotify) */}
         {selectedVideo && (
           <div
-            className="zen-music-player"
+            className={`zen-music-player ${isSpotifySelected || isSoundCloudSelected ? '' : 'zen-music-player-video'}`}
             style={
               isSpotifySelected
                 ? { aspectRatio: 'auto', height: isSpotifyTallSelected ? 380 : 152 }

@@ -8,6 +8,19 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.7.0",
+    date: "2026-09-26",
+    type: "feature",
+    title: "Layouts, music restore, notes, and themes",
+    details: [
+      "Tightened the layout for short and narrow screens, including 800×600, and shortened the music video player.",
+      "Replaced unavailable livestream links and added a Restore default music button that updates the playlist without resetting the rest of your data.",
+      "Notes can be edited, reordered, and color-coded.",
+      "Settings can auto-start the next phase. Off keeps the timer paused between phases.",
+      "Added Blueprint, Graph Paper, Filament, Brutalist, and Kraft themes, plus Chime and Bell notification sounds.",
+    ],
+  },
+  {
     version: "1.6.0",
     date: "2026-04-25",
     type: "fix",

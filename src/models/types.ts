@@ -48,6 +48,8 @@ export interface Note {
   content: string;
   category: NoteCategory;
   tags?: string[]; // For grouping and searching
+  color?: string;
+  order?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -85,7 +87,14 @@ export type ThemeOption =
   'meteor-shower' |
   'particle-network' |
   'flicker-matrix' |
-  'retro-wave';
+  'retro-wave' |
+  'blueprint' |
+  'graph-paper' |
+  'filament' |
+  'brutalist' |
+  'kraft';
+
+export type NotificationSound = 'classic' | 'chime' | 'bell';
 
 // Language options
 export type LanguageOption = 'en' | 'es' | 'fr' | 'nl';
@@ -106,6 +115,9 @@ export interface AppSettings {
   language: LanguageOption;
   keyboardShortcutsEnabled: boolean;
   focusModeEnabled: boolean;
+  /** When true, the next phase starts on its own. Off keeps the current stop-between-phases behavior. */
+  autoContinueCycle: boolean;
+  notificationSound: NotificationSound;
 }
 
 // Keyboard shortcuts

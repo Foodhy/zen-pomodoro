@@ -637,6 +637,126 @@
   --radius: 0.5rem;
 }
 
+/* Blueprint — navy drafting sheet (inspired by stealthis diy-bg-blueprint-grid) */
+.theme-blueprint {
+  --background: 210 68% 16%;
+  --foreground: 198 80% 92%;
+  --card: 210 62% 20%;
+  --card-foreground: 198 80% 94%;
+  --popover: 210 62% 18%;
+  --popover-foreground: 198 80% 94%;
+  --primary: 24 86% 58%;
+  --primary-foreground: 210 70% 10%;
+  --secondary: 210 40% 26%;
+  --secondary-foreground: 198 70% 90%;
+  --muted: 210 40% 24%;
+  --muted-foreground: 198 30% 74%;
+  --accent: 188 90% 62%;
+  --accent-foreground: 210 70% 10%;
+  --destructive: 0 80% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 198 40% 36%;
+  --input: 210 40% 24%;
+  --ring: 188 90% 62%;
+  --radius: 0.35rem;
+}
+
+/* Graph paper — warm sheet with blue rules (inspired by stealthis diy-bg-graph-paper) */
+.theme-graph-paper {
+  --background: 40 43% 93%;
+  --foreground: 220 25% 16%;
+  --card: 40 50% 97%;
+  --card-foreground: 220 25% 16%;
+  --popover: 40 50% 98%;
+  --popover-foreground: 220 25% 16%;
+  --primary: 217 72% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 30% 88%;
+  --secondary-foreground: 220 25% 18%;
+  --muted: 40 24% 88%;
+  --muted-foreground: 220 12% 38%;
+  --accent: 0 72% 48%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 46%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 217 30% 72%;
+  --input: 40 24% 90%;
+  --ring: 217 72% 42%;
+  --radius: 0.4rem;
+}
+
+/* Filament — dark shop with orange and cyan (inspired by stealthis printables maker profile) */
+.theme-filament {
+  --background: 220 14% 7%;
+  --foreground: 210 20% 94%;
+  --card: 220 12% 11%;
+  --card-foreground: 210 20% 94%;
+  --popover: 220 12% 10%;
+  --popover-foreground: 210 20% 94%;
+  --primary: 24 95% 58%;
+  --primary-foreground: 220 20% 8%;
+  --secondary: 220 10% 16%;
+  --secondary-foreground: 210 20% 90%;
+  --muted: 220 10% 15%;
+  --muted-foreground: 210 10% 68%;
+  --accent: 186 90% 52%;
+  --accent-foreground: 220 20% 8%;
+  --destructive: 0 80% 58%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 10% 22%;
+  --input: 220 10% 16%;
+  --ring: 24 95% 58%;
+  --radius: 0.6rem;
+}
+
+/* Brutalist — flat ink and paper, hard edges (inspired by stealthis neo-brutalist landing) */
+.theme-brutalist {
+  --background: 42 38% 94%;
+  --foreground: 0 0% 6%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 6%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 6%;
+  --primary: 50 100% 50%;
+  --primary-foreground: 0 0% 6%;
+  --secondary: 0 0% 92%;
+  --secondary-foreground: 0 0% 8%;
+  --muted: 42 20% 90%;
+  --muted-foreground: 0 0% 28%;
+  --accent: 168 70% 40%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 86% 48%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 8%;
+  --input: 0 0% 100%;
+  --ring: 0 0% 8%;
+  --radius: 0rem;
+}
+
+/* Kraft — tan paper and ink (blueprint kraft preset) */
+.theme-kraft {
+  --background: 36 38% 78%;
+  --foreground: 24 28% 16%;
+  --card: 36 42% 84%;
+  --card-foreground: 24 28% 16%;
+  --popover: 36 42% 86%;
+  --popover-foreground: 24 28% 16%;
+  --primary: 140 28% 28%;
+  --primary-foreground: 40 40% 96%;
+  --secondary: 32 28% 70%;
+  --secondary-foreground: 24 28% 16%;
+  --muted: 32 22% 70%;
+  --muted-foreground: 24 16% 32%;
+  --accent: 18 62% 38%;
+  --accent-foreground: 40 40% 96%;
+  --destructive: 0 62% 40%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 28 22% 42%;
+  --input: 36 30% 80%;
+  --ring: 140 28% 28%;
+  --radius: 0.35rem;
+}
+
 html,
 body,
 #root {
@@ -826,6 +946,51 @@ h6 {
   .zen-ctrl-sm {
     width: 2.25rem;
     height: 2.25rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .zen-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-height: 760px) {
+  .zen-layout {
+    padding: 0.5rem 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .timer-display,
+  .zen-card-expanded .timer-display {
+    font-size: 3.5rem !important;
+    margin-bottom: 0.6rem;
+  }
+
+  .zen-stat-card {
+    padding: 0.4rem 0.75rem;
+    min-width: 0;
+  }
+
+  .zen-stat-value {
+    font-size: 1.2rem;
+  }
+
+  .zen-music-player,
+  .zen-music-player-video {
+    height: min(26vh, 180px);
+    max-height: 180px;
+  }
+}
+
+@media (min-width: 1600px) and (min-height: 900px) {
+  .zen-layout {
+    max-width: 1560px;
+  }
+
+  .zen-music-player-video {
+    height: min(36vh, 340px);
+    max-height: 340px;
   }
 }
 
@@ -1643,6 +1808,9 @@ body::before {
 
 .zen-music-player {
   width: 100%;
+  height: min(34vh, 280px);
+  max-height: 280px;
+  aspect-ratio: auto;
 }
 
 .zen-music-header {
@@ -1795,7 +1963,6 @@ body::before {
 }
 
 .zen-music-player {
-  aspect-ratio: 16 / 9;
   border-radius: var(--radius);
   overflow: hidden;
   background: hsl(var(--muted));

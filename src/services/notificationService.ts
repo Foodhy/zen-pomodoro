@@ -8,6 +8,7 @@ export class NotificationService {
   private permission: NotificationPermission = 'default';
   private notificationSound: HTMLAudioElement | null = null;
   private language: string = 'en';
+  private soundSrc = '/notification.mp3';
 
   private constructor() {
     // Initialize notification permission status
@@ -33,6 +34,16 @@ export class NotificationService {
   /** Set the active UI language so notifications match the user's locale. */
   public setLanguage(language: string): void {
     this.language = language;
+  }
+
+  public setSound(src: string): void {
+    if (this.soundSrc === src && this.notificationSound) return;
+    this.soundSrc = src;
+    try {
+      this.notificationSound = new Audio(src);
+    } catch (error) {
+      console.warn('Could not load notification sound', error);
+    }
   }
 
   public async requestPermission(): Promise<boolean> {

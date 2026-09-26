@@ -52,6 +52,78 @@ export const ThemeBackground: React.FC = () => {
           />
         </div>
       );
+    case "blueprint":
+      return (
+        <div style={layerStyle} aria-hidden="true">
+          <div style={{ position: "absolute", inset: 0, background: "#0f2a4a" }} />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: [
+                "linear-gradient(rgba(125, 211, 252, 0.18) 1px, transparent 1px)",
+                "linear-gradient(90deg, rgba(125, 211, 252, 0.18) 1px, transparent 1px)",
+                "linear-gradient(rgba(125, 211, 252, 0.08) 1px, transparent 1px)",
+                "linear-gradient(90deg, rgba(125, 211, 252, 0.08) 1px, transparent 1px)",
+              ].join(","),
+              backgroundSize: "80px 80px, 80px 80px, 8px 8px, 8px 8px",
+            }}
+          />
+        </div>
+      );
+    case "graph-paper":
+      return (
+        <div style={layerStyle} aria-hidden="true">
+          <div style={{ position: "absolute", inset: 0, background: "#f3ecdf" }} />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: [
+                "linear-gradient(rgba(37, 99, 235, 0.18) 1px, transparent 1px)",
+                "linear-gradient(90deg, rgba(37, 99, 235, 0.18) 1px, transparent 1px)",
+              ].join(","),
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div style={{ position: "absolute", top: 0, bottom: 0, left: 48, width: 2, background: "rgba(185, 28, 28, 0.45)" }} />
+        </div>
+      );
+    case "filament":
+      return (
+        <div style={layerStyle} aria-hidden="true">
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(ellipse at 20% 0%, rgba(251,146,60,0.22), transparent 45%), radial-gradient(ellipse at 90% 80%, rgba(34,211,238,0.16), transparent 40%), #0b0d10",
+            }}
+          />
+        </div>
+      );
+    case "brutalist":
+      return (
+        <div style={layerStyle} aria-hidden="true">
+          <div style={{ position: "absolute", inset: 0, background: "#f6f1e4" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 10, background: "#111" }} />
+        </div>
+      );
+    case "kraft":
+      return (
+        <div style={layerStyle} aria-hidden="true">
+          <div style={{ position: "absolute", inset: 0, background: "#d9c7a7" }} />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "radial-gradient(rgba(80, 52, 24, 0.08) 0.6px, transparent 0.6px)",
+              backgroundSize: "3px 3px",
+            }}
+          />
+        </div>
+      );
     case "retro-wave":
       return (
         <div style={layerStyle} aria-hidden="true">

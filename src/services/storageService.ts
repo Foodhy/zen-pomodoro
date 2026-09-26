@@ -25,7 +25,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   splitView: false,
   language: 'en',
   keyboardShortcutsEnabled: true,
-  focusModeEnabled: false
+  focusModeEnabled: false,
+  autoContinueCycle: false,
+  notificationSound: 'classic'
 };
 
 // Default profiles
@@ -67,23 +69,23 @@ const DEFAULT_PROFILES: Profile[] = [
 const DEFAULT_YOUTUBE_VIDEOS: YouTubeVideo[] = [
   {
     id: 'yt-default-1',
-    title: '🎵 lofi hip hop radio 📚 beats to relax/study to',
-    url: 'https://www.youtube.com/watch?v=X4VbdwhkE10'
+    title: '🎵 Lofi Hiphop Radio - Study/Relax/Game',
+    url: 'https://www.youtube.com/watch?v=m4ArvE3hFLo'
   },
   {
     id: 'yt-default-2',
-    title: '🎵 jazz lofi radio 🎷 beats to chill/study to',
-    url: 'https://www.youtube.com/watch?v=E2vONfzoyRI'
+    title: '🎵 1 Hour of Rain Lofi Hip Hop',
+    url: 'https://www.youtube.com/watch?v=KuC4dBSHUoA'
   },
   {
     id: 'yt-default-3',
-    title: '🎵 synthwave radio 🌌 beats to chill/game to',
-    url: 'https://www.youtube.com/watch?v=4xDzrJKXOOY'
+    title: '🎵 City of Gamers — chill studying lofi mix',
+    url: 'https://www.youtube.com/watch?v=AskMUDFV57k'
   },
   {
     id: 'yt-default-4',
-    title: '🎹 relaxing piano radio - calm music to focus to',
-    url: 'https://www.youtube.com/watch?v=N0snMcR6aaA'
+    title: '🎹 1 Hour of Slow LoFi Hip Hop',
+    url: 'https://www.youtube.com/watch?v=fSnCDspFC-g'
   },
   {
     id: 'yt-default-5b',
@@ -545,12 +547,32 @@ export const deleteNote = (id: string): void => {
   localStorage.setItem(KEYS.NOTES, JSON.stringify(notes));
 };
 
+export const moveNote = (id: string, direction: 'up' | 'down', profileId: string): void => {
+  const notes = getAllNotes();
+  const profileNotes = notes
+    .filter((note) => note.profileId === profileId)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.createdAt.localeCompare(b.createdAt));
+  profileNotes.forEach((note, index) => {
+    note.order = index;
+  });
+  const index = profileNotes.findIndex((note) => note.id === id);
+  const swapWith = direction === 'up' ? index - 1 : index + 1;
+  if (index < 0 || swapWith < 0 || swapWith >= profileNotes.length) {
+    localStorage.setItem(KEYS.NOTES, JSON.stringify(notes));
+    return;
+  }
+  const currentOrder = profileNotes[index].order ?? index;
+  profileNotes[index].order = profileNotes[swapWith].order ?? swapWith;
+  profileNotes[swapWith].order = currentOrder;
+  localStorage.setItem(KEYS.NOTES, JSON.stringify(notes));
+};
+
 // SETTINGS
 
 // Get app settings
 export const getSettings = (): AppSettings => {
   const settings = localStorage.getItem(KEYS.SETTINGS);
-  return settings ? JSON.parse(settings) : DEFAULT_SETTINGS;
+  return settings ? { ...DEFAULT_SETTINGS, ...JSON.parse(settings) } : DEFAULT_SETTINGS;
 };
 
 // Save app settings
@@ -594,6 +616,21 @@ export const saveYouTubeVideo = (video: YouTubeVideo): void => {
 export const deleteYouTubeVideo = (id: string): void => {
   const videos = getYouTubeVideos().filter(v => v.id !== id);
   localStorage.setItem(KEYS.VIDEOS, JSON.stringify(videos));
+};
+
+/** Merge the shipped playlist back in without wiping tasks, notes, or custom tracks. */
+export const restoreDefaultMusic = (): YouTubeVideo[] => {
+  const current = getYouTubeVideos();
+  const byId = new Map(current.map((video) => [video.id, video]));
+  DEFAULT_YOUTUBE_VIDEOS.forEach((def) => {
+    byId.set(def.id, { ...byId.get(def.id), ...def });
+  });
+  const restored = [
+    ...DEFAULT_YOUTUBE_VIDEOS.map((def) => byId.get(def.id)!),
+    ...current.filter((video) => !DEFAULT_YOUTUBE_VIDEOS.some((def) => def.id === video.id)),
+  ];
+  localStorage.setItem(KEYS.VIDEOS, JSON.stringify(restored));
+  return restored;
 };
 
 // Reset all storage (for development/testing)
