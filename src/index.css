@@ -1876,6 +1876,19 @@ body::before {
   aspect-ratio: auto;
 }
 
+.zen-panel-body:has(.zen-music-container) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.zen-music-player-fill {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
 .zen-music-groups {
   flex: 1 1 auto;
   min-height: 0;

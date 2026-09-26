@@ -224,9 +224,11 @@ const YouTubePlayerWithImportExport = () => {
         {/* Embedded player (YouTube, SoundCloud or Spotify) */}
         {selectedVideo && (
           <div
-            className={`zen-music-player ${isSpotifySelected || isSoundCloudSelected ? '' : 'zen-music-player-video'}`}
+            className={`zen-music-player ${compactHeight ? 'zen-music-player-fill' : ''} ${isSpotifySelected || isSoundCloudSelected ? '' : 'zen-music-player-video'}`}
             style={
-              isSpotifySelected
+              compactHeight
+                ? undefined
+                : isSpotifySelected
                 ? { aspectRatio: 'auto', height: isSpotifyTallSelected ? 380 : 152 }
                 : isSoundCloudSelected
                 ? { aspectRatio: 'auto', height: isSoundCloudVisual ? 360 : 166 }
