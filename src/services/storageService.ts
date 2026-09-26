@@ -586,11 +586,24 @@ export const saveSettings = (settings: AppSettings): void => {
 export const getYouTubeVideos = (): YouTubeVideo[] => {
   const videos = localStorage.getItem(KEYS.VIDEOS);
   if (!videos) {
-    // Initialize with default videos
     localStorage.setItem(KEYS.VIDEOS, JSON.stringify(DEFAULT_YOUTUBE_VIDEOS));
     return DEFAULT_YOUTUBE_VIDEOS;
   }
-  return JSON.parse(videos);
+  const parsed: YouTubeVideo[] = JSON.parse(videos);
+  const defaultsById = new Map(DEFAULT_YOUTUBE_VIDEOS.map((video) => [video.id, video]));
+  let changed = false;
+  const migrated = parsed.map((video) => {
+    const shipped = defaultsById.get(video.id);
+    if (shipped && shipped.url !== video.url) {
+      changed = true;
+      return { ...video, url: shipped.url, title: shipped.title };
+    }
+    return video;
+  });
+  if (changed) {
+    localStorage.setItem(KEYS.VIDEOS, JSON.stringify(migrated));
+  }
+  return migrated;
 };
 
 // Save a YouTube video
